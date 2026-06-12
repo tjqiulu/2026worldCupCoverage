@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Node (如果以后用)
+node_modules/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# OS
+Thumbs.db
+
+# Project specific
+# data/ 下的 derived JSON 可被重生成，但先不 gitignore（手写的会丢）
+# 真正想 ignore 的是临时缓存
+data/.cache/
+*.log
+!docs/logs/**/*.md
+
+# Env
+.env
+.env.local
