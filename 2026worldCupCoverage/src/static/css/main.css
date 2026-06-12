@@ -95,7 +95,7 @@ button:disabled {
     font-weight: 700;
     padding: 8px 12px;
     color: #1D3557;
-    background: #e8e8e8;
+    background-color: #e8e8e8; /* only color, NOT shorthand (clobbers flag-icons bg-image) */
     border-radius: 4px;
     margin-bottom: 10px;
     border-left: 4px solid transparent;
@@ -293,7 +293,7 @@ footer a:hover {
 }
 
 .match-modal-close:hover {
-    background: #f0f0f0;
+    background-color: #f0f0f0; /* only color, NOT shorthand */
     color: #000;
     border-color: #999;
 }
@@ -340,7 +340,7 @@ footer a:hover {
     height: 60px;
     border-radius: 4px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    background: #f0f0f0;
+    background-color: #f0f0f0; /* only color, NOT shorthand */
 }
 
 .match-modal-team .team-name-zh {
@@ -435,7 +435,7 @@ footer a:hover {
 }
 
 .tab:hover:not(.active) {
-    background: #f0f0f0;
+    background-color: #f0f0f0; /* only color, NOT shorthand */
     color: #333;
 }
 
@@ -509,7 +509,7 @@ footer a:hover {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 6px 0;
-    background: #e8e8e8;
+    background-color: #e8e8e8; /* only color, NOT shorthand (clobbers flag-icons bg-image) */
     border-radius: 4px;
 }
 
@@ -635,7 +635,7 @@ footer a:hover {
 }
 
 .bracket-card.third {
-    background: #e8e8e8;
+    background-color: #e8e8e8; /* only color, NOT shorthand (clobbers flag-icons bg-image) */
     border-color: #bbb;
 }
 
@@ -671,7 +671,7 @@ footer a:hover {
     vertical-align: -0.15em;
     margin-right: 6px;
     display: inline-block;
-    background: #e8e8e8;  /* placeholder background until image loads */
+    background-color: #e8e8e8; /* only color, NOT shorthand (clobbers flag-icons bg-image) */
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
@@ -715,4 +715,222 @@ footer a:hover {
 
 .bracket-card .team-name .en {
     display: none;  /* bracket is narrow, hide EN for space */
+}
+
+/* === Plan 010: Match details (score + goalscorers) === */
+
+.match-card {
+    position: relative;
+}
+
+.status-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    z-index: 1;
+}
+.status-final {
+    background: #e0e0e0;
+    color: #555;
+}
+.status-live {
+    background: #E63946;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.status-scheduled {
+    background: transparent;
+    color: #999;
+    border: 1px solid #ddd;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    animation: live-pulse 1.2s ease-in-out infinite;
+}
+@keyframes live-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.match-score {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    min-width: 70px;
+    justify-content: center;
+}
+.match-score .score-num {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    font-variant-numeric: tabular-nums;
+    min-width: 16px;
+    text-align: center;
+}
+.match-score .score-sep {
+    color: #999;
+    font-size: 14px;
+}
+.match-score.live .score-num {
+    color: #E63946;
+}
+
+.match-modal-score-section,
+.match-modal-goals-section {
+    margin: 0 0 20px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 6px;
+}
+.match-modal-score-section[hidden],
+.match-modal-goals-section[hidden] {
+    display: none;
+}
+
+.modal-score-label,
+.modal-goals-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-status {
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.score-status.live {
+    background: #E63946;
+    color: white;
+}
+.score-status.final {
+    background: #999;
+    color: white;
+}
+
+.modal-score-big {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+.modal-score-big .score-num {
+    font-size: 40px;
+    font-weight: 700;
+    color: #1D3557;
+    font-variant-numeric: tabular-nums;
+    min-width: 50px;
+    text-align: center;
+}
+.modal-score-big .score-sep {
+    font-size: 28px;
+    color: #ccc;
+    font-weight: 300;
+}
+
+.score-half {
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+    padding-top: 6px;
+    border-top: 1px solid #eee;
+}
+
+.modal-goals-list {
+    list-style: none;
+    padding: 4px 12px;
+    margin: 0;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.goal-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+.goal-row:last-child {
+    border-bottom: none;
+}
+.goal-flag .fi {
+    width: 22px;
+    height: 16px;
+    border-radius: 2px;
+    background-color: #f0f0f0;
+}
+.goal-player {
+    color: #1D3557;
+    font-weight: 600;
+}
+.goal-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: white;
+    vertical-align: middle;
+}
+.goal-pen { background: #E63946; }
+.goal-og { background: #888; }
+.goal-minute {
+    color: #E63946;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 30px;
+    text-align: right;
+}
+.goal-team {
+    color: #555;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.goal-team .fi {
+    width: 18px;
+    height: 14px;
+    border-radius: 1px;
+}
+.goal-player {
+    color: #1D3557;
+    font-weight: 600;
+}
+.goal-type {
+    color: #888;
+    font-size: 12px;
+    font-weight: 400;
+}
+.goal-minute {
+    color: #E63946;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    min-width: 30px;
+    text-align: right;
 }

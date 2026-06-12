@@ -106,12 +106,37 @@ function renderMatchCard(m) {
         ? `Group ${m.group}${m.matchday ? ` · MD ${m.matchday}` : ''}`
         : labelStage(m.stage);
     const venue = (m.venue && m.venue.name) || '';
-    return `<div class="match-card" data-id="${escapeHtml(m.match_id)}">
+    const status = (m.details && m.details.status) || 'scheduled';
+    const statusBadge = renderStatusBadge(status);
+    const scoreOrVs = (status === 'final' || status === 'live')
+        ? renderScoreDisplay(m.details.score, status)
+        : '<div class="match-vs">vs</div>';
+    return `<div class="match-card" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
         <div class="match-time">${escapeHtml(time)}</div>
+        ${statusBadge}
         <div class="match-team home">${renderTeamName(m.home, 'home')}</div>
-        <div class="match-vs">vs</div>
+        ${scoreOrVs}
         <div class="match-team away">${renderTeamName(m.away, 'away')}</div>
         <div class="match-meta">${escapeHtml(stageLabel)} · ${escapeHtml(venue)}</div>
+    </div>`;
+}
+
+function renderStatusBadge(status) {
+    const map = {
+        final: '<span class="status-badge status-final">已结束</span>',
+        live: '<span class="status-badge status-live"><span class="live-dot"></span>LIVE</span>',
+        scheduled: '<span class="status-badge status-scheduled">未开始</span>',
+    };
+    return map[status] || '';
+}
+
+function renderScoreDisplay(score, status) {
+    if (!score) return '<div class="match-vs">vs</div>';
+    const cls = status === 'live' ? 'match-score live' : 'match-score';
+    return `<div class="${cls}">
+        <span class="score-num">${score.home}</span>
+        <span class="score-sep">-</span>
+        <span class="score-num">${score.away}</span>
     </div>`;
 }
 
@@ -554,6 +579,29 @@ function showMatchModal(matchId) {
     document.getElementById('modal-date').textContent = formatModalDate(match.date_utc);
     document.getElementById('modal-home').innerHTML = renderModalTeam(match.home);
     document.getElementById('modal-away').innerHTML = renderModalTeam(match.away);
+
+    // Plan 010: score + goalscorers section
+    const scoreSection = document.getElementById('modal-score-section');
+    const details = match.details;
+    const status = (details && details.status) || 'scheduled';
+    if ((status === 'final' || status === 'live') && details && details.score) {
+        scoreSection.innerHTML = renderModalScore(details, status);
+        scoreSection.hidden = false;
+    } else {
+        scoreSection.innerHTML = '';
+        scoreSection.hidden = true;
+    }
+
+    // Plan 010: goalscorers list (only for final)
+    const goalsSection = document.getElementById('modal-goals-section');
+    if (status === 'final' && details && details.goalscorers && details.goalscorers.length) {
+        goalsSection.innerHTML = renderModalGoals(details, match);
+        goalsSection.hidden = false;
+    } else {
+        goalsSection.innerHTML = '';
+        goalsSection.hidden = true;
+    }
+
     const venueEl = document.getElementById('modal-venue');
     if (match.venue && match.venue.name) {
         venueEl.innerHTML = `<span class="venue-name">📍 ${escapeHtml(match.venue.name)}</span>`;
@@ -561,6 +609,43 @@ function showMatchModal(matchId) {
         venueEl.innerHTML = '';
     }
     document.getElementById('match-modal').hidden = false;
+}
+
+function renderModalScore(details, status) {
+    const { score, half_time_score } = details;
+    const statusLabel = status === 'live'
+        ? '<span class="score-status live">LIVE</span>'
+        : '<span class="score-status final">完场</span>';
+    let hts = '';
+    if (half_time_score) {
+        hts = `<div class="score-half">半场 ${half_time_score.home} - ${half_time_score.away}</div>`;
+    }
+    return `<div class="modal-score-label">比分 Score ${statusLabel}</div>
+        <div class="modal-score-big">
+            <span class="score-num">${score.home}</span>
+            <span class="score-sep">-</span>
+            <span class="score-num">${score.away}</span>
+        </div>
+        ${hts}`;
+}
+
+function renderModalGoals(details, match) {
+    const rows = details.goalscorers.map(g => {
+        const flag = g.team === 'home' && match.home.code_iso
+            ? `<span class="fi fi-${escapeHtml(match.home.code_iso)}"></span>`
+            : g.team === 'away' && match.away.code_iso
+                ? `<span class="fi fi-${escapeHtml(match.away.code_iso)}"></span>`
+                : '';
+        const typeBadge = g.type === 'penalty' ? ' <span class="goal-badge goal-pen">P</span>'
+            : g.type === 'own_goal' ? ' <span class="goal-badge goal-og">OG</span>' : '';
+        return `<li class="goal-row">
+            <span class="goal-flag">${flag}</span>
+            <span class="goal-player">${escapeHtml(g.player)}${typeBadge}</span>
+            <span class="goal-minute">${g.minute}'</span>
+        </li>`;
+    }).join('');
+    return `<div class="modal-goals-label">进球 Goals</div>
+        <ul class="modal-goals-list">${rows}</ul>`;
 }
 
 function closeMatchModal() {

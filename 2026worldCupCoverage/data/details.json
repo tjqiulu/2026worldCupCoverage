@@ -1,0 +1,22 @@
+{
+  "_comment": "Manually maintained match results. Schema: src/data/details.py. See docs/maintenance/match-details.md for how to update. Initial entries below are EXAMPLE data (using 2022 WC player names) — replace with real results as matches are played.",
+  "fifa-wc-2026-11a1dcab930a@worldcup-calendar": {
+    "status": "final",
+    "score": {"home": 2, "away": 0},
+    "half_time_score": {"home": 1, "away": 0},
+    "goalscorers": [
+      {"team": "home", "player": "H. Lozano", "minute": 23, "type": "goal"},
+      {"team": "home", "player": "R. Jiménez", "minute": 67, "type": "penalty"}
+    ]
+  },
+  "fifa-wc-2026-dfd8df44c1fb@worldcup-calendar": {
+    "status": "final",
+    "score": {"home": 1, "away": 2},
+    "half_time_score": {"home": 0, "away": 1},
+    "goalscorers": [
+      {"team": "away", "player": "P. Schick", "minute": 24, "type": "goal"},
+      {"team": "home", "player": "H. Son", "minute": 56, "type": "goal"},
+      {"team": "away", "player": "P. Schick", "minute": 78, "type": "goal"}
+    ]
+  }
+}
