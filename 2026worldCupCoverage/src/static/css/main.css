@@ -403,3 +403,58 @@ footer a:hover {
         font-size: 13px;
     }
 }
+
+/* === Plan 004: Flag icons + bilingual team names === */
+
+.fi {
+    width: 1.3em;
+    height: 1em;
+    border-radius: 2px;
+    vertical-align: -0.15em;
+    margin-right: 6px;
+    display: inline-block;
+    background: #e8e8e8;  /* placeholder background until image loads */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.fi-circle {
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Bilingual team name layout */
+.team-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    font-weight: 600;
+}
+
+.team-name .zh {
+    color: #222;
+}
+
+.team-name .en {
+    color: #888;
+    font-weight: 400;
+    font-size: 0.85em;
+    margin-left: 6px;
+}
+
+.placeholder-name {
+    color: #888;
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* Compact flag in bracket cards (narrower) */
+.bracket-card .fi {
+    width: 1.1em;
+    height: 0.85em;
+    margin-right: 3px;
+    vertical-align: -0.1em;
+}
+
+.bracket-card .team-name .en {
+    display: none;  /* bracket is narrow, hide EN for space */
+}

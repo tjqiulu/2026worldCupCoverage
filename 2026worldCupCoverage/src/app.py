@@ -19,6 +19,7 @@ if str(_PROJECT_ROOT) not in sys.path:
 
 from flask import Flask, jsonify, render_template, request  # noqa: E402
 
+from src.data.countries import enrich_matches  # noqa: E402
 from src.data.ics_fetcher import fetch_ics  # noqa: E402
 from src.data.ics_parser import parse_ics  # noqa: E402
 
@@ -62,6 +63,7 @@ def create_app() -> Flask:
     @app.route("/api/matches")
     def api_matches() -> Any:
         matches = load_matches()
+        enrich_matches(matches)
         date = request.args.get("date")
         if date:
             matches = [m for m in matches if m["date_utc"].startswith(date)]
@@ -77,7 +79,9 @@ def create_app() -> Flask:
 
     @app.route("/api/health")
     def api_health() -> Any:
-        return jsonify({"status": "ok", "matches_loaded": len(load_matches())})
+        matches = load_matches()
+        enrich_matches(matches)
+        return jsonify({"status": "ok", "matches_loaded": len(matches)})
 
     return app
 

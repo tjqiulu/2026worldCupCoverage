@@ -102,19 +102,38 @@ function renderMatches(matches) {
 
 function renderMatchCard(m) {
     const time = beijingTimeStr(m.date_utc);
-    const home = (m.home && m.home.name) || '?';
-    const away = (m.away && m.away.name) || '?';
     const stageLabel = m.group
         ? `Group ${m.group}${m.matchday ? ` · MD ${m.matchday}` : ''}`
         : labelStage(m.stage);
     const venue = (m.venue && m.venue.name) || '';
     return `<div class="match-card" data-id="${escapeHtml(m.match_id)}">
         <div class="match-time">${escapeHtml(time)}</div>
-        <div class="match-team home">${escapeHtml(home)}</div>
+        <div class="match-team home">${renderTeamName(m.home, 'home')}</div>
         <div class="match-vs">vs</div>
-        <div class="match-team away">${escapeHtml(away)}</div>
+        <div class="match-team away">${renderTeamName(m.away, 'away')}</div>
         <div class="match-meta">${escapeHtml(stageLabel)} · ${escapeHtml(venue)}</div>
     </div>`;
+}
+
+function renderTeamName(side, align) {
+    if (!side || !side.name) return '<span class="placeholder-name">?</span>';
+    if (side.code_iso) {
+        // Real country with flag
+        return `<span class="team-name">
+            ${align === 'away' ? renderEnName(side) : ''}
+            <span class="fi fi-${escapeHtml(side.code_iso)}"></span>
+            <span class="zh">${escapeHtml(side.name_zh || side.name)}</span>
+            ${align === 'home' ? renderEnName(side) : ''}
+        </span>`;
+    }
+    // Placeholder (W86, 1E, L101, etc.)
+    return `<span class="placeholder-name">${escapeHtml(side.name)}</span>`;
+}
+
+function renderEnName(side) {
+    if (!side.name || !side.name_zh) return '';
+    if (side.name === side.name_zh) return '';  // same in both langs
+    return `<span class="en">${escapeHtml(side.name)}</span>`;
 }
 
 function labelStage(stage) {
@@ -234,18 +253,18 @@ function renderBracket(matches) {
 function renderBracketCard(m, stage, rowStart, rowSpan) {
     const time = beijingTimeStr(m.date_utc);
     const date = beijingDateStr(m.date_utc);
-    const home = m.home?.name || '?';
-    const away = m.away?.name || '?';
     const venue = m.venue?.name || '';
+    const homeTitle = m.home?.name || '?';
+    const awayTitle = m.away?.name || '?';
     // For R32 use full date, for later rounds use shorter "7/04" format
     const dateLabel = stage === 'r32' || stage === 'third' ? date : date.substring(5).replace('-', '/');
     return `<div class="bracket-card ${stage}" style="grid-row: ${rowStart} / span ${rowSpan};"
-                data-id="${escapeHtml(m.match_id)}" title="${escapeHtml(home + ' vs ' + away + ' · ' + date + ' ' + time + ' · ' + venue)}">
+                data-id="${escapeHtml(m.match_id)}" title="${escapeHtml(homeTitle + ' vs ' + awayTitle + ' · ' + date + ' ' + time + ' · ' + venue)}">
         <div class="bc-date">${escapeHtml(dateLabel)} ${escapeHtml(time)}</div>
         <div class="bc-teams">
-            <div class="bc-team home">${escapeHtml(home)}</div>
+            <div class="bc-team home">${renderTeamName(m.home, 'home')}</div>
             <div class="bc-vs">vs</div>
-            <div class="bc-team away">${escapeHtml(away)}</div>
+            <div class="bc-team away">${renderTeamName(m.away, 'away')}</div>
         </div>
     </div>`;
 }
