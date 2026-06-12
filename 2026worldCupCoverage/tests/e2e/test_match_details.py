@@ -65,17 +65,25 @@ def inject_final_match():
 
 class TestMatchesViewStatusBadge:
     def test_scheduled_match_shows_scheduled_badge(self, page: Page):
-        """R4, R7: All matches show '未开始' by default (no details data)."""
+        """R4, R7: Future match (auto-detected as scheduled) shows '未开始' badge.
+
+        Plan 011: past matches are now auto-detected as 'final'. Look for a
+        card with status='scheduled' (future date) instead of assuming first.
+        """
         page.click('button[data-tab="matches"]')
         page.wait_for_timeout(300)
-        first = page.locator('#matches-view .match-card').first
-        status = first.get_attribute('data-status')
-        assert status == 'scheduled', f"Expected 'scheduled', got {status}"
-        badge = first.locator('.status-badge')
+        cards = page.locator('#matches-view .match-card').all()
+        scheduled_card = None
+        for card in cards:
+            if card.get_attribute('data-status') == 'scheduled':
+                scheduled_card = card
+                break
+        assert scheduled_card is not None, "No scheduled match in first batch"
+        badge = scheduled_card.locator('.status-badge')
         assert '未开始' in badge.text_content()
         # No score, just 'vs'
-        assert first.locator('.match-score').count() == 0
-        assert first.locator('.match-vs').count() == 1
+        assert scheduled_card.locator('.match-score').count() == 0
+        assert scheduled_card.locator('.match-vs').count() == 1
 
     def test_final_match_with_details(self, page: Page, inject_final_match):
         """R4, R5: When final match data exists, badge and score shown.

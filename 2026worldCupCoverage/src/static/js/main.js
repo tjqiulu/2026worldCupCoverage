@@ -106,9 +106,9 @@ function renderMatchCard(m) {
         ? `Group ${m.group}${m.matchday ? ` · MD ${m.matchday}` : ''}`
         : labelStage(m.stage);
     const venue = (m.venue && m.venue.name) || '';
-    const status = (m.details && m.details.status) || 'scheduled';
+    const status = getEffectiveStatus(m);
     const statusBadge = renderStatusBadge(status);
-    const scoreOrVs = (status === 'final' || status === 'live')
+    const scoreOrVs = (status === 'final' || status === 'live') && m.details && m.details.score
         ? renderScoreDisplay(m.details.score, status)
         : '<div class="match-vs">vs</div>';
     return `<div class="match-card" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
@@ -119,6 +119,27 @@ function renderMatchCard(m) {
         <div class="match-team away">${renderTeamName(m.away, 'away')}</div>
         <div class="match-meta">${escapeHtml(stageLabel)} · ${escapeHtml(venue)}</div>
     </div>`;
+}
+
+// === Plan 011: Auto-detect match status from date_utc ===
+// Constants for auto-detection window (in milliseconds)
+const LIVE_WINDOW_MS = 2 * 60 * 60 * 1000;  // 2 hours before/after kickoff = "live"
+
+function getEffectiveStatus(match, now) {
+    // 1. details.status wins if set (manual override)
+    if (match.details && match.details.status) {
+        return match.details.status;
+    }
+    // 2. Auto-detect from date_utc
+    const matchTime = new Date(match.date_utc).getTime();
+    const nowMs = (now !== undefined) ? now : Date.now();
+    if (matchTime + LIVE_WINDOW_MS < nowMs) {
+        return 'final';  // match ended (>2h ago)
+    }
+    if (matchTime - LIVE_WINDOW_MS < nowMs && nowMs < matchTime + LIVE_WINDOW_MS) {
+        return 'live';  // match in progress (or about to start)
+    }
+    return 'scheduled';  // future
 }
 
 function renderStatusBadge(status) {
@@ -583,9 +604,13 @@ function showMatchModal(matchId) {
     // Plan 010: score + goalscorers section
     const scoreSection = document.getElementById('modal-score-section');
     const details = match.details;
-    const status = (details && details.status) || 'scheduled';
+    const status = getEffectiveStatus(match);
     if ((status === 'final' || status === 'live') && details && details.score) {
         scoreSection.innerHTML = renderModalScore(details, status);
+        scoreSection.hidden = false;
+    } else if (status === 'final' && (!details || !details.score)) {
+        // Auto-detected as final but no details.json entry: show "score pending"
+        scoreSection.innerHTML = renderModalFinalNoDetails();
         scoreSection.hidden = false;
     } else {
         scoreSection.innerHTML = '';
@@ -646,6 +671,14 @@ function renderModalGoals(details, match) {
     }).join('');
     return `<div class="modal-goals-label">进球 Goals</div>
         <ul class="modal-goals-list">${rows}</ul>`;
+}
+
+function renderModalFinalNoDetails() {
+    return `<div class="modal-score-label">比分 Score</div>
+        <div class="modal-score-pending">
+            比赛已结束 · 比分待更新
+        </div>
+        <div class="modal-score-hint">Match ended · Score pending update</div>`;
 }
 
 function closeMatchModal() {

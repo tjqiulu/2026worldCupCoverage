@@ -857,6 +857,23 @@ footer a:hover {
     border-top: 1px solid #eee;
 }
 
+.modal-score-pending {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 20px 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+.modal-score-hint {
+    text-align: center;
+    color: #aaa;
+    font-size: 12px;
+    padding-top: 4px;
+}
+
 .modal-goals-list {
     list-style: none;
     padding: 4px 12px;
