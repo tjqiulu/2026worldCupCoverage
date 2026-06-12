@@ -39,7 +39,8 @@ function todayBeijing() {
     return beijingDateStr(new Date().toISOString());
 }
 
-const matchesContainer = document.getElementById('matches-container');
+const matchesContainer = document.getElementById('matches-view');
+const bracketContainer = document.getElementById('bracket-view');
 const refreshBtn = document.getElementById('refresh-btn');
 const todayBtn = document.getElementById('today-btn');
 const cacheInfo = document.getElementById('cache-info');
@@ -47,15 +48,22 @@ const cacheInfo = document.getElementById('cache-info');
 let allMatches = [];
 
 async function loadMatches() {
-    matchesContainer.innerHTML = '<p class="loading">加载中 Loading...</p>';
+    const showLoading = () => {
+        matchesContainer.innerHTML = '<p class="loading">加载中 Loading...</p>';
+        bracketContainer.innerHTML = '<p class="loading">加载中 Loading...</p>';
+    };
+    showLoading();
     try {
         const resp = await fetch('/api/matches');
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         allMatches = await resp.json();
         renderMatches(allMatches);
+        renderBracket(allMatches);
         scrollToToday();
     } catch (e) {
-        matchesContainer.innerHTML = `<p class="error">加载失败: ${escapeHtml(e.message)}</p>`;
+        const errHtml = `<p class="error">加载失败: ${escapeHtml(e.message)}</p>`;
+        matchesContainer.innerHTML = errHtml;
+        bracketContainer.innerHTML = errHtml;
     }
 }
 
@@ -146,6 +154,115 @@ function scrollToToday() {
     }
 }
 
+// === Plan 003: Tabs + Bracket ===
+
+const STAGE_LABELS = {
+    r32: '1/8 决赛 · R32',
+    r16: '1/16 决赛 · R16',
+    qf: '1/4 决赛 · QF',
+    sf: '半决赛 · SF',
+    final: '决赛 · Final',
+    third: '季军战',
+};
+
+// Row span for each stage in the bracket grid (R32 row count = 16)
+// R32 = 1, R16 = 2, QF = 4, SF = 8, Final = 16
+const STAGE_ROW_SPAN = { r32: 1, r16: 2, qf: 4, sf: 8, final: 16 };
+
+function renderBracket(matches) {
+    if (!matches.length) {
+        bracketContainer.innerHTML = '<p class="empty">暂无淘汰赛数据</p>';
+        return;
+    }
+
+    const stages = {
+        r32: [],
+        r16: [],
+        qf: [],
+        sf: [],
+        final: [],
+    };
+    const third = [];
+    for (const m of matches) {
+        if (m.stage in stages) stages[m.stage].push(m);
+        else if (m.stage === 'third') third.push(m);
+    }
+    for (const k of Object.keys(stages)) {
+        stages[k].sort((a, b) => a.date_utc.localeCompare(b.date_utc));
+    }
+    third.sort((a, b) => a.date_utc.localeCompare(b.date_utc));
+
+    const stageOrder = ['r32', 'r16', 'qf', 'sf', 'final'];
+
+    let html = '<div class="bracket-wrapper">';
+
+    // Column labels
+    html += '<div class="bracket-labels">';
+    for (const stage of stageOrder) {
+        html += `<div class="label">${escapeHtml(STAGE_LABELS[stage])}</div>`;
+    }
+    html += '</div>';
+
+    // Bracket grid
+    html += '<div class="bracket">';
+    for (const stage of stageOrder) {
+        const ms = stages[stage];
+        const rowSpan = STAGE_ROW_SPAN[stage];
+        ms.forEach((m, i) => {
+            const rowStart = i * rowSpan + 1;
+            html += renderBracketCard(m, stage, rowStart, rowSpan);
+        });
+    }
+    html += '</div>';
+
+    // Third place match (single column)
+    if (third.length) {
+        html += '<div class="bracket-labels" style="margin-top: 16px;">';
+        html += `<div class="label" style="grid-column: 1 / -1;">${escapeHtml(STAGE_LABELS.third)}</div>`;
+        html += '</div>';
+        html += '<div class="bracket-single-col">';
+        third.forEach(m => {
+            html += renderBracketCard(m, 'third', 1, 1);
+        });
+        html += '</div>';
+    }
+
+    html += '</div>';
+    bracketContainer.innerHTML = html;
+}
+
+function renderBracketCard(m, stage, rowStart, rowSpan) {
+    const time = beijingTimeStr(m.date_utc);
+    const date = beijingDateStr(m.date_utc);
+    const home = m.home?.name || '?';
+    const away = m.away?.name || '?';
+    const venue = m.venue?.name || '';
+    // For R32 use full date, for later rounds use shorter "7/04" format
+    const dateLabel = stage === 'r32' || stage === 'third' ? date : date.substring(5).replace('-', '/');
+    return `<div class="bracket-card ${stage}" style="grid-row: ${rowStart} / span ${rowSpan};"
+                data-id="${escapeHtml(m.match_id)}" title="${escapeHtml(home + ' vs ' + away + ' · ' + date + ' ' + time + ' · ' + venue)}">
+        <div class="bc-date">${escapeHtml(dateLabel)} ${escapeHtml(time)}</div>
+        <div class="bc-teams">
+            <div class="bc-team home">${escapeHtml(home)}</div>
+            <div class="bc-vs">vs</div>
+            <div class="bc-team away">${escapeHtml(away)}</div>
+        </div>
+    </div>`;
+}
+
+function showTab(name) {
+    document.querySelectorAll('.tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.tab === name);
+    });
+    document.querySelectorAll('.view').forEach(v => {
+        v.classList.toggle('active', v.id === `${name}-view`);
+    });
+}
+
+document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+});
+
 async function refreshData() {
     refreshBtn.disabled = true;
     const original = refreshBtn.textContent;
@@ -168,6 +285,9 @@ async function refreshData() {
 }
 
 refreshBtn.addEventListener('click', refreshData);
-todayBtn.addEventListener('click', scrollToToday);
+todayBtn.addEventListener('click', () => {
+    showTab('matches');
+    setTimeout(scrollToToday, 50);
+});
 
 loadMatches();

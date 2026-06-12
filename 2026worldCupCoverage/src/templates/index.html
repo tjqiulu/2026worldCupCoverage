@@ -18,9 +18,21 @@
             <button id="refresh-btn" title="重新拉取数据">🔄 刷新</button>
         </div>
     </header>
-    <main id="matches-container">
-        <p class="loading">加载中 Loading...</p>
+
+    <nav class="tabs">
+        <button class="tab" data-tab="matches">赛程 Matches</button>
+        <button class="tab active" data-tab="bracket">对阵 Bracket</button>
+    </nav>
+
+    <main>
+        <div id="matches-view" class="view">
+            <p class="loading">加载中 Loading...</p>
+        </div>
+        <div id="bracket-view" class="view active">
+            <p class="loading">加载中 Loading...</p>
+        </div>
     </main>
+
     <footer>
         <small>数据源: <a href="https://github.com/baires/fifa-cal-2026" target="_blank">baires/fifa-cal-2026</a> · 时间: 北京时间 (UTC+8) · 本地缓存: <span id="cache-info">未知</span></small>
     </footer>
