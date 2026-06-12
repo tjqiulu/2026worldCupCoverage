@@ -1,0 +1,225 @@
+/* 2026 World Cup Coverage - main styles (Plan 002 minimal) */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans CJK SC",
+                 "PingFang SC", "Microsoft YaHei", Roboto, Helvetica, Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    line-height: 1.5;
+    padding: 16px 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0 16px;
+    border-bottom: 3px solid #E63946;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.title .emoji {
+    font-size: 28px;
+}
+
+.title h1 {
+    color: #E63946;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.title .subtitle {
+    color: #1D3557;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    padding: 8px 14px;
+    background: #E63946;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s;
+}
+
+button:hover:not(:disabled) {
+    background: #C5303C;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#today-btn {
+    background: #1D3557;
+}
+
+#today-btn:hover:not(:disabled) {
+    background: #14253D;
+}
+
+/* Day groups */
+.day-group {
+    margin-bottom: 28px;
+}
+
+.day-header {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px 12px;
+    color: #1D3557;
+    background: #e8e8e8;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border-left: 4px solid transparent;
+}
+
+.day-header.today {
+    background: #FEF3C7;
+    border-left-color: #E63946;
+    color: #B91C1C;
+}
+
+.day-header .today-tag {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 8px;
+    background: #E63946;
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 3px;
+}
+
+/* Match cards */
+.match-card {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-bottom: 8px;
+    gap: 16px;
+    transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.match-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.match-time {
+    font-size: 14px;
+    color: #555;
+    min-width: 60px;
+    font-variant-numeric: tabular-nums;
+}
+
+.match-team {
+    flex: 1;
+    font-weight: 600;
+    font-size: 15px;
+    color: #222;
+}
+
+.match-team.home {
+    text-align: right;
+}
+
+.match-team.away {
+    text-align: left;
+}
+
+.match-vs {
+    color: #999;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 0 8px;
+    white-space: nowrap;
+}
+
+.match-meta {
+    font-size: 12px;
+    color: #888;
+    min-width: 180px;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+    .match-meta {
+        display: none;
+    }
+    .match-time {
+        min-width: 50px;
+        font-size: 12px;
+    }
+}
+
+/* States */
+.loading, .error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    font-size: 15px;
+}
+
+.error {
+    color: #E63946;
+}
+
+.empty {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+/* Footer */
+footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+}
+
+footer a {
+    color: #1D3557;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 世界杯 2026 World Cup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <header>
+        <div class="title">
+            <span class="emoji">🏆</span>
+            <h1>2026 世界杯</h1>
+            <span class="subtitle">FIFA World Cup</span>
+        </div>
+        <div class="actions">
+            <button id="today-btn" title="跳到今天">📅 今天</button>
+            <button id="refresh-btn" title="重新拉取数据">🔄 刷新</button>
+        </div>
+    </header>
+    <main id="matches-container">
+        <p class="loading">加载中 Loading...</p>
+    </main>
+    <footer>
+        <small>数据源: <a href="https://github.com/baires/fifa-cal-2026" target="_blank">baires/fifa-cal-2026</a> · 本地缓存: <span id="cache-info">未知</span></small>
+    </footer>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,1874 @@
+[
+  {
+    "match_id": "fifa-wc-2026-11a1dcab930a@worldcup-calendar",
+    "summary": "Mexico vs South Africa",
+    "date_utc": "2026-06-11T19:00:00+00:00",
+    "home": {
+      "name": "Mexico"
+    },
+    "away": {
+      "name": "South Africa"
+    },
+    "stage": "group",
+    "group": "A",
+    "matchday": 1,
+    "venue": {
+      "name": "Mexico City",
+      "raw": "Mexico City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-dfd8df44c1fb@worldcup-calendar",
+    "summary": "South Korea vs Czech Republic",
+    "date_utc": "2026-06-12T02:00:00+00:00",
+    "home": {
+      "name": "South Korea"
+    },
+    "away": {
+      "name": "Czech Republic"
+    },
+    "stage": "group",
+    "group": "A",
+    "matchday": 1,
+    "venue": {
+      "name": "Guadalajara (Zapopan)",
+      "raw": "Guadalajara (Zapopan)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-965e9ac9ce78@worldcup-calendar",
+    "summary": "Canada vs Bosnia & Herzegovina",
+    "date_utc": "2026-06-12T19:00:00+00:00",
+    "home": {
+      "name": "Canada"
+    },
+    "away": {
+      "name": "Bosnia & Herzegovina"
+    },
+    "stage": "group",
+    "group": "B",
+    "matchday": 2,
+    "venue": {
+      "name": "Toronto",
+      "raw": "Toronto"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-fdf1bfc654f3@worldcup-calendar",
+    "summary": "USA vs Paraguay",
+    "date_utc": "2026-06-13T01:00:00+00:00",
+    "home": {
+      "name": "USA"
+    },
+    "away": {
+      "name": "Paraguay"
+    },
+    "stage": "group",
+    "group": "D",
+    "matchday": 2,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-11a1e8291690@worldcup-calendar",
+    "summary": "Qatar vs Switzerland",
+    "date_utc": "2026-06-13T19:00:00+00:00",
+    "home": {
+      "name": "Qatar"
+    },
+    "away": {
+      "name": "Switzerland"
+    },
+    "stage": "group",
+    "group": "B",
+    "matchday": 3,
+    "venue": {
+      "name": "San Francisco Bay Area (Santa Clara)",
+      "raw": "San Francisco Bay Area (Santa Clara)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-51c5def6e311@worldcup-calendar",
+    "summary": "Brazil vs Morocco",
+    "date_utc": "2026-06-13T22:00:00+00:00",
+    "home": {
+      "name": "Brazil"
+    },
+    "away": {
+      "name": "Morocco"
+    },
+    "stage": "group",
+    "group": "C",
+    "matchday": 3,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-ec4c7885a3a4@worldcup-calendar",
+    "summary": "Haiti vs Scotland",
+    "date_utc": "2026-06-14T01:00:00+00:00",
+    "home": {
+      "name": "Haiti"
+    },
+    "away": {
+      "name": "Scotland"
+    },
+    "stage": "group",
+    "group": "C",
+    "matchday": 3,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-998d2005257f@worldcup-calendar",
+    "summary": "Australia vs Turkey",
+    "date_utc": "2026-06-14T04:00:00+00:00",
+    "home": {
+      "name": "Australia"
+    },
+    "away": {
+      "name": "Turkey"
+    },
+    "stage": "group",
+    "group": "D",
+    "matchday": 3,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-764217ec91b0@worldcup-calendar",
+    "summary": "Germany vs Curaçao",
+    "date_utc": "2026-06-14T17:00:00+00:00",
+    "home": {
+      "name": "Germany"
+    },
+    "away": {
+      "name": "Curaçao"
+    },
+    "stage": "group",
+    "group": "E",
+    "matchday": 4,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-744bfbfd7938@worldcup-calendar",
+    "summary": "Netherlands vs Japan",
+    "date_utc": "2026-06-14T20:00:00+00:00",
+    "home": {
+      "name": "Netherlands"
+    },
+    "away": {
+      "name": "Japan"
+    },
+    "stage": "group",
+    "group": "F",
+    "matchday": 4,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-0ef2205260cd@worldcup-calendar",
+    "summary": "Ivory Coast vs Ecuador",
+    "date_utc": "2026-06-14T23:00:00+00:00",
+    "home": {
+      "name": "Ivory Coast"
+    },
+    "away": {
+      "name": "Ecuador"
+    },
+    "stage": "group",
+    "group": "E",
+    "matchday": 4,
+    "venue": {
+      "name": "Philadelphia",
+      "raw": "Philadelphia"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-df779f16393a@worldcup-calendar",
+    "summary": "Sweden vs Tunisia",
+    "date_utc": "2026-06-15T02:00:00+00:00",
+    "home": {
+      "name": "Sweden"
+    },
+    "away": {
+      "name": "Tunisia"
+    },
+    "stage": "group",
+    "group": "F",
+    "matchday": 4,
+    "venue": {
+      "name": "Monterrey (Guadalupe)",
+      "raw": "Monterrey (Guadalupe)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-95c833b74439@worldcup-calendar",
+    "summary": "Spain vs Cape Verde",
+    "date_utc": "2026-06-15T16:00:00+00:00",
+    "home": {
+      "name": "Spain"
+    },
+    "away": {
+      "name": "Cape Verde"
+    },
+    "stage": "group",
+    "group": "H",
+    "matchday": 5,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-323786f24db4@worldcup-calendar",
+    "summary": "Belgium vs Egypt",
+    "date_utc": "2026-06-15T19:00:00+00:00",
+    "home": {
+      "name": "Belgium"
+    },
+    "away": {
+      "name": "Egypt"
+    },
+    "stage": "group",
+    "group": "G",
+    "matchday": 5,
+    "venue": {
+      "name": "Seattle",
+      "raw": "Seattle"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-b9f4734fd923@worldcup-calendar",
+    "summary": "Saudi Arabia vs Uruguay",
+    "date_utc": "2026-06-15T22:00:00+00:00",
+    "home": {
+      "name": "Saudi Arabia"
+    },
+    "away": {
+      "name": "Uruguay"
+    },
+    "stage": "group",
+    "group": "H",
+    "matchday": 5,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-af1e7aa5490e@worldcup-calendar",
+    "summary": "Iran vs New Zealand",
+    "date_utc": "2026-06-16T01:00:00+00:00",
+    "home": {
+      "name": "Iran"
+    },
+    "away": {
+      "name": "New Zealand"
+    },
+    "stage": "group",
+    "group": "G",
+    "matchday": 5,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-0f846365870d@worldcup-calendar",
+    "summary": "France vs Senegal",
+    "date_utc": "2026-06-16T19:00:00+00:00",
+    "home": {
+      "name": "France"
+    },
+    "away": {
+      "name": "Senegal"
+    },
+    "stage": "group",
+    "group": "I",
+    "matchday": 6,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-cccee6959e93@worldcup-calendar",
+    "summary": "Iraq vs Norway",
+    "date_utc": "2026-06-16T22:00:00+00:00",
+    "home": {
+      "name": "Iraq"
+    },
+    "away": {
+      "name": "Norway"
+    },
+    "stage": "group",
+    "group": "I",
+    "matchday": 6,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-3d712cde556f@worldcup-calendar",
+    "summary": "Argentina vs Algeria",
+    "date_utc": "2026-06-17T01:00:00+00:00",
+    "home": {
+      "name": "Argentina"
+    },
+    "away": {
+      "name": "Algeria"
+    },
+    "stage": "group",
+    "group": "J",
+    "matchday": 6,
+    "venue": {
+      "name": "Kansas City",
+      "raw": "Kansas City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-647e537b682d@worldcup-calendar",
+    "summary": "Austria vs Jordan",
+    "date_utc": "2026-06-17T04:00:00+00:00",
+    "home": {
+      "name": "Austria"
+    },
+    "away": {
+      "name": "Jordan"
+    },
+    "stage": "group",
+    "group": "J",
+    "matchday": 6,
+    "venue": {
+      "name": "San Francisco Bay Area (Santa Clara)",
+      "raw": "San Francisco Bay Area (Santa Clara)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-762d3e9456fd@worldcup-calendar",
+    "summary": "Portugal vs DR Congo",
+    "date_utc": "2026-06-17T17:00:00+00:00",
+    "home": {
+      "name": "Portugal"
+    },
+    "away": {
+      "name": "DR Congo"
+    },
+    "stage": "group",
+    "group": "K",
+    "matchday": 7,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-1d9bf69d0e64@worldcup-calendar",
+    "summary": "England vs Croatia",
+    "date_utc": "2026-06-17T20:00:00+00:00",
+    "home": {
+      "name": "England"
+    },
+    "away": {
+      "name": "Croatia"
+    },
+    "stage": "group",
+    "group": "L",
+    "matchday": 7,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-3cf93686bcf8@worldcup-calendar",
+    "summary": "Ghana vs Panama",
+    "date_utc": "2026-06-17T23:00:00+00:00",
+    "home": {
+      "name": "Ghana"
+    },
+    "away": {
+      "name": "Panama"
+    },
+    "stage": "group",
+    "group": "L",
+    "matchday": 7,
+    "venue": {
+      "name": "Toronto",
+      "raw": "Toronto"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-961435d8626c@worldcup-calendar",
+    "summary": "Uzbekistan vs Colombia",
+    "date_utc": "2026-06-18T02:00:00+00:00",
+    "home": {
+      "name": "Uzbekistan"
+    },
+    "away": {
+      "name": "Colombia"
+    },
+    "stage": "group",
+    "group": "K",
+    "matchday": 7,
+    "venue": {
+      "name": "Mexico City",
+      "raw": "Mexico City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-e8aa08edb6ad@worldcup-calendar",
+    "summary": "Czech Republic vs South Africa",
+    "date_utc": "2026-06-18T16:00:00+00:00",
+    "home": {
+      "name": "Czech Republic"
+    },
+    "away": {
+      "name": "South Africa"
+    },
+    "stage": "group",
+    "group": "A",
+    "matchday": 8,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-28e5beab171a@worldcup-calendar",
+    "summary": "Switzerland vs Bosnia & Herzegovina",
+    "date_utc": "2026-06-18T19:00:00+00:00",
+    "home": {
+      "name": "Switzerland"
+    },
+    "away": {
+      "name": "Bosnia & Herzegovina"
+    },
+    "stage": "group",
+    "group": "B",
+    "matchday": 8,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-106797924277@worldcup-calendar",
+    "summary": "Canada vs Qatar",
+    "date_utc": "2026-06-18T22:00:00+00:00",
+    "home": {
+      "name": "Canada"
+    },
+    "away": {
+      "name": "Qatar"
+    },
+    "stage": "group",
+    "group": "B",
+    "matchday": 8,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-7e2495985fc6@worldcup-calendar",
+    "summary": "Mexico vs South Korea",
+    "date_utc": "2026-06-19T01:00:00+00:00",
+    "home": {
+      "name": "Mexico"
+    },
+    "away": {
+      "name": "South Korea"
+    },
+    "stage": "group",
+    "group": "A",
+    "matchday": 8,
+    "venue": {
+      "name": "Guadalajara (Zapopan)",
+      "raw": "Guadalajara (Zapopan)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-8ff270051ebe@worldcup-calendar",
+    "summary": "USA vs Australia",
+    "date_utc": "2026-06-19T19:00:00+00:00",
+    "home": {
+      "name": "USA"
+    },
+    "away": {
+      "name": "Australia"
+    },
+    "stage": "group",
+    "group": "D",
+    "matchday": 9,
+    "venue": {
+      "name": "Seattle",
+      "raw": "Seattle"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-f93686d79d46@worldcup-calendar",
+    "summary": "Scotland vs Morocco",
+    "date_utc": "2026-06-19T22:00:00+00:00",
+    "home": {
+      "name": "Scotland"
+    },
+    "away": {
+      "name": "Morocco"
+    },
+    "stage": "group",
+    "group": "C",
+    "matchday": 9,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-35b03107e97b@worldcup-calendar",
+    "summary": "Brazil vs Haiti",
+    "date_utc": "2026-06-20T00:30:00+00:00",
+    "home": {
+      "name": "Brazil"
+    },
+    "away": {
+      "name": "Haiti"
+    },
+    "stage": "group",
+    "group": "C",
+    "matchday": 9,
+    "venue": {
+      "name": "Philadelphia",
+      "raw": "Philadelphia"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-dfb31b509dd6@worldcup-calendar",
+    "summary": "Turkey vs Paraguay",
+    "date_utc": "2026-06-20T03:00:00+00:00",
+    "home": {
+      "name": "Turkey"
+    },
+    "away": {
+      "name": "Paraguay"
+    },
+    "stage": "group",
+    "group": "D",
+    "matchday": 9,
+    "venue": {
+      "name": "San Francisco Bay Area (Santa Clara)",
+      "raw": "San Francisco Bay Area (Santa Clara)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-d400a9b695a8@worldcup-calendar",
+    "summary": "Netherlands vs Sweden",
+    "date_utc": "2026-06-20T17:00:00+00:00",
+    "home": {
+      "name": "Netherlands"
+    },
+    "away": {
+      "name": "Sweden"
+    },
+    "stage": "group",
+    "group": "F",
+    "matchday": 10,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-04adb35cd696@worldcup-calendar",
+    "summary": "Germany vs Ivory Coast",
+    "date_utc": "2026-06-20T20:00:00+00:00",
+    "home": {
+      "name": "Germany"
+    },
+    "away": {
+      "name": "Ivory Coast"
+    },
+    "stage": "group",
+    "group": "E",
+    "matchday": 10,
+    "venue": {
+      "name": "Toronto",
+      "raw": "Toronto"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-99c0702d0791@worldcup-calendar",
+    "summary": "Ecuador vs Curaçao",
+    "date_utc": "2026-06-21T00:00:00+00:00",
+    "home": {
+      "name": "Ecuador"
+    },
+    "away": {
+      "name": "Curaçao"
+    },
+    "stage": "group",
+    "group": "E",
+    "matchday": 10,
+    "venue": {
+      "name": "Kansas City",
+      "raw": "Kansas City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-f544802e5627@worldcup-calendar",
+    "summary": "Tunisia vs Japan",
+    "date_utc": "2026-06-21T04:00:00+00:00",
+    "home": {
+      "name": "Tunisia"
+    },
+    "away": {
+      "name": "Japan"
+    },
+    "stage": "group",
+    "group": "F",
+    "matchday": 10,
+    "venue": {
+      "name": "Monterrey (Guadalupe)",
+      "raw": "Monterrey (Guadalupe)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-5b9ad7ac6f5f@worldcup-calendar",
+    "summary": "Spain vs Saudi Arabia",
+    "date_utc": "2026-06-21T16:00:00+00:00",
+    "home": {
+      "name": "Spain"
+    },
+    "away": {
+      "name": "Saudi Arabia"
+    },
+    "stage": "group",
+    "group": "H",
+    "matchday": 11,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-0b5f46aa9cfd@worldcup-calendar",
+    "summary": "Belgium vs Iran",
+    "date_utc": "2026-06-21T19:00:00+00:00",
+    "home": {
+      "name": "Belgium"
+    },
+    "away": {
+      "name": "Iran"
+    },
+    "stage": "group",
+    "group": "G",
+    "matchday": 11,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-a06b3652712e@worldcup-calendar",
+    "summary": "Uruguay vs Cape Verde",
+    "date_utc": "2026-06-21T22:00:00+00:00",
+    "home": {
+      "name": "Uruguay"
+    },
+    "away": {
+      "name": "Cape Verde"
+    },
+    "stage": "group",
+    "group": "H",
+    "matchday": 11,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-51f3976829e1@worldcup-calendar",
+    "summary": "New Zealand vs Egypt",
+    "date_utc": "2026-06-22T01:00:00+00:00",
+    "home": {
+      "name": "New Zealand"
+    },
+    "away": {
+      "name": "Egypt"
+    },
+    "stage": "group",
+    "group": "G",
+    "matchday": 11,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-61198cde6a1a@worldcup-calendar",
+    "summary": "Argentina vs Austria",
+    "date_utc": "2026-06-22T17:00:00+00:00",
+    "home": {
+      "name": "Argentina"
+    },
+    "away": {
+      "name": "Austria"
+    },
+    "stage": "group",
+    "group": "J",
+    "matchday": 12,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-5344004efef4@worldcup-calendar",
+    "summary": "France vs Iraq",
+    "date_utc": "2026-06-22T21:00:00+00:00",
+    "home": {
+      "name": "France"
+    },
+    "away": {
+      "name": "Iraq"
+    },
+    "stage": "group",
+    "group": "I",
+    "matchday": 12,
+    "venue": {
+      "name": "Philadelphia",
+      "raw": "Philadelphia"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-d47eb6b9f103@worldcup-calendar",
+    "summary": "Norway vs Senegal",
+    "date_utc": "2026-06-23T00:00:00+00:00",
+    "home": {
+      "name": "Norway"
+    },
+    "away": {
+      "name": "Senegal"
+    },
+    "stage": "group",
+    "group": "I",
+    "matchday": 12,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-41edcc085fe5@worldcup-calendar",
+    "summary": "Jordan vs Algeria",
+    "date_utc": "2026-06-23T03:00:00+00:00",
+    "home": {
+      "name": "Jordan"
+    },
+    "away": {
+      "name": "Algeria"
+    },
+    "stage": "group",
+    "group": "J",
+    "matchday": 12,
+    "venue": {
+      "name": "San Francisco Bay Area (Santa Clara)",
+      "raw": "San Francisco Bay Area (Santa Clara)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-1bc3f4be2e36@worldcup-calendar",
+    "summary": "Portugal vs Uzbekistan",
+    "date_utc": "2026-06-23T17:00:00+00:00",
+    "home": {
+      "name": "Portugal"
+    },
+    "away": {
+      "name": "Uzbekistan"
+    },
+    "stage": "group",
+    "group": "K",
+    "matchday": 13,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-0d9bbef5c913@worldcup-calendar",
+    "summary": "England vs Ghana",
+    "date_utc": "2026-06-23T20:00:00+00:00",
+    "home": {
+      "name": "England"
+    },
+    "away": {
+      "name": "Ghana"
+    },
+    "stage": "group",
+    "group": "L",
+    "matchday": 13,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-014d40403a6b@worldcup-calendar",
+    "summary": "Panama vs Croatia",
+    "date_utc": "2026-06-23T23:00:00+00:00",
+    "home": {
+      "name": "Panama"
+    },
+    "away": {
+      "name": "Croatia"
+    },
+    "stage": "group",
+    "group": "L",
+    "matchday": 13,
+    "venue": {
+      "name": "Toronto",
+      "raw": "Toronto"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-e592e72369a3@worldcup-calendar",
+    "summary": "Colombia vs DR Congo",
+    "date_utc": "2026-06-24T02:00:00+00:00",
+    "home": {
+      "name": "Colombia"
+    },
+    "away": {
+      "name": "DR Congo"
+    },
+    "stage": "group",
+    "group": "K",
+    "matchday": 13,
+    "venue": {
+      "name": "Guadalajara (Zapopan)",
+      "raw": "Guadalajara (Zapopan)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-7930b6dbf88c@worldcup-calendar",
+    "summary": "Switzerland vs Canada",
+    "date_utc": "2026-06-24T19:00:00+00:00",
+    "home": {
+      "name": "Switzerland"
+    },
+    "away": {
+      "name": "Canada"
+    },
+    "stage": "group",
+    "group": "B",
+    "matchday": 14,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-cb7249d22fdd@worldcup-calendar",
+    "summary": "Bosnia & Herzegovina vs Qatar",
+    "date_utc": "2026-06-24T19:00:00+00:00",
+    "home": {
+      "name": "Bosnia & Herzegovina"
+    },
+    "away": {
+      "name": "Qatar"
+    },
+    "stage": "group",
+    "group": "B",
+    "matchday": 14,
+    "venue": {
+      "name": "Seattle",
+      "raw": "Seattle"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-9b6ddb137374@worldcup-calendar",
+    "summary": "Scotland vs Brazil",
+    "date_utc": "2026-06-24T22:00:00+00:00",
+    "home": {
+      "name": "Scotland"
+    },
+    "away": {
+      "name": "Brazil"
+    },
+    "stage": "group",
+    "group": "C",
+    "matchday": 14,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-35140186af9c@worldcup-calendar",
+    "summary": "Morocco vs Haiti",
+    "date_utc": "2026-06-24T22:00:00+00:00",
+    "home": {
+      "name": "Morocco"
+    },
+    "away": {
+      "name": "Haiti"
+    },
+    "stage": "group",
+    "group": "C",
+    "matchday": 14,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-a39ddca16285@worldcup-calendar",
+    "summary": "Czech Republic vs Mexico",
+    "date_utc": "2026-06-25T01:00:00+00:00",
+    "home": {
+      "name": "Czech Republic"
+    },
+    "away": {
+      "name": "Mexico"
+    },
+    "stage": "group",
+    "group": "A",
+    "matchday": 14,
+    "venue": {
+      "name": "Mexico City",
+      "raw": "Mexico City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-f21ab750b07d@worldcup-calendar",
+    "summary": "South Africa vs South Korea",
+    "date_utc": "2026-06-25T01:00:00+00:00",
+    "home": {
+      "name": "South Africa"
+    },
+    "away": {
+      "name": "South Korea"
+    },
+    "stage": "group",
+    "group": "A",
+    "matchday": 14,
+    "venue": {
+      "name": "Monterrey (Guadalupe)",
+      "raw": "Monterrey (Guadalupe)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-449fbd478704@worldcup-calendar",
+    "summary": "Curaçao vs Ivory Coast",
+    "date_utc": "2026-06-25T20:00:00+00:00",
+    "home": {
+      "name": "Curaçao"
+    },
+    "away": {
+      "name": "Ivory Coast"
+    },
+    "stage": "group",
+    "group": "E",
+    "matchday": 15,
+    "venue": {
+      "name": "Philadelphia",
+      "raw": "Philadelphia"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-bd2418c0d719@worldcup-calendar",
+    "summary": "Ecuador vs Germany",
+    "date_utc": "2026-06-25T20:00:00+00:00",
+    "home": {
+      "name": "Ecuador"
+    },
+    "away": {
+      "name": "Germany"
+    },
+    "stage": "group",
+    "group": "E",
+    "matchday": 15,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-82b095ff1da0@worldcup-calendar",
+    "summary": "Japan vs Sweden",
+    "date_utc": "2026-06-25T23:00:00+00:00",
+    "home": {
+      "name": "Japan"
+    },
+    "away": {
+      "name": "Sweden"
+    },
+    "stage": "group",
+    "group": "F",
+    "matchday": 15,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-f5165b86a7e9@worldcup-calendar",
+    "summary": "Tunisia vs Netherlands",
+    "date_utc": "2026-06-25T23:00:00+00:00",
+    "home": {
+      "name": "Tunisia"
+    },
+    "away": {
+      "name": "Netherlands"
+    },
+    "stage": "group",
+    "group": "F",
+    "matchday": 15,
+    "venue": {
+      "name": "Kansas City",
+      "raw": "Kansas City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-4f14fe6a7480@worldcup-calendar",
+    "summary": "Turkey vs USA",
+    "date_utc": "2026-06-26T02:00:00+00:00",
+    "home": {
+      "name": "Turkey"
+    },
+    "away": {
+      "name": "USA"
+    },
+    "stage": "group",
+    "group": "D",
+    "matchday": 15,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-27d203e7ec39@worldcup-calendar",
+    "summary": "Paraguay vs Australia",
+    "date_utc": "2026-06-26T02:00:00+00:00",
+    "home": {
+      "name": "Paraguay"
+    },
+    "away": {
+      "name": "Australia"
+    },
+    "stage": "group",
+    "group": "D",
+    "matchday": 15,
+    "venue": {
+      "name": "San Francisco Bay Area (Santa Clara)",
+      "raw": "San Francisco Bay Area (Santa Clara)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-723b2034d515@worldcup-calendar",
+    "summary": "Norway vs France",
+    "date_utc": "2026-06-26T19:00:00+00:00",
+    "home": {
+      "name": "Norway"
+    },
+    "away": {
+      "name": "France"
+    },
+    "stage": "group",
+    "group": "I",
+    "matchday": 16,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-bd389ef93c34@worldcup-calendar",
+    "summary": "Senegal vs Iraq",
+    "date_utc": "2026-06-26T19:00:00+00:00",
+    "home": {
+      "name": "Senegal"
+    },
+    "away": {
+      "name": "Iraq"
+    },
+    "stage": "group",
+    "group": "I",
+    "matchday": 16,
+    "venue": {
+      "name": "Toronto",
+      "raw": "Toronto"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-f7b3d5f83547@worldcup-calendar",
+    "summary": "Cape Verde vs Saudi Arabia",
+    "date_utc": "2026-06-27T00:00:00+00:00",
+    "home": {
+      "name": "Cape Verde"
+    },
+    "away": {
+      "name": "Saudi Arabia"
+    },
+    "stage": "group",
+    "group": "H",
+    "matchday": 16,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-3ae6a791ad0a@worldcup-calendar",
+    "summary": "Uruguay vs Spain",
+    "date_utc": "2026-06-27T00:00:00+00:00",
+    "home": {
+      "name": "Uruguay"
+    },
+    "away": {
+      "name": "Spain"
+    },
+    "stage": "group",
+    "group": "H",
+    "matchday": 16,
+    "venue": {
+      "name": "Guadalajara (Zapopan)",
+      "raw": "Guadalajara (Zapopan)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-71865170e473@worldcup-calendar",
+    "summary": "Egypt vs Iran",
+    "date_utc": "2026-06-27T03:00:00+00:00",
+    "home": {
+      "name": "Egypt"
+    },
+    "away": {
+      "name": "Iran"
+    },
+    "stage": "group",
+    "group": "G",
+    "matchday": 16,
+    "venue": {
+      "name": "Seattle",
+      "raw": "Seattle"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-b388a214fccb@worldcup-calendar",
+    "summary": "New Zealand vs Belgium",
+    "date_utc": "2026-06-27T03:00:00+00:00",
+    "home": {
+      "name": "New Zealand"
+    },
+    "away": {
+      "name": "Belgium"
+    },
+    "stage": "group",
+    "group": "G",
+    "matchday": 16,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-e855fd4f1a2f@worldcup-calendar",
+    "summary": "Panama vs England",
+    "date_utc": "2026-06-27T21:00:00+00:00",
+    "home": {
+      "name": "Panama"
+    },
+    "away": {
+      "name": "England"
+    },
+    "stage": "group",
+    "group": "L",
+    "matchday": 17,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-e1ac545f3f60@worldcup-calendar",
+    "summary": "Croatia vs Ghana",
+    "date_utc": "2026-06-27T21:00:00+00:00",
+    "home": {
+      "name": "Croatia"
+    },
+    "away": {
+      "name": "Ghana"
+    },
+    "stage": "group",
+    "group": "L",
+    "matchday": 17,
+    "venue": {
+      "name": "Philadelphia",
+      "raw": "Philadelphia"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-da13fe28ac54@worldcup-calendar",
+    "summary": "Colombia vs Portugal",
+    "date_utc": "2026-06-27T23:30:00+00:00",
+    "home": {
+      "name": "Colombia"
+    },
+    "away": {
+      "name": "Portugal"
+    },
+    "stage": "group",
+    "group": "K",
+    "matchday": 17,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-bc692e901fbf@worldcup-calendar",
+    "summary": "DR Congo vs Uzbekistan",
+    "date_utc": "2026-06-27T23:30:00+00:00",
+    "home": {
+      "name": "DR Congo"
+    },
+    "away": {
+      "name": "Uzbekistan"
+    },
+    "stage": "group",
+    "group": "K",
+    "matchday": 17,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-2ed591dab203@worldcup-calendar",
+    "summary": "Algeria vs Austria",
+    "date_utc": "2026-06-28T02:00:00+00:00",
+    "home": {
+      "name": "Algeria"
+    },
+    "away": {
+      "name": "Austria"
+    },
+    "stage": "group",
+    "group": "J",
+    "matchday": 17,
+    "venue": {
+      "name": "Kansas City",
+      "raw": "Kansas City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-8d41013dc501@worldcup-calendar",
+    "summary": "Jordan vs Argentina",
+    "date_utc": "2026-06-28T02:00:00+00:00",
+    "home": {
+      "name": "Jordan"
+    },
+    "away": {
+      "name": "Argentina"
+    },
+    "stage": "group",
+    "group": "J",
+    "matchday": 17,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-1e776111ce63@worldcup-calendar",
+    "summary": "2A vs 2B",
+    "date_utc": "2026-06-28T19:00:00+00:00",
+    "home": {
+      "name": "2A"
+    },
+    "away": {
+      "name": "2B"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-e144cb4fb77e@worldcup-calendar",
+    "summary": "1C vs 2F",
+    "date_utc": "2026-06-29T17:00:00+00:00",
+    "home": {
+      "name": "1C"
+    },
+    "away": {
+      "name": "2F"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-2d0a996298e5@worldcup-calendar",
+    "summary": "1E vs 3A/B/C/D/F",
+    "date_utc": "2026-06-29T20:30:00+00:00",
+    "home": {
+      "name": "1E"
+    },
+    "away": {
+      "name": "3A/B/C/D/F"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-cf8f93430d95@worldcup-calendar",
+    "summary": "1F vs 2C",
+    "date_utc": "2026-06-30T01:00:00+00:00",
+    "home": {
+      "name": "1F"
+    },
+    "away": {
+      "name": "2C"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Monterrey (Guadalupe)",
+      "raw": "Monterrey (Guadalupe)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-921b9ac0b401@worldcup-calendar",
+    "summary": "2E vs 2I",
+    "date_utc": "2026-06-30T17:00:00+00:00",
+    "home": {
+      "name": "2E"
+    },
+    "away": {
+      "name": "2I"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-4f740fef287b@worldcup-calendar",
+    "summary": "1I vs 3C/D/F/G/H",
+    "date_utc": "2026-06-30T21:00:00+00:00",
+    "home": {
+      "name": "1I"
+    },
+    "away": {
+      "name": "3C/D/F/G/H"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-ff1e60e42e65@worldcup-calendar",
+    "summary": "1A vs 3C/E/F/H/I",
+    "date_utc": "2026-07-01T01:00:00+00:00",
+    "home": {
+      "name": "1A"
+    },
+    "away": {
+      "name": "3C/E/F/H/I"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Mexico City",
+      "raw": "Mexico City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-64d381f99150@worldcup-calendar",
+    "summary": "1L vs 3E/H/I/J/K",
+    "date_utc": "2026-07-01T16:00:00+00:00",
+    "home": {
+      "name": "1L"
+    },
+    "away": {
+      "name": "3E/H/I/J/K"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-315531d89b13@worldcup-calendar",
+    "summary": "1G vs 3A/E/H/I/J",
+    "date_utc": "2026-07-01T20:00:00+00:00",
+    "home": {
+      "name": "1G"
+    },
+    "away": {
+      "name": "3A/E/H/I/J"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Seattle",
+      "raw": "Seattle"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-8ecc320a224b@worldcup-calendar",
+    "summary": "1D vs 3B/E/F/I/J",
+    "date_utc": "2026-07-02T00:00:00+00:00",
+    "home": {
+      "name": "1D"
+    },
+    "away": {
+      "name": "3B/E/F/I/J"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "San Francisco Bay Area (Santa Clara)",
+      "raw": "San Francisco Bay Area (Santa Clara)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-b92877596178@worldcup-calendar",
+    "summary": "1H vs 2J",
+    "date_utc": "2026-07-02T19:00:00+00:00",
+    "home": {
+      "name": "1H"
+    },
+    "away": {
+      "name": "2J"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-2268d8e43992@worldcup-calendar",
+    "summary": "2K vs 2L",
+    "date_utc": "2026-07-02T23:00:00+00:00",
+    "home": {
+      "name": "2K"
+    },
+    "away": {
+      "name": "2L"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Toronto",
+      "raw": "Toronto"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-8f31a5321274@worldcup-calendar",
+    "summary": "1B vs 3E/F/G/I/J",
+    "date_utc": "2026-07-03T03:00:00+00:00",
+    "home": {
+      "name": "1B"
+    },
+    "away": {
+      "name": "3E/F/G/I/J"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-e0865c6090ac@worldcup-calendar",
+    "summary": "2D vs 2G",
+    "date_utc": "2026-07-03T18:00:00+00:00",
+    "home": {
+      "name": "2D"
+    },
+    "away": {
+      "name": "2G"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-bc0ef23af714@worldcup-calendar",
+    "summary": "1J vs 2H",
+    "date_utc": "2026-07-03T22:00:00+00:00",
+    "home": {
+      "name": "1J"
+    },
+    "away": {
+      "name": "2H"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-7daebadcc553@worldcup-calendar",
+    "summary": "1K vs 3D/E/I/J/L",
+    "date_utc": "2026-07-04T01:30:00+00:00",
+    "home": {
+      "name": "1K"
+    },
+    "away": {
+      "name": "3D/E/I/J/L"
+    },
+    "stage": "r32",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Kansas City",
+      "raw": "Kansas City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-f1580d7dd1b5@worldcup-calendar",
+    "summary": "W73 vs W75",
+    "date_utc": "2026-07-04T17:00:00+00:00",
+    "home": {
+      "name": "W73"
+    },
+    "away": {
+      "name": "W75"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Houston",
+      "raw": "Houston"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-4db8524f0584@worldcup-calendar",
+    "summary": "W74 vs W77",
+    "date_utc": "2026-07-04T21:00:00+00:00",
+    "home": {
+      "name": "W74"
+    },
+    "away": {
+      "name": "W77"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Philadelphia",
+      "raw": "Philadelphia"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-2fe65a841eb9@worldcup-calendar",
+    "summary": "W76 vs W78",
+    "date_utc": "2026-07-05T20:00:00+00:00",
+    "home": {
+      "name": "W76"
+    },
+    "away": {
+      "name": "W78"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-105318c3b7dc@worldcup-calendar",
+    "summary": "W79 vs W80",
+    "date_utc": "2026-07-06T00:00:00+00:00",
+    "home": {
+      "name": "W79"
+    },
+    "away": {
+      "name": "W80"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Mexico City",
+      "raw": "Mexico City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-9f42e573a0d4@worldcup-calendar",
+    "summary": "W83 vs W84",
+    "date_utc": "2026-07-06T19:00:00+00:00",
+    "home": {
+      "name": "W83"
+    },
+    "away": {
+      "name": "W84"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-fe27390faad1@worldcup-calendar",
+    "summary": "W81 vs W82",
+    "date_utc": "2026-07-07T00:00:00+00:00",
+    "home": {
+      "name": "W81"
+    },
+    "away": {
+      "name": "W82"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Seattle",
+      "raw": "Seattle"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-a1f69232fd29@worldcup-calendar",
+    "summary": "W86 vs W88",
+    "date_utc": "2026-07-07T16:00:00+00:00",
+    "home": {
+      "name": "W86"
+    },
+    "away": {
+      "name": "W88"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-6ab7d17445ce@worldcup-calendar",
+    "summary": "W85 vs W87",
+    "date_utc": "2026-07-07T20:00:00+00:00",
+    "home": {
+      "name": "W85"
+    },
+    "away": {
+      "name": "W87"
+    },
+    "stage": "r16",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Vancouver",
+      "raw": "Vancouver"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-6a63358564fd@worldcup-calendar",
+    "summary": "W89 vs W90",
+    "date_utc": "2026-07-09T20:00:00+00:00",
+    "home": {
+      "name": "W89"
+    },
+    "away": {
+      "name": "W90"
+    },
+    "stage": "qf",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Boston (Foxborough)",
+      "raw": "Boston (Foxborough)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-6ff27d38cc16@worldcup-calendar",
+    "summary": "W93 vs W94",
+    "date_utc": "2026-07-10T19:00:00+00:00",
+    "home": {
+      "name": "W93"
+    },
+    "away": {
+      "name": "W94"
+    },
+    "stage": "qf",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Los Angeles (Inglewood)",
+      "raw": "Los Angeles (Inglewood)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-fbe7a024f3e0@worldcup-calendar",
+    "summary": "W91 vs W92",
+    "date_utc": "2026-07-11T21:00:00+00:00",
+    "home": {
+      "name": "W91"
+    },
+    "away": {
+      "name": "W92"
+    },
+    "stage": "qf",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-dc9278a6bd00@worldcup-calendar",
+    "summary": "W95 vs W96",
+    "date_utc": "2026-07-12T01:00:00+00:00",
+    "home": {
+      "name": "W95"
+    },
+    "away": {
+      "name": "W96"
+    },
+    "stage": "qf",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Kansas City",
+      "raw": "Kansas City"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-81fa299a842d@worldcup-calendar",
+    "summary": "W97 vs W98",
+    "date_utc": "2026-07-14T19:00:00+00:00",
+    "home": {
+      "name": "W97"
+    },
+    "away": {
+      "name": "W98"
+    },
+    "stage": "sf",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Dallas (Arlington)",
+      "raw": "Dallas (Arlington)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-43df622ceb7a@worldcup-calendar",
+    "summary": "W99 vs W100",
+    "date_utc": "2026-07-15T19:00:00+00:00",
+    "home": {
+      "name": "W99"
+    },
+    "away": {
+      "name": "W100"
+    },
+    "stage": "sf",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Atlanta",
+      "raw": "Atlanta"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-aea8dc458d5d@worldcup-calendar",
+    "summary": "L101 vs L102",
+    "date_utc": "2026-07-18T21:00:00+00:00",
+    "home": {
+      "name": "L101"
+    },
+    "away": {
+      "name": "L102"
+    },
+    "stage": "third",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "Miami (Miami Gardens)",
+      "raw": "Miami (Miami Gardens)"
+    }
+  },
+  {
+    "match_id": "fifa-wc-2026-a6884a13dba5@worldcup-calendar",
+    "summary": "W101 vs W102",
+    "date_utc": "2026-07-19T19:00:00+00:00",
+    "home": {
+      "name": "W101"
+    },
+    "away": {
+      "name": "W102"
+    },
+    "stage": "final",
+    "group": null,
+    "matchday": null,
+    "venue": {
+      "name": "New York/New Jersey (East Rutherford)",
+      "raw": "New York/New Jersey (East Rutherford)"
+    }
+  }
+]
