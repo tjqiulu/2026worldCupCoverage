@@ -37,6 +37,24 @@
     <footer>
         <small>数据源: <a href="https://github.com/baires/fifa-cal-2026" target="_blank">baires/fifa-cal-2026</a> · 时间: 北京时间 (UTC+8) · 本地缓存: <span id="cache-info">未知</span></small>
     </footer>
+
+    <!-- Match detail modal (Plan 009) -->
+    <div id="match-modal" class="match-modal" hidden>
+        <div class="match-modal-backdrop"></div>
+        <div class="match-modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-stage">
+            <button class="match-modal-close" aria-label="关闭">×</button>
+            <div class="match-modal-content">
+                <div class="match-modal-stage" id="modal-stage"></div>
+                <div class="match-modal-date" id="modal-date"></div>
+                <div class="match-modal-teams">
+                    <div class="match-modal-team" id="modal-home"></div>
+                    <div class="match-modal-vs">VS</div>
+                    <div class="match-modal-team" id="modal-away"></div>
+                </div>
+                <div class="match-modal-venue" id="modal-venue"></div>
+            </div>
+        </div>
+    </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

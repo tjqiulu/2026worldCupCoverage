@@ -288,6 +288,9 @@ function renderBracket(matches) {
 
     // Draw connecting lines on top of the grid (behind cards)
     drawBracketLines(bracketContainer, matches);
+
+    // Attach click handlers for opening detail modal
+    attachMatchCardClickHandlers();
 }
 
 // === Plan 007: Bracket connecting lines (SVG overlay) ===
@@ -475,6 +478,116 @@ function showTab(name) {
 
 document.querySelectorAll('.tab').forEach(btn => {
     btn.addEventListener('click', () => showTab(btn.dataset.tab));
+});
+
+// === Plan 009: Match detail modal ===
+
+const STAGE_LABELS_ZH = {
+    group: '小组赛',
+    r32: '1/8 决赛 R32',
+    r16: '1/16 决赛 R16',
+    qf: '1/4 决赛 QF',
+    sf: '半决赛',
+    third: '季军战',
+    final: '决赛',
+    unknown: '未知阶段',
+};
+
+const WEEKDAYS_FULL_ZH = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+function describePlaceholder(name) {
+    if (!name) return '';
+    if (name.startsWith('W')) {
+        const n = name.slice(1);
+        return `${n} 场胜者`;
+    }
+    if (name.startsWith('L')) {
+        const n = name.slice(1);
+        return `${n} 场败者`;
+    }
+    // 1X / 2X / 3X
+    const m = name.match(/^([123])([A-Z])$/);
+    if (m) {
+        const place = { '1': '第一', '2': '第二', '3': '第三' }[m[1]];
+        return `${m[2]} 组${place}`;
+    }
+    return name;
+}
+
+function renderModalTeam(team) {
+    if (!team) return '';
+    if (team.code_iso) {
+        return `<span class="fi fi-${escapeHtml(team.code_iso)}"></span>
+                <div class="team-name-zh">${escapeHtml(team.name_zh || team.name)}</div>
+                <div class="team-name-en">${escapeHtml(team.name)}</div>`;
+    }
+    return `<div class="placeholder-flag" title="${escapeHtml(describePlaceholder(team.name))}">?</div>
+            <div class="team-name-zh placeholder-name">${escapeHtml(team.name)}</div>
+            <div class="team-name-en">${escapeHtml(describePlaceholder(team.name))}</div>`;
+}
+
+function getStageFullLabel(match) {
+    if (match.stage === 'group' && match.group) {
+        return `${STAGE_LABELS_ZH.group} · Group ${match.group}${match.matchday ? ` · 第 ${match.matchday} 轮` : ''}`;
+    }
+    if (match.stage === 'third') {
+        return STAGE_LABELS_ZH.third;
+    }
+    return STAGE_LABELS_ZH[match.stage] || match.stage;
+}
+
+function formatModalDate(utcIso) {
+    const d = new Date(utcIso);
+    const bj = new Date(d.getTime() + BEIJING_OFFSET_MS);
+    const month = bj.getUTCMonth() + 1;
+    const day = bj.getUTCDate();
+    const weekday = WEEKDAYS_FULL_ZH[bj.getUTCDay()];
+    const hour = String(bj.getUTCHours()).padStart(2, '0');
+    const min = String(bj.getUTCMinutes()).padStart(2, '0');
+    return `${month} 月 ${day} 日 ${weekday} ${hour}:${min}（北京时间）`;
+}
+
+function showMatchModal(matchId) {
+    const match = allMatches.find(m => m.match_id === matchId);
+    if (!match) return;
+    document.getElementById('modal-stage').textContent = getStageFullLabel(match);
+    document.getElementById('modal-date').textContent = formatModalDate(match.date_utc);
+    document.getElementById('modal-home').innerHTML = renderModalTeam(match.home);
+    document.getElementById('modal-away').innerHTML = renderModalTeam(match.away);
+    const venueEl = document.getElementById('modal-venue');
+    if (match.venue && match.venue.name) {
+        venueEl.innerHTML = `<span class="venue-name">📍 ${escapeHtml(match.venue.name)}</span>`;
+    } else {
+        venueEl.innerHTML = '';
+    }
+    document.getElementById('match-modal').hidden = false;
+}
+
+function closeMatchModal() {
+    document.getElementById('match-modal').hidden = true;
+}
+
+function attachMatchCardClickHandlers() {
+    document.querySelectorAll('.match-card, .bracket-card').forEach(card => {
+        if (card.dataset.id && !card.dataset.clickBound) {
+            card.addEventListener('click', () => showMatchModal(card.dataset.id));
+            card.dataset.clickBound = '1';
+        }
+    });
+}
+
+// Hook up modal close handlers
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('match-modal');
+    if (modal) {
+        modal.querySelector('.match-modal-close').addEventListener('click', closeMatchModal);
+        modal.querySelector('.match-modal-backdrop').addEventListener('click', closeMatchModal);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.hidden) {
+                closeMatchModal();
+            }
+        });
+    }
 });
 
 async function refreshData() {
