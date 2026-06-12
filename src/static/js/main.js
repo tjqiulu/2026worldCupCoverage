@@ -53,17 +53,29 @@ async function loadMatches() {
         bracketContainer.innerHTML = '<p class="loading">加载中 Loading...</p>';
     };
     showLoading();
-    try {
-        const resp = await fetch('/api/matches');
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-        allMatches = await resp.json();
-        renderMatches(allMatches);
-        renderBracket(allMatches);
-        scrollToToday();
-    } catch (e) {
-        const errHtml = `<p class="error">加载失败: ${escapeHtml(e.message)}</p>`;
-        matchesContainer.innerHTML = errHtml;
-        bracketContainer.innerHTML = errHtml;
+    // Retry up to 3 times with backoff (handles Flask reloader race, etc.)
+    const MAX_RETRIES = 3;
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            const resp = await fetch('/api/matches');
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            allMatches = await resp.json();
+            renderMatches(allMatches);
+            renderBracket(allMatches);
+            attachMatchCardClickHandlers();
+            scrollToToday();
+            return;  // success
+        } catch (e) {
+            if (attempt < MAX_RETRIES) {
+                const delay = attempt * 1000;  // 1s, 2s, 3s
+                console.warn(`Fetch attempt ${attempt} failed, retrying in ${delay}ms...`);
+                await new Promise(r => setTimeout(r, delay));
+            } else {
+                const errHtml = `<p class="error">加载失败: ${escapeHtml(e.message)}</p>`;
+                matchesContainer.innerHTML = errHtml;
+                bracketContainer.innerHTML = errHtml;
+            }
+        }
     }
 }
 
