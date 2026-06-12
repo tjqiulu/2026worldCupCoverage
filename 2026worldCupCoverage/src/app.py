@@ -8,6 +8,7 @@ Routes:
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -36,7 +37,13 @@ MATCHES_FILE = DATA_DIR / "matches.json"
 
 # Server config
 HOST = "127.0.0.1"
-PORT = 8766  # 8765 occupied by another service on this host
+PORT = 8766
+
+# Debug mode: off by default for end-user launches (set FLASK_DEBUG=1 to enable)
+# When debug=True, Flask uses a reloader that spawns a child process on startup,
+# which can cause the first browser request to fail with "Failed to fetch"
+# if it hits during the reloader handoff window.
+DEBUG = os.environ.get("FLASK_DEBUG", "0") == "1"  # 8765 occupied by another service on this host
 
 
 def load_matches() -> list[dict[str, Any]]:
@@ -116,4 +123,4 @@ def create_app() -> Flask:
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(host=HOST, port=PORT, debug=True)
+    app.run(host=HOST, port=PORT, debug=DEBUG)

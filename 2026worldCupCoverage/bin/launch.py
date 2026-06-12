@@ -84,13 +84,19 @@ def wait_for_http(url: str, timeout: int = DEFAULT_HEALTH_TIMEOUT) -> bool:
 
 
 def start_flask(project_root: Path) -> subprocess.Popen:
-    """Start the Flask app as a subprocess. Returns the Popen object."""
+    """Start the Flask app as a subprocess. Returns the Popen object.
+
+    Disables Flask debug mode to avoid the reloader race condition
+    that causes the first browser request to fail with "Failed to fetch".
+    """
+    env = os.environ.copy()
+    env["FLASK_DEBUG"] = "0"
     return subprocess.Popen(
         ["python3", "src/app.py"],
         cwd=str(project_root),
+        env=env,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
-        # Put flask in its own process group so we can SIGTERM it
         preexec_fn=os.setsid if sys.platform != "win32" else None,
     )
 
