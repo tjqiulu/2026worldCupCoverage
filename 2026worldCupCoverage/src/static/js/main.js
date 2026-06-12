@@ -173,7 +173,7 @@ function scrollToToday() {
     }
 }
 
-// === Plan 003: Tabs + Bracket ===
+// === Plan 003 (updated by Plan 005): Tabs + Mirror Bracket ===
 
 const STAGE_LABELS = {
     r32: '1/8 决赛 · R32',
@@ -184,23 +184,14 @@ const STAGE_LABELS = {
     third: '季军战',
 };
 
-// Row span for each stage in the bracket grid (R32 row count = 16)
-// R32 = 1, R16 = 2, QF = 4, SF = 8, Final = 16
-const STAGE_ROW_SPAN = { r32: 1, r16: 2, qf: 4, sf: 8, final: 16 };
-
 function renderBracket(matches) {
     if (!matches.length) {
         bracketContainer.innerHTML = '<p class="empty">暂无淘汰赛数据</p>';
         return;
     }
 
-    const stages = {
-        r32: [],
-        r16: [],
-        qf: [],
-        sf: [],
-        final: [],
-    };
+    // Collect and sort by stage
+    const stages = { r32: [], r16: [], qf: [], sf: [], final: [] };
     const third = [];
     for (const m of matches) {
         if (m.stage in stages) stages[m.stage].push(m);
@@ -211,37 +202,72 @@ function renderBracket(matches) {
     }
     third.sort((a, b) => a.date_utc.localeCompare(b.date_utc));
 
-    const stageOrder = ['r32', 'r16', 'qf', 'sf', 'final'];
+    // Split halves: 8 R32 top, 8 R32 bottom; 4 R16 top, 4 R16 bottom; etc.
+    // Top half: rows 1-8, Bottom half: rows 9-16
+    const r32Top = stages.r32.slice(0, 8);
+    const r32Bot = stages.r32.slice(8, 16);
+    const r16Top = stages.r16.slice(0, 4);
+    const r16Bot = stages.r16.slice(4, 8);
+    const qfTop = stages.qf.slice(0, 2);
+    const qfBot = stages.qf.slice(2, 4);
+    const sfTop = stages.sf[0] || null;
+    const sfBot = stages.sf[1] || null;
+    const finalMatch = stages.final[0] || null;
 
     let html = '<div class="bracket-wrapper">';
 
-    // Column labels
-    html += '<div class="bracket-labels">';
-    for (const stage of stageOrder) {
-        html += `<div class="label">${escapeHtml(STAGE_LABELS[stage])}</div>`;
+    // Column labels: 9 columns (mirror)
+    const labelTexts = ['R32', 'R16', 'QF', 'SF', 'Final', 'SF', 'QF', 'R16', 'R32'];
+    html += '<div class="bracket-labels-mirror">';
+    for (const l of labelTexts) {
+        html += `<div class="label">${escapeHtml(l)}</div>`;
     }
     html += '</div>';
 
-    // Bracket grid
-    html += '<div class="bracket">';
-    for (const stage of stageOrder) {
-        const ms = stages[stage];
-        const rowSpan = STAGE_ROW_SPAN[stage];
-        ms.forEach((m, i) => {
-            const rowStart = i * rowSpan + 1;
-            html += renderBracketCard(m, stage, rowStart, rowSpan);
-        });
+    // 9-column mirror grid (16 rows total)
+    html += '<div class="bracket-mirror">';
+
+    // Top half (rows 1-8)
+    r32Top.forEach((m, i) => {
+        html += renderMirrorCard(m, 'r32', 1, i + 1, 1);
+    });
+    r16Top.forEach((m, i) => {
+        html += renderMirrorCard(m, 'r16', 2, i * 2 + 1, 2);
+    });
+    qfTop.forEach((m, i) => {
+        html += renderMirrorCard(m, 'qf', 3, i * 4 + 1, 4);
+    });
+    if (sfTop) {
+        html += renderMirrorCard(sfTop, 'sf', 4, 1, 8);
     }
+    // Center: Final (rows 1-16, full height)
+    if (finalMatch) {
+        html += renderMirrorCard(finalMatch, 'final', 5, 1, 16);
+    }
+    // Bottom half (rows 9-16)
+    if (sfBot) {
+        html += renderMirrorCard(sfBot, 'sf', 6, 9, 8);
+    }
+    qfBot.forEach((m, i) => {
+        html += renderMirrorCard(m, 'qf', 7, 9 + i * 4, 4);
+    });
+    r16Bot.forEach((m, i) => {
+        html += renderMirrorCard(m, 'r16', 8, 9 + i * 2, 2);
+    });
+    r32Bot.forEach((m, i) => {
+        html += renderMirrorCard(m, 'r32', 9, 9 + i, 1);
+    });
+
     html += '</div>';
 
-    // Third place match (single column)
+    // Third place match (single column below mirror)
     if (third.length) {
-        html += '<div class="bracket-labels" style="margin-top: 16px;">';
-        html += `<div class="label" style="grid-column: 1 / -1;">${escapeHtml(STAGE_LABELS.third)}</div>`;
+        html += '<div class="bracket-labels-mirror" style="margin-top: 24px; grid-template-columns: minmax(200px, 400px);">';
+        html += `<div class="label">${escapeHtml(STAGE_LABELS.third)}</div>`;
         html += '</div>';
         html += '<div class="bracket-single-col">';
         third.forEach(m => {
-            html += renderBracketCard(m, 'third', 1, 1);
+            html += renderMirrorCard(m, 'third', 1, 1, 1);
         });
         html += '</div>';
     }
@@ -250,7 +276,7 @@ function renderBracket(matches) {
     bracketContainer.innerHTML = html;
 }
 
-function renderBracketCard(m, stage, rowStart, rowSpan) {
+function renderMirrorCard(m, stage, col, row, span) {
     const time = beijingTimeStr(m.date_utc);
     const date = beijingDateStr(m.date_utc);
     const venue = m.venue?.name || '';
@@ -258,8 +284,11 @@ function renderBracketCard(m, stage, rowStart, rowSpan) {
     const awayTitle = m.away?.name || '?';
     // For R32 use full date, for later rounds use shorter "7/04" format
     const dateLabel = stage === 'r32' || stage === 'third' ? date : date.substring(5).replace('-', '/');
-    return `<div class="bracket-card ${stage}" style="grid-row: ${rowStart} / span ${rowSpan};"
-                data-id="${escapeHtml(m.match_id)}" title="${escapeHtml(homeTitle + ' vs ' + awayTitle + ' · ' + date + ' ' + time + ' · ' + venue)}">
+    const colClass = `col-${col}`;
+    return `<div class="bracket-card ${stage} ${colClass}"
+                style="grid-column: ${col}; grid-row: ${row} / span ${span};"
+                data-id="${escapeHtml(m.match_id)}"
+                title="${escapeHtml(homeTitle + ' vs ' + awayTitle + ' · ' + date + ' ' + time + ' · ' + venue)}">
         <div class="bc-date">${escapeHtml(dateLabel)} ${escapeHtml(time)}</div>
         <div class="bc-teams">
             <div class="bc-team home">${renderTeamName(m.home, 'home')}</div>
