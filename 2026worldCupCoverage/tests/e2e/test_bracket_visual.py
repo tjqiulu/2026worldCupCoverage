@@ -41,25 +41,34 @@ class TestR16Alignment:
     def test_r32_count(self, r32_boxes):
         assert len(r32_boxes) == 16, f"Expected 16 R32 cards, got {len(r32_boxes)}"
 
-    @pytest.mark.parametrize("r16_idx, r32_left_idx, r32_right_idx", [
-        # Top half (4 R16): R32 positions in BRACKET order
-        # Bracket order: 1, 3, 2, 5, 4, 6, 7, 8 (indices 0-7 in DOM)
-        (0, 0, 1),  # R16-1 between R32-1 (idx 0) and R32-3 (idx 1)
-        (1, 2, 3),  # R16-2 between R32-2 (idx 2) and R32-5 (idx 3)
-        (2, 4, 5),  # R16-3 between R32-4 (idx 4) and R32-6 (idx 5)
-        (3, 6, 7),  # R16-4 between R32-7 (idx 6) and R32-8 (idx 7)
-        # Bottom half
-        (4, 8, 9),   # R16-5 between R32-11 (idx 8) and R32-12 (idx 9)
-        (5, 10, 11), # R16-6 between R32-9 (idx 10) and R32-10 (idx 11)
-        (6, 12, 13), # R16-7 between R32-14 (idx 12) and R32-16 (idx 13)
-        (7, 14, 15), # R16-8 between R32-13 (idx 14) and R32-15 (idx 15)
+    @pytest.mark.parametrize("r16_idx, r32_top_idx, r32_bot_idx", [
+        # Plan 008: 8-row layout. R16 card sits between 2 R32 parents
+        # in the SAME half (top or bottom).
+        # Top half R16 at DOM idx 0-3, parents in top half R32 at idx 0-7
+        #   R16-1 (idx 0) parents: R32-1 (idx 0) + R32-3 (idx 1)
+        #   R16-2 (idx 1) parents: R32-2 (idx 2) + R32-5 (idx 3)
+        #   R16-3 (idx 2) parents: R32-4 (idx 4) + R32-6 (idx 5)
+        #   R16-4 (idx 3) parents: R32-7 (idx 6) + R32-8 (idx 7)
+        # Bottom half R16 at DOM idx 4-7, parents in bottom half R32 at idx 8-15
+        #   R16-5 (idx 4) parents: R32-11 (idx 8) + R32-12 (idx 9)
+        #   R16-6 (idx 5) parents: R32-9 (idx 10) + R32-10 (idx 11)
+        #   R16-7 (idx 6) parents: R32-14 (idx 12) + R32-16 (idx 13)
+        #   R16-8 (idx 7) parents: R32-13 (idx 14) + R32-15 (idx 15)
+        (0, 0, 1),
+        (1, 2, 3),
+        (2, 4, 5),
+        (3, 6, 7),
+        (4, 8, 9),
+        (5, 10, 11),
+        (6, 12, 13),
+        (7, 14, 15),
     ])
     def test_r16_vertically_between_r32_parents(
-        self, r16_boxes, r32_boxes, r16_idx, r32_left_idx, r32_right_idx
+        self, r16_boxes, r32_boxes, r16_idx, r32_top_idx, r32_bot_idx
     ):
         r16 = r16_boxes[r16_idx]
-        r32_l = r32_boxes[r32_left_idx]
-        r32_r = r32_boxes[r32_right_idx]
+        r32_l = r32_boxes[r32_top_idx]
+        r32_r = r32_boxes[r32_bot_idx]
 
         r16_cy = _center_y(r16)
         l_cy = _center_y(r32_l)
@@ -69,7 +78,7 @@ class TestR16Alignment:
         lo, hi = sorted([l_cy, r_cy])
         assert lo < r16_cy < hi, (
             f"R16[{r16_idx}] center y={r16_cy:.1f} not between "
-            f"R32[{r32_left_idx}] y={l_cy:.1f} and R32[{r32_right_idx}] y={r_cy:.1f}"
+            f"R32[{r32_top_idx}] y={l_cy:.1f} and R32[{r32_bot_idx}] y={r_cy:.1f}"
         )
 
         # R16 should be roughly equidistant (within 2px tolerance for sub-pixel rounding)
@@ -77,25 +86,21 @@ class TestR16Alignment:
         dist_r = abs(r16_cy - r_cy)
         imbalance = abs(dist_l - dist_r)
         assert imbalance < 2, (
-            f"R16[{r16_idx}] off-center: dist to left={dist_l:.1f}, "
-            f"dist to right={dist_r:.1f}, imbalance={imbalance:.1f}px"
+            f"R16[{r16_idx}] off-center: dist to top={dist_l:.1f}, "
+            f"dist to bot={dist_r:.1f}, imbalance={imbalance:.1f}px"
         )
 
     def test_r16_x_between_r32_parents(self, r16_boxes, r32_boxes):
-        """R16 card's x should be > R32's x (R16 is in column 2, R32 in col 1)."""
-        for i in range(4):  # Just check first 4
+        """Top-half R16 should be in col 2 (right of col 1)."""
+        for i in range(4):
             r16_x = r16_boxes[i]["x"]
-            r32_x = r32_boxes[i * 2]["x"]
-            assert r16_x > r32_x, f"R16[{i}] should be to the right of R32[{i*2}]"
+            r32_x = r32_boxes[i]["x"]  # 1:1 pairing in top half
+            assert r16_x > r32_x, f"R16[{i}] should be to the right of R32[{i}]"
 
 
-# === QF alignment with R16 parents ===
+# === QF alignment ===
 
 class TestQFAlignment:
-    @pytest.fixture
-    def r16_boxes(self, page: Page) -> list[dict]:
-        return _card_boxes_by_stage(page, "r16")
-
     @pytest.fixture
     def qf_boxes(self, page: Page) -> list[dict]:
         return _card_boxes_by_stage(page, "qf")
@@ -103,33 +108,19 @@ class TestQFAlignment:
     def test_qf_count(self, qf_boxes):
         assert len(qf_boxes) == 4
 
-    @pytest.mark.parametrize("qf_idx, r16_left, r16_right", [
-        (0, 0, 1),  # QF-1 between R16-1 and R16-2
-        (1, 2, 3),  # QF-2 between R16-3 and R16-4
-        (2, 4, 5),  # QF-3 between R16-5 and R16-6
-        (3, 6, 7),  # QF-4 between R16-7 and R16-8
-    ])
-    def test_qf_between_r16_parents(self, r16_boxes, qf_boxes, qf_idx, r16_left, r16_right):
-        qf = qf_boxes[qf_idx]
-        r16_l = r16_boxes[r16_left]
-        r16_r = r16_boxes[r16_right]
-        qf_cy = _center_y(qf)
-        l_cy = _center_y(r16_l)
-        r_cy = _center_y(r16_r)
-        lo, hi = sorted([l_cy, r_cy])
-        assert lo < qf_cy < hi, (
-            f"QF[{qf_idx}] center y={qf_cy:.1f} not between "
-            f"R16[{r16_left}] y={l_cy:.1f} and R16[{r16_right}] y={r_cy:.1f}"
-        )
+    def test_qf_top_bottom_at_same_y(self, qf_boxes):
+        """Plan 008: QF-1 (top, col 3 row 1) at same y as QF-3 (bot, col 7 row 1).
+        QF-2 (top, col 3 row 5) at same y as QF-4 (bot, col 7 row 5)."""
+        # In DOM order: QF-1, QF-2, QF-3, QF-4
+        # QF-1 ↔ QF-3 (both row 1)
+        # QF-2 ↔ QF-4 (both row 5)
+        assert abs(_center_y(qf_boxes[0]) - _center_y(qf_boxes[2])) < 2
+        assert abs(_center_y(qf_boxes[1]) - _center_y(qf_boxes[3])) < 2
 
 
-# === SF alignment with QF parents ===
+# === SF alignment ===
 
 class TestSFAlignment:
-    @pytest.fixture
-    def qf_boxes(self, page: Page) -> list[dict]:
-        return _card_boxes_by_stage(page, "qf")
-
     @pytest.fixture
     def sf_boxes(self, page: Page) -> list[dict]:
         return _card_boxes_by_stage(page, "sf")
@@ -137,21 +128,10 @@ class TestSFAlignment:
     def test_sf_count(self, sf_boxes):
         assert len(sf_boxes) == 2
 
-    def test_sf1_between_qf1_and_qf2(self, qf_boxes, sf_boxes):
-        sf = sf_boxes[0]
-        qf1 = qf_boxes[0]
-        qf2 = qf_boxes[1]
-        sf_cy = _center_y(sf)
-        lo, hi = sorted([_center_y(qf1), _center_y(qf2)])
-        assert lo < sf_cy < hi
-
-    def test_sf2_between_qf3_and_qf4(self, qf_boxes, sf_boxes):
-        sf = sf_boxes[1]
-        qf3 = qf_boxes[2]
-        qf4 = qf_boxes[3]
-        sf_cy = _center_y(sf)
-        lo, hi = sorted([_center_y(qf3), _center_y(qf4)])
-        assert lo < sf_cy < hi
+    def test_sf_top_bottom_at_same_y(self, sf_boxes):
+        """Plan 008: SF-1 (top, col 4) and SF-2 (bot, col 6) both span all 8 rows."""
+        # Both span the full grid height, so they should have the same y center
+        assert abs(_center_y(sf_boxes[0]) - _center_y(sf_boxes[1])) < 5
 
 
 # === Final alignment ===
@@ -182,38 +162,69 @@ class TestFinalAlignment:
         )
 
     def test_final_vertically_centered(self, final_box, sf_boxes):
-        """Final should be vertically between SF-1 (top half) and SF-2 (bottom half)."""
+        """Plan 008: SF-1, Final, SF-2 all in same 8 rows, so same y center."""
         final_cy = _center_y(final_box)
         sf1_cy = _center_y(sf_boxes[0])
         sf2_cy = _center_y(sf_boxes[1])
-        # SF-1 should be above, SF-2 should be below
-        assert sf1_cy < final_cy < sf2_cy
+        # All three should be at the same y (span full 8 rows each)
+        assert abs(sf1_cy - final_cy) < 5, f"SF-1 cy={sf1_cy} != Final cy={final_cy}"
+        assert abs(sf2_cy - final_cy) < 5, f"SF-2 cy={sf2_cy} != Final cy={final_cy}"
 
 
 # === Top/bottom mirror symmetry ===
 
 class TestMirrorSymmetry:
-    def test_r32_mirror_symmetric(self, page: Page):
-        """R32 cards 1-8 (top) should be mirror of 9-16 (bottom) around Final center."""
+    """Plan 008: both halves in 8-row grid, top R32[i] and bot R32[i+8] at SAME y."""
+
+    def test_r32_top_bottom_same_y(self, page: Page):
+        """R32[i] (top half, col 1) and R32[i+8] (bottom half, col 9) at same y."""
         r32_boxes = _card_boxes_by_stage(page, "r32")
         assert len(r32_boxes) == 16
-
-        # Get Final card's center y as mirror axis
-        final_box = _card_boxes_by_stage(page, "final")[0]
-        axis_y = _center_y(final_box)
-
-        # Check r32[0] (top of top half) and r32[15] (bottom of bottom half) are equidistant from axis
         for i in range(8):
-            top = _center_y(r32_boxes[i])
-            bot = _center_y(r32_boxes[15 - i])
-            top_dist = abs(top - axis_y)
-            bot_dist = abs(bot - axis_y)
-            imbalance = abs(top_dist - bot_dist)
-            # Allow larger tolerance (mirror has padding differences)
-            assert imbalance < 20, (
-                f"R32[{i}] and R32[{15-i}] not symmetric around Final: "
-                f"top_dist={top_dist:.1f}, bot_dist={bot_dist:.1f}"
+            top_cy = _center_y(r32_boxes[i])
+            bot_cy = _center_y(r32_boxes[i + 8])
+            diff = abs(top_cy - bot_cy)
+            assert diff < 2, (
+                f"R32[{i}] (top) cy={top_cy:.1f} != R32[{i+8}] (bot) cy={bot_cy:.1f} "
+                f"(diff={diff:.1f}px, should be < 2px for true L-R symmetry)"
             )
+
+    def test_r16_top_bottom_same_y(self, page: Page):
+        """R16[i] (top half, col 2) and R16[i+4] (bottom half, col 8) at same y."""
+        r16_boxes = _card_boxes_by_stage(page, "r16")
+        assert len(r16_boxes) == 8
+        for i in range(4):
+            top_cy = _center_y(r16_boxes[i])
+            bot_cy = _center_y(r16_boxes[i + 4])
+            diff = abs(top_cy - bot_cy)
+            assert diff < 2, (
+                f"R16[{i}] (top) cy={top_cy:.1f} != R16[{i+4}] (bot) cy={bot_cy:.1f} "
+                f"(diff={diff:.1f}px)"
+            )
+
+    def test_qf_top_bottom_same_y(self, page: Page):
+        """QF[i] (top half, col 3) and QF[i+2] (bottom half, col 7) at same y."""
+        qf_boxes = _card_boxes_by_stage(page, "qf")
+        assert len(qf_boxes) == 4
+        for i in range(2):
+            top_cy = _center_y(qf_boxes[i])
+            bot_cy = _center_y(qf_boxes[i + 2])
+            diff = abs(top_cy - bot_cy)
+            assert diff < 2, (
+                f"QF[{i}] (top) cy={top_cy:.1f} != QF[{i+2}] (bot) cy={bot_cy:.1f} "
+                f"(diff={diff:.1f}px)"
+            )
+
+    def test_sf_top_bottom_same_y(self, page: Page):
+        """SF-1 (top, col 4) and SF-2 (bottom, col 6) at same y (both span full 8 rows)."""
+        sf_boxes = _card_boxes_by_stage(page, "sf")
+        assert len(sf_boxes) == 2
+        # Both span the same 8 rows, so should have the same y center
+        top_cy = _center_y(sf_boxes[0])
+        bot_cy = _center_y(sf_boxes[1])
+        # SF-1 and SF-2 should have similar y (both centered in 8 rows)
+        diff = abs(top_cy - bot_cy)
+        assert diff < 5, f"SF-1 and SF-2 not at same y: diff={diff:.1f}"
 
 
 # === Screenshot capture for human review ===

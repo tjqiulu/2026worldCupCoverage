@@ -329,7 +329,7 @@ footer a:hover {
 .bracket-mirror {
     display: grid;
     grid-template-columns: repeat(9, minmax(90px, 1fr));
-    grid-template-rows: repeat(16, 48px);
+    grid-template-rows: repeat(8, 60px);
     gap: 6px 8px;
     min-width: 950px;
     padding: 8px 0;

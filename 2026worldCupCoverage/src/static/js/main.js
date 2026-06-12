@@ -234,7 +234,10 @@ function renderBracket(matches) {
     html += '<svg class="bracket-lines" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>';
     html += '<div class="bracket-mirror">';
 
-    // Top half (rows 1-8)
+    // === Plan 008: 8-row layout, both halves in same vertical extent ===
+    // Top half: cols 1-4, rows 1-8
+    // Bottom half: cols 6-9, rows 1-8 (mirrored horizontally)
+    // Final: col 5, row 1, span 8
     r32Top.forEach((m, i) => {
         html += renderMirrorCard(m, 'r32', 1, i + 1, 1);
     });
@@ -247,22 +250,22 @@ function renderBracket(matches) {
     if (sfTop) {
         html += renderMirrorCard(sfTop, 'sf', 4, 1, 8);
     }
-    // Center: Final (rows 1-16, full height)
+    // Center: Final (rows 1-8)
     if (finalMatch) {
-        html += renderMirrorCard(finalMatch, 'final', 5, 1, 16);
+        html += renderMirrorCard(finalMatch, 'final', 5, 1, 8);
     }
-    // Bottom half (rows 9-16)
+    // Bottom half: rows 1-8, cols 6-9 (mirrored)
     if (sfBot) {
-        html += renderMirrorCard(sfBot, 'sf', 6, 9, 8);
+        html += renderMirrorCard(sfBot, 'sf', 6, 1, 8);
     }
     qfBot.forEach((m, i) => {
-        html += renderMirrorCard(m, 'qf', 7, 9 + i * 4, 4);
+        html += renderMirrorCard(m, 'qf', 7, i * 4 + 1, 4);
     });
     r16Bot.forEach((m, i) => {
-        html += renderMirrorCard(m, 'r16', 8, 9 + i * 2, 2);
+        html += renderMirrorCard(m, 'r16', 8, i * 2 + 1, 2);
     });
     r32Bot.forEach((m, i) => {
-        html += renderMirrorCard(m, 'r32', 9, 9 + i, 1);
+        html += renderMirrorCard(m, 'r32', 9, i + 1, 1);
     });
 
     html += '</div>';  // close .bracket-mirror
@@ -363,41 +366,50 @@ function connect(svg, parentCards, childCard, wBox) {
     if (parents.length === 0) return;
 
     const cBox = childCard.getBoundingClientRect();
-    const cx = cBox.left - wBox.left;
     const cy = cBox.top + cBox.height / 2 - wBox.top;
+    const cLeft = cBox.left - wBox.left;
+    const cRight = cBox.right - wBox.left;
+    const cCenterX = cLeft + cBox.width / 2;
 
-    // Get all parent (x, y) endpoints — they all share the same x (right edge of their column)
-    const parentYs = parents.map(p => {
+    // Get all parent (left, right, y) endpoints
+    const parentsData = parents.map(p => {
         const b = p.getBoundingClientRect();
-        return { x: b.right - wBox.left, y: b.top + b.height / 2 - wBox.top };
+        return {
+            left: b.left - wBox.left,
+            right: b.right - wBox.left,
+            y: b.top + b.height / 2 - wBox.top,
+        };
     });
-    parentYs.sort((a, b) => a.y - b.y);
+    parentsData.sort((a, b) => a.y - b.y);
+
+    // Direction: if parent center is LEFT of child center, go RIGHT (use parent.right)
+    //            if parent center is RIGHT of child center, go LEFT (use parent.left)
+    const pCenterX = (parentsData[0].left + parentsData[0].right) / 2;
+    const goingRight = pCenterX < cCenterX;
+    const px = goingRight ? parentsData[0].right : parentsData[0].left;
+    const cEdge = goingRight ? cLeft : cRight;
 
     if (parents.length === 1) {
-        // Simple L: parent right -> vertical to child y -> horizontal to child left
+        // Simple L: parent edge -> vertical to child y -> horizontal to child edge
         const path = document.createElementNS(SVG_NS, 'path');
-        path.setAttribute('d', `M ${parentYs[0].x} ${parentYs[0].y} V ${cy} H ${cx}`);
+        path.setAttribute('d', `M ${px} ${parentsData[0].y} V ${cy} H ${cEdge}`);
         path.setAttribute('class', 'bracket-line');
         svg.appendChild(path);
         return;
     }
 
-    // 2+ parents: draw a single vertical line spanning all parents, then a horizontal
-    // line from the midpoint (child's y) to the child's left edge.
-    // Vertical line
-    const x = parentYs[0].x;  // all parents share the same x
+    // 2+ parents: T-shape (vertical line spanning all parents + horizontal to child)
+    const x = px;  // all parents share the same edge x
     const vert = document.createElementNS(SVG_NS, 'path');
-    vert.setAttribute('d', `M ${x} ${parentYs[0].y} L ${x} ${parentYs[parentYs.length - 1].y}`);
+    vert.setAttribute('d', `M ${x} ${parentsData[0].y} L ${x} ${parentsData[parentsData.length - 1].y}`);
     vert.setAttribute('class', 'bracket-line');
     svg.appendChild(vert);
 
-    // Horizontal line from (x, cy) to (cx, cy)
     const horz = document.createElementNS(SVG_NS, 'path');
-    horz.setAttribute('d', `M ${x} ${cy} L ${cx} ${cy}`);
+    horz.setAttribute('d', `M ${x} ${cy} L ${cEdge} ${cy}`);
     horz.setAttribute('class', 'bracket-line');
     svg.appendChild(horz);
 
-    // Small dot at the merge point (visual anchor)
     const dot = document.createElementNS(SVG_NS, 'circle');
     dot.setAttribute('cx', x);
     dot.setAttribute('cy', cy);
