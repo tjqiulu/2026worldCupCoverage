@@ -1,0 +1,48 @@
+{
+  "name": "2026 世界杯 FIFA World Cup Coverage",
+  "short_name": "WC 2026",
+  "description": "2026 FIFA World Cup 赛程 / 对阵 / 详情 — 桌面浏览器全屏看板",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f5f5",
+  "theme_color": "#E63946",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["sports", "news"],
+  "icons": [
+    {
+      "src": "/static/img/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "赛程 Matches",
+      "short_name": "Matches",
+      "description": "查看所有比赛（按日期分组）",
+      "url": "/?tab=matches"
+    },
+    {
+      "name": "对阵 Bracket",
+      "short_name": "Bracket",
+      "description": "淘汰赛对阵图",
+      "url": "/?tab=bracket"
+    }
+  ]
+}

@@ -951,3 +951,13 @@ footer a:hover {
     min-width: 30px;
     text-align: right;
 }
+
+/* Plan 014: PWA install button */
+.install-btn {
+    background: #1D3557;
+    color: white;
+    font-size: 13px;
+}
+.install-btn:hover:not(:disabled) {
+    background: #14253D;
+}

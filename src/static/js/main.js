@@ -748,3 +748,40 @@ todayBtn.addEventListener('click', () => {
 });
 
 loadMatches();
+
+
+// === Plan 014: PWA install prompt ===
+
+let deferredInstallPrompt = null;
+
+function setupPwaInstall() {
+    const btn = document.getElementById('install-pwa-btn');
+    if (!btn) return;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        btn.hidden = false;
+        btn.textContent = '📲 安装';
+    });
+    btn.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice.outcome === 'accepted') {
+            btn.textContent = '✓ 已安装';
+            btn.disabled = true;
+        } else {
+            btn.textContent = '📲 安装';
+        }
+        deferredInstallPrompt = null;
+    });
+    window.addEventListener('appinstalled', () => {
+        btn.hidden = true;
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPwaInstall);
+} else {
+    setupPwaInstall();
+}
