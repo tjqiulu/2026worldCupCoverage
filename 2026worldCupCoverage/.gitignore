@@ -40,3 +40,6 @@ data/.cache/
 # Env
 .env
 .env.local
+
+# E2E test artifacts
+tests/e2e/screenshots/
