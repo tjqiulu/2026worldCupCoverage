@@ -20,9 +20,14 @@ if str(_PROJECT_ROOT) not in sys.path:
 from flask import Flask, jsonify, render_template, request  # noqa: E402
 
 from src.data.countries import enrich_matches  # noqa: E402
-from src.data.details import enrich_matches as enrich_details_matches  # noqa: E402
+from src.data.details import (
+    enrich_matches as enrich_details_matches,
+    merge_from_api,
+    save_details,
+)
 from src.data.ics_fetcher import fetch_ics  # noqa: E402
 from src.data.ics_parser import parse_ics  # noqa: E402
+from src.data.worldcup_api import fetch_details_for_matches, last_fetch_age_seconds  # noqa: E402
 
 # Paths
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -75,7 +80,27 @@ def create_app() -> Flask:
     def api_refresh() -> Any:
         try:
             matches = _refresh_matches()
-            return jsonify({"status": "ok", "count": len(matches)})
+            # Plan 012: also pull live scores from worldcup26.ir
+            scores_updated = 0
+            try:
+                api_details = fetch_details_for_matches(matches)
+                if api_details:
+                    from src.data.details import load_details
+                    existing = load_details()
+                    merged, scores_updated = merge_from_api(existing, api_details)
+                    if scores_updated > 0:
+                        save_details(merged)
+            except Exception as api_err:
+                # API failure is non-fatal — keep existing details
+                print(f"Warning: worldcup26.ir API failed: {api_err}")
+
+            age = last_fetch_age_seconds()
+            return jsonify({
+                "status": "ok",
+                "count": len(matches),
+                "scores_updated": scores_updated,
+                "last_refresh_seconds_ago": round(age) if age is not None else None,
+            })
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
 

@@ -62,25 +62,31 @@ class TestStatusAutoDetect:
 
 
 class TestModalForAutoFinal:
-    def test_modal_past_match_shows_score_pending(self, page: Page):
-        """R5: Modal for past match (no details) shows graceful 'score pending'."""
+    def test_modal_past_match_shows_score_or_pending(self, page: Page):
+        """R5: Modal for past match shows either real score (if API has data)
+        OR graceful 'score pending' (if no data). Plan 012 added API data,
+        so most past matches will have scores; only future API data losses
+        would show pending.
+        """
         page.goto("http://127.0.0.1:8766", wait_until="networkidle")
         page.wait_for_timeout(1500)
         page.click('button[data-tab="matches"]')
         page.wait_for_timeout(300)
-        # Find a card with status='final' (past match) and click it
         cards = page.locator('#matches-view .match-card').all()
         for card in cards:
             if card.get_attribute('data-status') == 'final':
                 card.click()
                 page.wait_for_timeout(500)
-                # Score section should be visible
                 ss = page.locator('#modal-score-section')
                 assert ss.get_attribute('hidden') is None
                 text = ss.text_content()
-                # Should say "比分待更新" or "pending"
-                assert '待更新' in text or 'pending' in text.lower(), (
-                    f"Modal should show 'score pending' for past match, got: {text}"
+                # Should show either:
+                # - Real score: large number (e.g., "2 - 0")
+                # - Pending: "待更新" or "pending"
+                has_score = any(c.isdigit() for c in text)
+                has_pending = '待更新' in text or 'pending' in text.lower()
+                assert has_score or has_pending, (
+                    f"Modal should show score or pending, got: {text}"
                 )
                 return
         pytest.skip("No final match found in first batch")

@@ -117,16 +117,21 @@ class TestModalScoreSection:
 
 
 class TestNoExampleData:
-    """Verify details.json is empty by default (no fake example data)."""
+    """Verify details.json doesn't ship FAKE example data (Plan 010 user feedback)."""
 
-    def test_details_file_has_no_real_entries(self):
-        """User feedback: don't ship fake example data. details.json should be empty (or only have _comment)."""
+    def test_details_file_has_no_fake_example_data(self):
+        """Plan 010: don't ship fake 2022 WC data. But Plan 012 allows
+        real API data (from worldcup26.ir refresh).
+
+        This test verifies: if the file has a `_comment` field mentioning
+        "EXAMPLE", that's fake data. Real data is OK (real player names
+        like R. Jiménez can appear if API actually returns them).
+        """
         with open(DETAILS_FILE) as f:
             data = json.load(f)
-        # Allow only _comment key (or no keys at all)
-        real_keys = [k for k in data if not k.startswith("_")]
-        assert len(real_keys) == 0, (
-            f"details.json should be empty, but has {len(real_keys)} real entries: {real_keys}. "
+        comment = data.get("_comment", "")
+        assert "EXAMPLE" not in comment.upper(), (
+            f"details.json still has example data reference. "
             f"Plan 010 user feedback: example data was misleading."
         )
 

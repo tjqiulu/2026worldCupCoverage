@@ -80,6 +80,62 @@ def enrich_matches(matches: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return matches
 
 
+# === Plan 012: Merge from worldcup26.ir API ===
+
+def merge_from_api(
+    existing: dict[str, dict[str, Any]],
+    api_details: dict[str, dict[str, Any]],
+) -> tuple[dict[str, dict[str, Any]], int]:
+    """Merge API-fetched details into existing details.
+
+    Rules:
+    - Existing entries (manually maintained) take priority — never overwritten by API.
+    - New entries from API are added to existing.
+    - Returns (merged_dict, num_added) where num_added is the number of
+      new entries (not overwriting existing).
+    """
+    added = 0
+    merged = dict(existing)  # copy
+    for mid, api_entry in api_details.items():
+        if mid not in merged:
+            merged[mid] = api_entry
+            added += 1
+        # else: existing entry wins, skip API
+    return merged, added
+
+
+def load_details() -> dict[str, dict[str, Any]]:
+    """Load and parse details.json (always fresh from disk, no cache)."""
+    if not DETAILS_FILE.exists():
+        return {}
+    try:
+        raw = json.loads(DETAILS_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    return {k: v for k, v in raw.items() if not k.startswith("_")}
+
+
+def save_details(details: dict[str, dict[str, Any]]) -> None:
+    """Save details to disk, preserving any _comment key."""
+    current: dict[str, Any] = {}
+    if DETAILS_FILE.exists():
+        try:
+            current = json.loads(DETAILS_FILE.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    # Preserve _comment
+    comment = current.get("_comment")
+    new_data: dict[str, Any] = dict(details)
+    if comment is not None:
+        new_data["_comment"] = comment
+    DETAILS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    DETAILS_FILE.write_text(
+        json.dumps(new_data, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    # Invalidate the cache so next load picks up the change
+    _load.cache_clear()
+
+
 def validate_entry(entry: Any) -> bool:
     """Validate a single details entry has required structure.
 
