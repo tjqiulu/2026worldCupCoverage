@@ -229,6 +229,9 @@ function renderBracket(matches) {
     html += '</div>';
 
     // 9-column mirror grid (16 rows total)
+    // Wrap in a positioned container so SVG lines can be absolute-positioned
+    html += '<div class="bracket-mirror-wrapper">';
+    html += '<svg class="bracket-lines" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>';
     html += '<div class="bracket-mirror">';
 
     // Top half (rows 1-8)
@@ -262,7 +265,8 @@ function renderBracket(matches) {
         html += renderMirrorCard(m, 'r32', 9, 9 + i, 1);
     });
 
-    html += '</div>';
+    html += '</div>';  // close .bracket-mirror
+    html += '</div>';  // close .bracket-mirror-wrapper
 
     // Third place match (single column below mirror)
     if (third.length) {
@@ -278,6 +282,128 @@ function renderBracket(matches) {
 
     html += '</div>';
     bracketContainer.innerHTML = html;
+
+    // Draw connecting lines on top of the grid (behind cards)
+    drawBracketLines(bracketContainer, matches);
+}
+
+// === Plan 007: Bracket connecting lines (SVG overlay) ===
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function drawBracketLines(container, matches) {
+    const wrapper = container.querySelector('.bracket-mirror-wrapper');
+    if (!wrapper) return;
+    const svg = wrapper.querySelector('.bracket-lines');
+    if (!svg) return;
+
+    // Clear existing
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+    // Get wrapper bounds (offset for relative positioning of SVG)
+    const wBox = wrapper.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${wBox.width} ${wBox.height}`);
+
+    // Build card map by match id
+    const cardById = new Map();
+    for (const card of wrapper.querySelectorAll('.bracket-card')) {
+        const id = card.dataset.id;
+        if (id) cardById.set(id, card);
+    }
+
+    // Stage data
+    const r32ByDate = matches.filter(m => m.stage === 'r32').sort((a, b) => a.date_utc.localeCompare(b.date_utc));
+    const r16ByDate = matches.filter(m => m.stage === 'r16').sort((a, b) => a.date_utc.localeCompare(b.date_utc));
+    const qfByDate = matches.filter(m => m.stage === 'qf').sort((a, b) => a.date_utc.localeCompare(b.date_utc));
+    const sfByDate = matches.filter(m => m.stage === 'sf').sort((a, b) => a.date_utc.localeCompare(b.date_utc));
+    const finalMatch = matches.find(m => m.stage === 'final');
+
+    // Map R32 by bracket position (1-16)
+    const r32ByPos = new Map();
+    r32ByDate.forEach((m, i) => r32ByPos.set(i + 1, m));
+
+    // R32 -> R16 (8 groups, 2 R32 each)
+    for (const r16m of r16ByDate) {
+        const wH = parseInt((r16m.home?.name || '').replace('W', ''));
+        const wA = parseInt((r16m.away?.name || '').replace('W', ''));
+        const r32Parents = [wH, wA]
+            .filter(w => w)
+            .map(w => r32ByPos.get(w - 72))
+            .filter(m => m)
+            .map(m => cardById.get(m.match_id));
+        connect(svg, r32Parents, cardById.get(r16m.match_id), wBox);
+    }
+
+    // R16 -> QF (4 groups, 2 R16 each)
+    for (let i = 0; i < qfByDate.length; i++) {
+        const r16Parents = [r16ByDate[i * 2], r16ByDate[i * 2 + 1]]
+            .filter(m => m)
+            .map(m => cardById.get(m.match_id));
+        connect(svg, r16Parents, cardById.get(qfByDate[i].match_id), wBox);
+    }
+
+    // QF -> SF (2 groups, 2 QF each)
+    for (let i = 0; i < sfByDate.length; i++) {
+        const qfParents = [qfByDate[i * 2], qfByDate[i * 2 + 1]]
+            .filter(m => m)
+            .map(m => cardById.get(m.match_id));
+        connect(svg, qfParents, cardById.get(sfByDate[i].match_id), wBox);
+    }
+
+    // SF -> Final (1 group, 2 SF)
+    if (finalMatch) {
+        const sfParents = sfByDate.map(m => cardById.get(m.match_id));
+        connect(svg, sfParents, cardById.get(finalMatch.match_id), wBox);
+    }
+}
+
+function connect(svg, parentCards, childCard, wBox) {
+    if (!childCard) return;
+    const parents = (Array.isArray(parentCards) ? parentCards : [parentCards]).filter(p => p);
+    if (parents.length === 0) return;
+
+    const cBox = childCard.getBoundingClientRect();
+    const cx = cBox.left - wBox.left;
+    const cy = cBox.top + cBox.height / 2 - wBox.top;
+
+    // Get all parent (x, y) endpoints — they all share the same x (right edge of their column)
+    const parentYs = parents.map(p => {
+        const b = p.getBoundingClientRect();
+        return { x: b.right - wBox.left, y: b.top + b.height / 2 - wBox.top };
+    });
+    parentYs.sort((a, b) => a.y - b.y);
+
+    if (parents.length === 1) {
+        // Simple L: parent right -> vertical to child y -> horizontal to child left
+        const path = document.createElementNS(SVG_NS, 'path');
+        path.setAttribute('d', `M ${parentYs[0].x} ${parentYs[0].y} V ${cy} H ${cx}`);
+        path.setAttribute('class', 'bracket-line');
+        svg.appendChild(path);
+        return;
+    }
+
+    // 2+ parents: draw a single vertical line spanning all parents, then a horizontal
+    // line from the midpoint (child's y) to the child's left edge.
+    // Vertical line
+    const x = parentYs[0].x;  // all parents share the same x
+    const vert = document.createElementNS(SVG_NS, 'path');
+    vert.setAttribute('d', `M ${x} ${parentYs[0].y} L ${x} ${parentYs[parentYs.length - 1].y}`);
+    vert.setAttribute('class', 'bracket-line');
+    svg.appendChild(vert);
+
+    // Horizontal line from (x, cy) to (cx, cy)
+    const horz = document.createElementNS(SVG_NS, 'path');
+    horz.setAttribute('d', `M ${x} ${cy} L ${cx} ${cy}`);
+    horz.setAttribute('class', 'bracket-line');
+    svg.appendChild(horz);
+
+    // Small dot at the merge point (visual anchor)
+    const dot = document.createElementNS(SVG_NS, 'circle');
+    dot.setAttribute('cx', x);
+    dot.setAttribute('cy', cy);
+    dot.setAttribute('r', '2');
+    dot.setAttribute('class', 'bracket-dot');
+    svg.appendChild(dot);
 }
 
 function computeBracketOrder(r32, r16) {

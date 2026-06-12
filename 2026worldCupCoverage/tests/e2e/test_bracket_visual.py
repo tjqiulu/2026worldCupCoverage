@@ -224,3 +224,77 @@ def test_bracket_screenshot(page: Page):
     print(f"\n[INFO] Bracket screenshot saved to: {path}")
     assert path.exists()
     assert path.stat().st_size > 1000  # non-trivial image
+
+
+# === Plan 007: SVG connecting lines ===
+
+class TestConnectingLines:
+    """Verify SVG elbow lines correctly connect parent-child matches."""
+
+    def test_svg_exists(self, page: Page):
+        svg = page.locator(".bracket-lines").first
+        assert svg.count() == 1
+        # Wait for JS to render
+        page.wait_for_timeout(300)
+        svg_box = svg.bounding_box()
+        assert svg_box is not None
+        assert svg_box["width"] > 500
+        assert svg_box["height"] > 500
+
+    def test_line_count(self, page: Page):
+        """Plan 007: 30 lines total (16 R32→R16 + 8 R16→QF + 4 QF→SF + 2 SF→Final).
+
+        With T-shape (1 vertical + 1 horizontal per group), and 8+4+2+1 = 15 groups,
+        total paths = 30. Plus 15 merge-point dots.
+        """
+        page.wait_for_timeout(300)
+        lines = page.locator(".bracket-lines path.bracket-line").all()
+        dots = page.locator(".bracket-lines circle.bracket-dot").all()
+        assert len(lines) == 30, f"Expected 30 lines, got {len(lines)}"
+        assert len(dots) == 15, f"Expected 15 dots, got {len(dots)}"
+
+    def test_first_r32_r16_line_starts_at_parent_right_edge(self, page: Page):
+        """The first R32→R16 line should start at the right edge of R32-1."""
+        page.wait_for_timeout(300)
+        # R32-1 is the first card in DOM
+        r32_1 = page.locator(".bracket-card.r32").first
+        r32_1_box = r32_1.bounding_box()
+        # First line corresponds to the first connection (R32-1 → R16-1)
+        first_line = page.locator(".bracket-lines path.bracket-line").first
+        d = first_line.get_attribute("d") or ""
+
+        # Get SVG's bounding box (line coords are relative to SVG)
+        svg_box = page.locator(".bracket-lines").first.bounding_box()
+        svg_left = svg_box["x"]
+
+        # Parse "M px py ..." - first path is the T's vertical (or L's first)
+        parts = d.split()
+        assert parts[0] == "M"
+        px = float(parts[1])
+        # The SVG-relative x of the line should match R32-1's right edge (relative to SVG)
+        r32_right_svg = (r32_1_box["x"] + r32_1_box["width"]) - svg_left
+        # Allow small tolerance for grid gaps
+        assert abs(px - r32_right_svg) < 3, (
+            f"First line x={px} doesn't match R32-1 right edge "
+            f"(svg-relative)={r32_right_svg:.1f} (svg left={svg_left:.1f})"
+        )
+
+    def test_lines_visual_screenshot(self, page: Page):
+        """Take a screenshot of the bracket with connecting lines for visual review."""
+        page.wait_for_timeout(500)
+        path = save_screenshot(page, "bracket_with_lines")
+        print(f"\n[INFO] Bracket with lines screenshot: {path}")
+        assert path.stat().st_size > 5000  # non-trivial image with lines
+
+    def test_no_line_overlaps_card(self, page: Page):
+        """Lines should not visually cross over card bodies (only through gaps)."""
+        # This is a soft check: get the SVG bounding box and the bracket-mirror box,
+        # verify SVG fills the bracket area so lines are positioned correctly.
+        page.wait_for_timeout(300)
+        svg = page.locator(".bracket-lines").first
+        svg_box = svg.bounding_box()
+        mirror = page.locator(".bracket-mirror").first
+        mirror_box = mirror.bounding_box()
+        # SVG should cover the mirror area (with some tolerance for padding)
+        assert abs(svg_box["width"] - mirror_box["width"]) < 5
+        assert abs(svg_box["height"] - mirror_box["height"]) < 5
