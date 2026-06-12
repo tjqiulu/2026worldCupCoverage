@@ -27,16 +27,24 @@ class TestDetailsFile:
         details = all_details()
         assert isinstance(details, dict)
 
-    def test_initial_data_has_at_least_2_matches(self):
-        """R13: initial data has at least 2 finished matches for demo."""
+    def test_file_only_has_special_keys_or_empty(self):
+        """Plan 010 user feedback: don't ship fake example data.
+        details.json should be empty (just _comment) until real results added."""
         details = all_details()
-        # At least 2 entries (we pre-populated MEX vs RSA and KOR vs CZE)
-        assert len(details) >= 2, f"Expected ≥ 2 entries, got {len(details)}"
+        # If user has added real data, that's fine. We just don't
+        # REQUIRE example data anymore.
+        # (No assertion — empty file is valid; user adds data as matches play.)
+        pass
 
-    def test_initial_matches_have_final_status(self):
+    def test_all_entries_have_valid_status(self):
+        """R1: All entries (if any) must have valid status."""
         details = all_details()
-        final_count = sum(1 for e in details.values() if e.get("status") == "final")
-        assert final_count >= 2, f"Expected ≥ 2 'final' entries, got {final_count}"
+        for mid, entry in details.items():
+            from src.data.details import validate_entry, VALID_STATUSES
+            assert entry.get("status") in VALID_STATUSES, (
+                f"Entry {mid} has invalid status: {entry.get('status')}"
+            )
+            assert validate_entry(entry), f"Entry {mid} failed validation: {entry}"
 
 
 # === validate_entry ===

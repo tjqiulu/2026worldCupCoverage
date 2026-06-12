@@ -2,6 +2,14 @@
 
 > How to add or update match results (scores, goalscorers) in the app.
 
+## Status: empty data file
+
+`data/details.json` is currently **empty** (just `_comment`). The WC2026 tournament
+starts 2026-06-11 — no matches have been played yet from this app's perspective.
+
+**No example data is shipped** to avoid confusion (e.g., showing fake 2022 WC
+scores as 2026 results). Add real entries as matches are played.
+
 ## Why this exists
 
 The `baires/fifa-cal-2026` ICS only provides **schedules** (when, where, who).
