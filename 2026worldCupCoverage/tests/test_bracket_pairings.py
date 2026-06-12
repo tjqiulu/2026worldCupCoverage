@@ -5,6 +5,7 @@ import pytest
 
 from src.data.bracket_pairings import (
     build_bracket_pairings,
+    compute_bracket_order,
     derive_r32_to_r16,
     parse_w_number,
 )
@@ -117,3 +118,52 @@ class TestBuildBracketPairingsReal:
         m = pairings["r32_positions"][15]
         assert m["home"]["name"] == "1K"
         assert m["away"]["name"] == "3D/E/I/J/L"
+
+
+# === compute_bracket_order ===
+
+@pytest.mark.skipif(not REAL_MATCHES.exists(), reason="Real data not present")
+class TestComputeBracketOrder:
+    @pytest.fixture
+    def r32(self):
+        import json
+        matches = json.loads(REAL_MATCHES.read_text(encoding="utf-8"))
+        return sorted(
+            [m for m in matches if m["stage"] == "r32"],
+            key=lambda m: m["date_utc"],
+        )
+
+    @pytest.fixture
+    def r16(self):
+        import json
+        matches = json.loads(REAL_MATCHES.read_text(encoding="utf-8"))
+        return sorted(
+            [m for m in matches if m["stage"] == "r16"],
+            key=lambda m: m["date_utc"],
+        )
+
+    def test_returns_16_r32(self, r32, r16):
+        order = compute_bracket_order(r32, r16)
+        assert len(order) == 16
+
+    def test_top_half_first_pair_is_R16_1_parents(self, r32, r16):
+        order = compute_bracket_order(r32, r16)
+        # R16-1 = W73 vs W75 = R32-1 + R32-3
+        assert order[0]["home"]["name"] == "2A"  # R32-1
+        assert order[0]["away"]["name"] == "2B"
+        assert order[1]["home"]["name"] == "1E"  # R32-3
+        assert order[1]["away"]["name"] == "3A/B/C/D/F"
+
+    def test_top_half_second_pair_is_R16_2_parents(self, r32, r16):
+        order = compute_bracket_order(r32, r16)
+        # R16-2 = W74 vs W77 = R32-2 + R32-5
+        assert order[2]["home"]["name"] == "1C"  # R32-2
+        assert order[2]["away"]["name"] == "2F"
+        assert order[3]["home"]["name"] == "2E"  # R32-5
+        assert order[3]["away"]["name"] == "2I"
+
+    def test_all_16_r32_present(self, r32, r16):
+        order = compute_bracket_order(r32, r16)
+        original_ids = {m["match_id"] for m in r32}
+        order_ids = {m["match_id"] for m in order}
+        assert original_ids == order_ids

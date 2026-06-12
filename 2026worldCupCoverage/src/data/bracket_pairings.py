@@ -119,3 +119,38 @@ def build_bracket_pairings(
         "sf_to_qf": sf_to_qf,
         "final_to_sf": final_to_sf,
     }
+
+
+def compute_bracket_order(
+    r32: list[dict[str, Any]],
+    r16: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Return R32 matches reordered into bracket-tree order.
+
+    Default chronological order produces a 'zigzag' R16 layout because
+    FIFA's actual pairings aren't adjacent (e.g., R16-1 = R32-1 + R32-3,
+    R16-2 = R32-2 + R32-5). This function reorders R32 so that each R16's
+    two parents sit next to each other in the layout, producing a clean
+    tournament tree.
+
+    Top half (first 8): R16-1's parents, R16-2's parents, R16-3's parents, R16-4's parents.
+    Bottom half (next 8): R16-5, R16-6, R16-7, R16-8 same way.
+
+    Returns:
+        List of 16 R32 match dicts in bracket order (positions 1-8 are top
+        half, 9-16 are bottom half).
+    """
+    r32_by_pos = {i + 1: m for i, m in enumerate(r32)}
+    r16_sorted = sorted(r16, key=lambda m: m["date_utc"])
+
+    bracket_order: list[dict[str, Any]] = []
+    for r16m in r16_sorted:
+        w_h = parse_w_number(r16m.get("home", {}).get("name"))
+        w_a = parse_w_number(r16m.get("away", {}).get("name"))
+        for w in (w_h, w_a):
+            if w is not None:
+                r32m = r32_by_pos.get(w - 72)
+                if r32m is not None and r32m not in bracket_order:
+                    bracket_order.append(r32m)
+
+    return bracket_order

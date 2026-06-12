@@ -202,10 +202,14 @@ function renderBracket(matches) {
     }
     third.sort((a, b) => a.date_utc.localeCompare(b.date_utc));
 
-    // Split halves: 8 R32 top, 8 R32 bottom; 4 R16 top, 4 R16 bottom; etc.
-    // Top half: rows 1-8, Bottom half: rows 9-16
-    const r32Top = stages.r32.slice(0, 8);
-    const r32Bot = stages.r32.slice(8, 16);
+    // Split halves using BRACKET ORDER (not chronological) so R16 cards
+    // visually center between their actual R32 parents. FIFA pairings
+    // aren't adjacent (e.g., R16-1 = R32-1 + R32-3), so chronological
+    // order produces a zigzag layout.
+    // See: src/data/bracket_pairings.py compute_bracket_order
+    const r32Bracket = computeBracketOrder(stages.r32, stages.r16);
+    const r32Top = r32Bracket.slice(0, 8);
+    const r32Bot = r32Bracket.slice(8, 16);
     const r16Top = stages.r16.slice(0, 4);
     const r16Bot = stages.r16.slice(4, 8);
     const qfTop = stages.qf.slice(0, 2);
@@ -274,6 +278,30 @@ function renderBracket(matches) {
 
     html += '</div>';
     bracketContainer.innerHTML = html;
+}
+
+function computeBracketOrder(r32, r16) {
+    // Build R32 position → match lookup
+    const r32ByPos = new Map();
+    r32.forEach((m, i) => r32ByPos.set(i + 1, m));
+    // For each R16 match, take its 2 R32 parents (in home/away order)
+    const order = [];
+    const seen = new Set();
+    for (const r16m of r16) {
+        const wH = parseInt((r16m.home.name || '').replace('W', ''));
+        const wA = parseInt((r16m.away.name || '').replace('W', ''));
+        for (const w of [wH, wA]) {
+            if (w) {
+                const pos = w - 72;
+                const m = r32ByPos.get(pos);
+                if (m && !seen.has(m.match_id)) {
+                    order.push(m);
+                    seen.add(m.match_id);
+                }
+            }
+        }
+    }
+    return order;
 }
 
 function renderMirrorCard(m, stage, col, row, span) {
