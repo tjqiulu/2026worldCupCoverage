@@ -1,5 +1,44 @@
 // 2026 World Cup Coverage - main frontend logic (Plan 002 minimal)
 
+// === Timezone: Beijing (UTC+8) — user preference ===
+const BEIJING_OFFSET_MS = 8 * 60 * 60 * 1000;
+const WEEKDAYS_ZH = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+function toBeijing(utcIso) {
+    // Returns a Date whose UTC components represent Beijing time.
+    // Example: new Date('2026-06-11T19:00:00Z').getTime() + 8h
+    //          -> Date whose getUTC*() reads 2026-06-12 03:00:00 (Beijing)
+    return new Date(new Date(utcIso).getTime() + BEIJING_OFFSET_MS);
+}
+
+function beijingDateStr(utcIso) {
+    const d = toBeijing(utcIso);
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
+
+function beijingTimeStr(utcIso) {
+    const d = toBeijing(utcIso);
+    const h = String(d.getUTCHours()).padStart(2, '0');
+    const min = String(d.getUTCMinutes()).padStart(2, '0');
+    return `${h}:${min}`;
+}
+
+function beijingWeekdayIdx(beijingDateString) {
+    // Given a YYYY-MM-DD in Beijing time, return 0-6 weekday index.
+    // Trick: noon Beijing of that date == 04:00 UTC of that date, which is
+    // safely within the same Beijing date and gives the correct weekday.
+    const [y, m, day] = beijingDateString.split('-').map(Number);
+    const d = new Date(Date.UTC(y, m - 1, day, 4));
+    return d.getUTCDay();
+}
+
+function todayBeijing() {
+    return beijingDateStr(new Date().toISOString());
+}
+
 const matchesContainer = document.getElementById('matches-container');
 const refreshBtn = document.getElementById('refresh-btn');
 const todayBtn = document.getElementById('today-btn');
@@ -26,16 +65,16 @@ function renderMatches(matches) {
         return;
     }
 
-    // Group by UTC date
+    // Group by Beijing date
     const byDate = {};
     for (const m of matches) {
-        const d = m.date_utc.split('T')[0];
+        const d = beijingDateStr(m.date_utc);
         if (!byDate[d]) byDate[d] = [];
         byDate[d].push(m);
     }
 
-    // Today's date in UTC (server's "today" for fixture)
-    const today = new Date().toISOString().split('T')[0];
+    // Today in Beijing
+    const today = todayBeijing();
 
     let html = '';
     for (const [date, ms] of Object.entries(byDate)) {
@@ -54,7 +93,7 @@ function renderMatches(matches) {
 }
 
 function renderMatchCard(m) {
-    const time = (m.date_utc.split('T')[1] || '').substring(0, 5);
+    const time = beijingTimeStr(m.date_utc);
     const home = (m.home && m.home.name) || '?';
     const away = (m.away && m.away.name) || '?';
     const stageLabel = m.group
@@ -85,10 +124,9 @@ function labelStage(stage) {
 }
 
 function formatDate(dateStr) {
-    // Parse as UTC date
-    const d = new Date(dateStr + 'T00:00:00Z');
-    const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-    return `${d.getUTCFullYear()}年${d.getUTCMonth() + 1}月${d.getUTCDate()}日 ${days[d.getUTCDay()]}`;
+    // dateStr is YYYY-MM-DD in Beijing time
+    const [y, m, day] = dateStr.split('-').map(Number);
+    return `${y}年${m}月${day}日 ${WEEKDAYS_ZH[beijingWeekdayIdx(dateStr)]}`;
 }
 
 function escapeHtml(s) {
