@@ -61,7 +61,7 @@
     "goalscorers": [
       {
         "player": "C. Larin",
-        "minute": 11,
+        "minute": 78,
         "stoppage": null,
         "type": null,
         "team": "home"
@@ -73,7 +73,11 @@
         "type": null,
         "team": "away"
       }
-    ]
+    ],
+    "_corrections": {
+      "_note": "Larin goal time corrected 2026-06-13 — worldcup26.ir had 11' but Bing (Sportradar) confirms 78' (late equalizer, 12min after coming on as sub)",
+      "source": "Bing Sports / Sportradar"
+    }
   },
   "fifa-wc-2026-fdf1bfc654f3@worldcup-calendar": {
     "status": "final",

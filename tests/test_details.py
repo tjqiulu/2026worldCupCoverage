@@ -110,12 +110,9 @@ class TestGetDetails:
             "bad_match": {"status": "INVALID_STATUS"},
         }))
         with patch("src.data.details.DETAILS_FILE", bad_file):
-            # Clear cache
-            from src.data import details
-            details._load.cache_clear()
+            # No cache to clear (Plan 016: lru_cache removed from _load)
             assert get_details("good_match") is not None
             assert get_details("bad_match") is None
-            details._load.cache_clear()
 
 
 # === enrich_match / enrich_matches ===

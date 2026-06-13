@@ -435,11 +435,11 @@ class TestScorerStringParser:
         assert result == [{"player": "some weird name", "minute": 0, "stoppage": None, "type": None}]
 
 
-class TestSaveDetailsInvalidatesCache:
-    """Plan 016 fix: save_details() must invalidate _load() lru_cache so subsequent
-    /api/matches requests see the newly-saved data (previously the cache held stale data)."""
+class TestLoadReadsFromDisk:
+    """Plan 016: _load() must always read from disk (no cache) so manual edits
+    to details.json are immediately visible to the running server."""
 
-    def test_cache_invalidated_on_save(self, tmp_path, monkeypatch):
+    def test_manual_edit_visible_after_load(self, tmp_path, monkeypatch):
         import json
         from src.data import details
         # Point DETAILS_FILE at a temp file
@@ -449,22 +449,16 @@ class TestSaveDetailsInvalidatesCache:
             "goalscorers": [{"team": "home", "player": "A", "minute": 10, "stoppage": None, "type": None}]
         }}))
         monkeypatch.setattr(details, "DETAILS_FILE", test_file)
-        # First read populates cache
-        details._load.cache_clear()
+        # First read
         d1 = details._load()
         assert "mid1" in d1
-        # Modify file on disk
-        test_file.write_text(json.dumps({"mid2": {
-            "status": "final", "score": {"home": 2, "away": 0},
-            "goalscorers": []
-        }}))
-        # Without invalidation, _load would return cached
-        d_pre = details._load()
-        assert "mid2" not in d_pre, "lru_cache is hiding the new entry (this is the bug)"
-        # Now save_details should clear the cache
-        details.save_details({"mid2": {"status": "final", "score": {"home": 2, "away": 0}, "goalscorers": []}})
-        d_post = details._load()
-        assert "mid2" in d_post, "save_details should have invalidated the cache"
+        # User manually edits the file (e.g., corrects a wrong goal time)
+        d1["mid1"]["goalscorers"][0]["minute"] = 78
+        test_file.write_text(json.dumps(d1))
+        # Next read should see the edit immediately (no cache)
+        d2 = details._load()
+        assert d2["mid1"]["goalscorers"][0]["minute"] == 78, \
+            "_load() must always read fresh from disk (no lru_cache)"
 
 
 class TestValidatorHandlesNullType:

@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import json
 import logging
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -32,12 +31,17 @@ VALID_STATUSES = {"final", "live", "scheduled"}
 VALID_GOAL_TYPES = {"goal", "penalty", "own_goal"}
 
 
-@lru_cache(maxsize=1)
 def _load() -> dict[str, dict[str, Any]]:
-    """Load details.json (cached at module level). Empty dict if file missing.
+    """Load details.json (fresh from disk on every call).
 
-    Skips special keys (starting with `_`) like `_comment` — these are
-    documentation/metadata, not match entries.
+    Plan 016 fix: previously this was @lru_cache(maxsize=1) which meant
+    manual edits to details.json (e.g., correcting a wrong goal time) were
+    not seen until the server was restarted. We tried invalidating the
+    cache in save_details() but that didn't help for manual edits.
+
+    The file is small (~5KB) and the request rate is low, so the lru_cache
+    optimization wasn't worth the correctness risk. Removed in commit
+    that fixed the user's "Larin 78' vs 11'" complaint.
     """
     if not DETAILS_FILE.exists():
         logging.warning(f"details.json not found at {DETAILS_FILE}")
@@ -136,8 +140,7 @@ def save_details(details: dict[str, dict[str, Any]]) -> None:
     DETAILS_FILE.write_text(
         json.dumps(new_data, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    # Invalidate the lru_cache so the next get_details() call reads fresh data
-    _load.cache_clear()
+    # Plan 016: lru_cache was removed from _load(); no cache invalidation needed.
 
 
 def validate_entry(entry: Any) -> bool:
