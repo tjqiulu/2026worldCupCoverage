@@ -1,6 +1,6 @@
 // 2026 World Cup Coverage - Service Worker
 // Cache shell for offline use; /api/* always network-first
-const CACHE_VERSION = 'wc2026-v4';
+const CACHE_VERSION = 'wc2026-v5';
 const CACHE_NAME = `${CACHE_VERSION}-shell`;
 const SHELL_URLS = [
     '/',
