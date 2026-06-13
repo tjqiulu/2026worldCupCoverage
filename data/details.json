@@ -42,5 +42,24 @@
       }
     ]
   },
+  "fifa-wc-2026-965e9ac9ce78@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "C. Larin",
+        "minute": 11,
+        "team": "home"
+      },
+      {
+        "player": "Jovo Lukić",
+        "minute": 21,
+        "team": "away"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py. See docs/maintenance/match-details.md for how to update. NO DATA YET - WC2026 starts 2026-06-11. Add entries here as matches are played to show scores + goalscorers in the UI."
 }

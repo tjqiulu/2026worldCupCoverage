@@ -278,3 +278,103 @@ class TestTeams:
             assert t.get("name_en")
             assert t.get("iso2")
             assert t.get("fifa_code")
+
+
+# === Plan 016: Team name normalization (Plan 016 fix) ===
+# ICS uses different team names than worldcup26.ir. Without normalization,
+# some finished matches don't get their scores (e.g., "Bosnia & Herzegovina"
+# vs "Bosnia and Herzegovina" — user reported "待更新" bug 2026-06-13).
+
+class TestTeamNameNormalization:
+    def test_bosnia_ampersand_vs_and(self):
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "Canada",
+            "away_team_name_en": "Bosnia and Herzegovina",  # API style
+        }
+        our_matches = [{
+            "match_id": "test-can-bih",
+            "home": {"name": "Canada"},
+            "away": {"name": "Bosnia & Herzegovina"},  # ICS style
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-can-bih", f"Expected match, got {result}"
+
+    def test_usa_vs_united_states(self):
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "United States",
+            "away_team_name_en": "Paraguay",
+        }
+        our_matches = [{
+            "match_id": "test-usa-par",
+            "home": {"name": "USA"},  # ICS uses abbreviation
+            "away": {"name": "Paraguay"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-usa-par"
+
+    def test_dr_congo_alias(self):
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "Democratic Republic of the Congo",
+            "away_team_name_en": "Portugal",
+        }
+        our_matches = [{
+            "match_id": "test-cgo-por",
+            "home": {"name": "DR Congo"},  # ICS abbreviation
+            "away": {"name": "Portugal"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-cgo-por"
+
+    def test_exact_match_still_works(self):
+        """The fallback shouldn't break exact matches."""
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "Mexico",
+            "away_team_name_en": "South Africa",
+        }
+        our_matches = [{
+            "match_id": "test-mex-rsa",
+            "home": {"name": "Mexico"},
+            "away": {"name": "South Africa"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-mex-rsa"
+
+    def test_no_match_returns_none(self):
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "Atlantis",
+            "away_team_name_en": "El Dorado",
+        }
+        our_matches = [{
+            "match_id": "test",
+            "home": {"name": "Mexico"},
+            "away": {"name": "Brazil"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result is None
+
+    def test_real_canada_bosnia_md1_now_matches(self):
+        """The original user complaint — end-to-end."""
+        from src.data.worldcup_api import find_match_id
+        # Get the real Canada-Bosnia MD1 game from API
+        games = [{g["home_team_name_en"]: g["away_team_name_en"], "data": g}
+                 for g in _fetch_real_games() if g.get("home_team_name_en") == "Canada" and "Bosnia" in (g.get("away_team_name_en") or "")]
+        assert len(games) >= 1, "Canada-Bosnia game not in API"
+        # Use the first one as API game
+        api_game = {"home_team_name_en": "Canada", "away_team_name_en": "Bosnia and Herzegovina"}
+        # Load our matches
+        import json
+        our_matches = json.loads(open("data/matches.json").read())
+        result = find_match_id(api_game, our_matches)
+        assert result is not None, "Should match via normalized name"
+
+
+def _fetch_real_games():
+    """Helper: real API games for end-to-end tests."""
+    from src.data.worldcup_api import _fetch_raw, clear_cache
+    clear_cache()
+    return _fetch_raw()

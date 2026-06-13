@@ -245,7 +245,50 @@ def find_match_id(game: dict[str, Any], matches: list[dict[str, Any]]) -> str | 
         our_away = (m.get("away", {}).get("name") or "").strip()
         if our_home == api_home and our_away == api_away:
             return m["match_id"]
+    # Fallback: normalized name match (handles '&' vs 'and', 'USA' vs 'United States', etc.)
+    api_home_n = _normalize_team_name(api_home)
+    api_away_n = _normalize_team_name(api_away)
+    for m in matches:
+        our_home = (m.get("home", {}).get("name") or "").strip()
+        our_away = (m.get("away", {}).get("name") or "").strip()
+        if (_normalize_team_name(our_home) == api_home_n
+                and _normalize_team_name(our_away) == api_away_n):
+            return m["match_id"]
     return None
+
+
+# Known team name aliases — ICS (our) -> worldcup26.ir (API)
+# Updated 2026-06-13 after user discovered "待更新" bug
+_TEAM_ALIASES = {
+    "USA": "United States",
+    "DR Congo": "Democratic Republic of the Congo",
+    "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+}
+
+
+def _normalize_team_name(name: str) -> str:
+    """Normalize a team name so different sources can match.
+
+    - Strip whitespace
+    - Lowercase
+    - Apply known aliases (ICS -> API direction)
+    - Collapse punctuation (treat '&' as ' and ' etc.)
+    """
+    if not name:
+        return ""
+    s = name.strip()
+    # Direct alias map (case-insensitive)
+    for k, v in _TEAM_ALIASES.items():
+        if s.lower() == k.lower():
+            s = v
+            break
+    # Normalize: lowercase, replace punctuation
+    s = s.lower()
+    s = s.replace("&", " and ")
+    import re as _re
+    s = _re.sub(r"[^a-z0-9]+", " ", s)
+    s = _re.sub(r"\s+", " ", s).strip()
+    return s
 
 
 def fetch_details_for_matches(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
