@@ -176,3 +176,105 @@ class TestFetchEndToEnd:
             assert entry["status"] == "final"
             assert "score" in entry
             assert "goalscorers" in entry
+
+
+# === Plan 015: Stadiums, Groups, Teams lookups ===
+
+class TestStadiums:
+    """Tests for fetch_stadiums + find_stadium_by_city."""
+
+    def test_fetch_stadiums_returns_list(self):
+        from src.data.worldcup_api import fetch_stadiums, clear_cache
+        clear_cache()
+        stadiums = fetch_stadiums()
+        if not stadiums:
+            pytest.skip("No stadiums returned (offline or API down)")
+        # At least 16 stadiums for WC 2026
+        assert len(stadiums) >= 16
+        for s in stadiums[:3]:
+            assert "id" in s
+            assert "name_en" in s
+            assert "city_en" in s
+            assert "capacity" in s and s["capacity"] > 0
+
+    def test_find_stadium_by_city_exact(self):
+        from src.data.worldcup_api import find_stadium_by_city, clear_cache
+        clear_cache()
+        s = find_stadium_by_city("Mexico City")
+        if s is None:
+            pytest.skip("API offline")
+        assert s["city_en"].lower() == "mexico city"
+        assert s["capacity"] > 0
+
+    def test_find_stadium_by_city_with_paren(self):
+        """ICS venue is e.g., 'Boston (Foxborough)' — should still match."""
+        from src.data.worldcup_api import find_stadium_by_city, clear_cache
+        clear_cache()
+        s = find_stadium_by_city("Boston (Foxborough)")
+        if s is None:
+            pytest.skip("API offline or city not found")
+        # Should match a stadium whose city is "Boston" (or contains "boston")
+        assert "boston" in s["city_en"].lower()
+
+    def test_find_stadium_by_city_empty(self):
+        from src.data.worldcup_api import find_stadium_by_city
+        assert find_stadium_by_city("") is None
+        assert find_stadium_by_city(None) is None
+
+    def test_find_stadium_by_city_no_match(self):
+        from src.data.worldcup_api import find_stadium_by_city
+        assert find_stadium_by_city("Atlantis") is None
+
+
+class TestGroups:
+    """Tests for fetch_groups + find_group_standings."""
+
+    def test_fetch_groups_returns_list(self):
+        from src.data.worldcup_api import fetch_groups, clear_cache
+        clear_cache()
+        groups = fetch_groups()
+        if not groups:
+            pytest.skip("API offline")
+        # 12 groups A-L
+        assert len(groups) >= 12
+        for g in groups[:3]:
+            assert "name" in g
+            assert "teams" in g
+            assert len(g["teams"]) == 4  # 4 teams per group
+
+    def test_find_group_standings_returns_sorted(self):
+        from src.data.worldcup_api import find_group_standings, clear_cache
+        clear_cache()
+        standings = find_group_standings("A")
+        if standings is None:
+            pytest.skip("API offline")
+        assert len(standings) == 4
+        # Sorted by pts desc
+        for i in range(len(standings) - 1):
+            cur = int(standings[i].get("pts", 0) or 0)
+            nxt = int(standings[i + 1].get("pts", 0) or 0)
+            assert cur >= nxt, f"Standings not sorted: {cur} < {nxt}"
+
+    def test_find_group_standings_empty(self):
+        from src.data.worldcup_api import find_group_standings
+        assert find_group_standings("") is None
+        assert find_group_standings(None) is None
+        assert find_group_standings("Z") is None  # not a real group
+
+
+class TestTeams:
+    """Tests for fetch_teams + get_teams_by_id."""
+
+    def test_get_teams_by_id_returns_map(self):
+        from src.data.worldcup_api import get_teams_by_id, clear_cache
+        clear_cache()
+        teams = get_teams_by_id()
+        if not teams:
+            pytest.skip("API offline")
+        # 48 group-stage teams
+        assert len(teams) == 48
+        # Each team has id-keyed entry with name_en, iso2
+        for tid, t in list(teams.items())[:3]:
+            assert t.get("name_en")
+            assert t.get("iso2")
+            assert t.get("fifa_code")

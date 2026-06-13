@@ -961,3 +961,138 @@ footer a:hover {
 .install-btn:hover:not(:disabled) {
     background: #14253D;
 }
+
+/* Plan 015: Modal section labels (stadium, standings, countdown) */
+.modal-section-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin: 18px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Plan 015: Stadium section */
+.modal-stadium-card {
+    background: white;
+    padding: 12px 16px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    border-left: 3px solid #1D3557;
+}
+.modal-stadium-card .stadium-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1D3557;
+    margin-bottom: 4px;
+}
+.modal-stadium-card .stadium-loc {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 4px;
+}
+.modal-stadium-card .stadium-capacity {
+    font-size: 12px;
+    color: #777;
+}
+.modal-stadium-card .stadium-capacity strong {
+    color: #1D3557;
+    font-weight: 700;
+}
+
+/* Plan 015: Standings table */
+.modal-standings-wrap {
+    overflow-x: auto;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.modal-standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.modal-standings-table th {
+    background: #f5f5f5;
+    color: #888;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.modal-standings-table th.standings-team {
+    text-align: left;
+    padding-left: 12px;
+}
+.modal-standings-table td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+}
+.modal-standings-table td.standings-team {
+    text-align: left;
+    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+}
+.standings-row:last-child td {
+    border-bottom: none;
+}
+.standings-row:nth-child(1) td.standings-rank,
+.standings-row:nth-child(2) td.standings-rank {
+    color: #1D3557;
+    font-weight: 700;
+}
+.standings-rank {
+    color: #888;
+    font-weight: 600;
+    width: 30px;
+}
+.standings-flag .fi {
+    width: 20px;
+    height: 14px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.standings-name {
+    font-size: 13px;
+    color: #1D3557;
+}
+.standings-num {
+    font-variant-numeric: tabular-nums;
+    color: #555;
+}
+.standings-pts {
+    color: #1D3557;
+    font-size: 14px;
+}
+
+/* Plan 015: Countdown */
+.modal-countdown-card {
+    background: linear-gradient(135deg, #1D3557 0%, #2A4A75 100%);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.countdown-time {
+    font-size: 32px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+}
+.countdown-kickoff {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}

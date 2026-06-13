@@ -1,6 +1,7 @@
-# Match Details Maintenance (Plan 010)
+# Match Details Maintenance (Plan 010 + Plan 015)
 
-> How to add or update match results (scores, goalscorers) in the app.
+> How to add or update match results (scores, goalscorers) in the app,
+> and how the modal content is enriched with stadium, standings, and countdown.
 
 ## Status: empty data file
 
@@ -111,7 +112,63 @@ The app will show a red "LIVE" badge with the current score.
 
 If you accidentally marked a match as "live" or "final", change `status` back to `"scheduled"` and remove `score` and `goalscorers`.
 
+## What's in the modal (Plan 015)
+
+The match detail modal (click any match) shows:
+
+- Stage label (e.g., "小组赛 · Group A · 第 1 轮")
+- Date and time in Beijing time
+- Home and away teams (flag + zh + en name)
+- Score (if final or live)
+- Goalscorers with minute markers (if final)
+- **Stadium card** (Plan 015) — full stadium name + city + country + capacity
+- **Group standings** (Plan 015, only for group stage) — current table sorted by pts/gd/gf
+- **Countdown** (Plan 015, only for not-yet-started) — live DD HH:MM:SS timer to kickoff
+- Venue city (legacy)
+
 ## Auto-loaded on next page load
+
+The app loads `data/details.json` on Flask startup and caches it.
+After editing, you need to either:
+- Restart Flask (`python3 src/app.py`), OR
+- Click the "刷新" button in the app (which calls `/api/refresh` which re-fetches ICS, but does NOT re-load details.json — restart Flask for details changes)
+
+## Modal content sources (Plan 015)
+
+| Section | Data source | Refresh |
+|---------|-------------|---------|
+| Stadium (name, city, capacity) | worldcup26.ir `/get/stadiums` | 5min in-memory cache |
+| Group standings (4 teams per group) | worldcup26.ir `/get/groups` | 5min in-memory cache |
+| Team names + flags in standings | worldcup26.ir `/get/teams` + our `countries.json` | 5min in-memory cache |
+| Countdown | `date_utc` (from ICS) | Client-side `setInterval` 1s |
+
+The `/api/matches` response is enriched with `venue.stadium` (all matches) and
+`standings` (group-stage matches). The `/api/teams` endpoint returns a
+`{team_id: {name, name_zh, code_iso, code_fifa, flag_url}}` map used by the
+frontend to render standings rows.
+
+### Why worldcup26.ir?
+
+- Free, open-source, no API key
+- Bilingual (en/fa) — we use `en` and merge with our `countries.json` for `zh`
+- Has 48 group-stage teams + 16 stadiums + live group standings
+- **No** lineup/possession/event data — that's a hard limit (no free API for it)
+
+### Adding more modal content (e.g., lineups)
+
+To add **lineup/possession/event timeline** for in-depth coverage:
+
+1. Find a data source (most are paid: Opta, StatsBomb, Sportradar)
+2. Add a new fetcher to `src/data/worldcup_api.py` (or new module)
+3. Add a new section to `index.html` (e.g., `#modal-lineup-section`)
+4. Add render function in `main.js` (`renderModalLineup(match)`)
+5. Add CSS in `main.css` (`.modal-lineup-card`)
+6. Wire in `showMatchModal` (conditional render)
+7. Add tests + update this doc
+
+Until then, the modal has: stage, date, teams, score, goals, stadium, standings, countdown.
+
+
 
 The app loads `data/details.json` on Flask startup and caches it.
 After editing, you need to either:

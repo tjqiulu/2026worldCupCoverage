@@ -46,6 +46,7 @@ const todayBtn = document.getElementById('today-btn');
 const cacheInfo = document.getElementById('cache-info');
 
 let allMatches = [];
+let allTeams = {};  // Plan 015: {team_id: {name, name_zh, code_iso, ...}}
 
 async function loadMatches() {
     const showLoading = () => {
@@ -60,6 +61,9 @@ async function loadMatches() {
             const resp = await fetch('/api/matches');
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             allMatches = await resp.json();
+            // Plan 015: load teams BEFORE first render so modal can show
+            // team names + flags in standings. Failure is non-fatal.
+            await loadTeams();
             renderMatches(allMatches);
             renderBracket(allMatches);
             attachMatchCardClickHandlers();
@@ -76,6 +80,18 @@ async function loadMatches() {
                 bracketContainer.innerHTML = errHtml;
             }
         }
+    }
+}
+
+async function loadTeams() {
+    try {
+        const resp = await fetch('/api/teams');
+        if (resp.ok) {
+            // Backend already normalizes: {id: {name, name_zh, code_iso, code_fifa, flag_url}}
+            allTeams = await resp.json();
+        }
+    } catch (e) {
+        console.warn('Failed to load teams:', e);
     }
 }
 
@@ -645,6 +661,42 @@ function showMatchModal(matchId) {
     } else {
         venueEl.innerHTML = '';
     }
+
+    // Plan 015: stadium section (full name + city + capacity)
+    const stadiumEl = document.getElementById('modal-stadium-section');
+    const stadium = match.venue && match.venue.stadium;
+    if (stadium && stadium.name) {
+        stadiumEl.innerHTML = renderModalStadium(stadium);
+        stadiumEl.hidden = false;
+    } else {
+        stadiumEl.innerHTML = '';
+        stadiumEl.hidden = true;
+    }
+
+    // Plan 015: group standings (all group stage matches — including finished,
+    // so the user can see how the table evolved after this match)
+    const standingsEl = document.getElementById('modal-standings-section');
+    if (match.stage === 'group' && match.group
+        && Array.isArray(match.standings) && match.standings.length) {
+        standingsEl.innerHTML = renderModalStandings(match);
+        standingsEl.hidden = false;
+    } else {
+        standingsEl.innerHTML = '';
+        standingsEl.hidden = true;
+    }
+
+    // Plan 015: countdown (only for not-yet-started)
+    const countdownEl = document.getElementById('modal-countdown-section');
+    if (status === 'scheduled' && match.date_utc) {
+        countdownEl.innerHTML = renderModalCountdown(match);
+        countdownEl.hidden = false;
+        startCountdownTimer(match);
+    } else {
+        countdownEl.innerHTML = '';
+        countdownEl.hidden = true;
+        stopCountdownTimer();
+    }
+
     document.getElementById('match-modal').hidden = false;
 }
 
@@ -691,6 +743,131 @@ function renderModalFinalNoDetails() {
             比赛已结束 · 比分待更新
         </div>
         <div class="modal-score-hint">Match ended · Score pending update</div>`;
+}
+
+// === Plan 015: Stadium, Standings, Countdown ===
+
+function renderModalStadium(stadium) {
+    const capacity = (typeof stadium.capacity === 'number' && stadium.capacity > 0)
+        ? stadium.capacity.toLocaleString('en-US')
+        : null;
+    return `<div class="modal-section-label">🏟️ 球场 Stadium</div>
+        <div class="modal-stadium-card">
+            <div class="stadium-name">${escapeHtml(stadium.name)}</div>
+            <div class="stadium-loc">📍 ${escapeHtml(stadium.city || '')}${stadium.country ? ', ' + escapeHtml(stadium.country) : ''}</div>
+            ${capacity ? `<div class="stadium-capacity">容量 Capacity: <strong>${capacity}</strong></div>` : ''}
+        </div>`;
+}
+
+function _teamFlag(teamId) {
+    // Look up team in the global team map (loaded with matches). Falls back to nothing.
+    const t = (typeof allTeams !== 'undefined' && allTeams && allTeams[teamId]) || null;
+    if (t && t.code_iso) {
+        return `<span class="fi fi-${escapeHtml(t.code_iso)}"></span>`;
+    }
+    return '';
+}
+
+function _teamName(teamId) {
+    const t = (typeof allTeams !== 'undefined' && allTeams && allTeams[teamId]) || null;
+    if (t) {
+        return escapeHtml(t.name_zh || t.name || teamId);
+    }
+    return `Team ${teamId}`;
+}
+
+function renderModalStandings(match) {
+    const rows = match.standings.map((t, i) => {
+        const rank = i + 1;
+        const flag = _teamFlag(t.team_id);
+        const name = _teamName(t.team_id);
+        return `<tr class="standings-row">
+            <td class="standings-rank">${rank}</td>
+            <td class="standings-team"><span class="standings-flag">${flag}</span><span class="standings-name">${name}</span></td>
+            <td class="standings-num">${_numOrZero(t.mp)}</td>
+            <td class="standings-num">${_numOrZero(t.w)}</td>
+            <td class="standings-num">${_numOrZero(t.d)}</td>
+            <td class="standings-num">${_numOrZero(t.l)}</td>
+            <td class="standings-num standings-pts"><strong>${_numOrZero(t.pts)}</strong></td>
+        </tr>`;
+    }).join('');
+    return `<div class="modal-section-label">🏆 ${escapeHtml(match.group)} 组积分榜 Group ${escapeHtml(match.group)} Standings</div>
+        <div class="modal-standings-wrap">
+            <table class="modal-standings-table">
+                <thead>
+                    <tr>
+                        <th class="standings-rank">#</th>
+                        <th class="standings-team">球队 Team</th>
+                        <th class="standings-num">赛 MP</th>
+                        <th class="standings-num">胜 W</th>
+                        <th class="standings-num">平 D</th>
+                        <th class="standings-num">负 L</th>
+                        <th class="standings-num">分 Pts</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+}
+
+function _numOrZero(v) {
+    if (v === null || v === undefined || v === '') return 0;
+    const n = parseInt(v, 10);
+    return isNaN(n) ? 0 : n;
+}
+
+function renderModalCountdown(match) {
+    const kickoffBjt = formatModalDate(match.date_utc);
+    return `<div class="modal-section-label">⏱️ 距离开赛 Kickoff in</div>
+        <div class="modal-countdown-card">
+            <div class="countdown-time" id="modal-countdown-time" data-target="${escapeHtml(match.date_utc)}">--:--:--</div>
+            <div class="countdown-kickoff">开赛时间: ${escapeHtml(kickoffBjt)}</div>
+        </div>`;
+}
+
+let _countdownTimerId = null;
+let _countdownTarget = null;
+
+function startCountdownTimer(match) {
+    stopCountdownTimer();
+    _countdownTarget = match.date_utc;
+    const tick = () => {
+        const el = document.getElementById('modal-countdown-time');
+        if (!el || el.dataset.target !== _countdownTarget) {
+            stopCountdownTimer();
+            return;
+        }
+        el.textContent = formatCountdown(_countdownTarget);
+    };
+    tick();
+    _countdownTimerId = setInterval(tick, 1000);
+}
+
+function stopCountdownTimer() {
+    if (_countdownTimerId !== null) {
+        clearInterval(_countdownTimerId);
+        _countdownTimerId = null;
+    }
+    _countdownTarget = null;
+}
+
+function formatCountdown(utcIso) {
+    const target = new Date(utcIso).getTime();
+    if (isNaN(target)) return '--:--:--';
+    const now = Date.now();
+    let diffMs = target - now;
+    if (diffMs <= 0) return '已开赛 · 即将更新';
+    const totalSec = Math.floor(diffMs / 1000);
+    const days = Math.floor(totalSec / 86400);
+    const rem = totalSec - days * 86400;
+    const hours = Math.floor(rem / 3600);
+    const mins = Math.floor((rem % 3600) / 60);
+    const secs = rem % 60;
+    const pad = n => String(n).padStart(2, '0');
+    if (days > 0) {
+        return `${days} 天 ${pad(hours)}:${pad(mins)}:${pad(secs)}`;
+    }
+    return `${pad(hours)}:${pad(mins)}:${pad(secs)}`;
 }
 
 function closeMatchModal() {

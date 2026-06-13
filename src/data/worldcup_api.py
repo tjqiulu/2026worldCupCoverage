@@ -21,6 +21,81 @@ TIMEOUT = 30  # seconds
 CACHE_TTL = 300  # 5 minutes
 
 _cache: dict[str, Any] = {"data": None, "fetched_at": 0.0}
+_stadiums_cache: dict[str, Any] = {"data": None, "fetched_at": 0.0}
+_groups_cache: dict[str, Any] = {"data": None, "fetched_at": 0.0}
+_teams_cache: dict[str, Any] = {"data": None, "fetched_at": 0.0}
+_endpoint_caches: dict[str, dict[str, Any]] = {
+    "stadiums": _stadiums_cache,
+    "groups": _groups_cache,
+    "teams": _teams_cache,
+}
+
+
+def _fetch_endpoint(cache_key: str, path: str) -> Any:
+    """Generic cached GET for an endpoint. Returns parsed JSON or None on error."""
+    cache = _endpoint_caches.get(cache_key)
+    if cache is None:
+        raise ValueError(f"Unknown cache key: {cache_key}")
+    now = time.time()
+    if cache["data"] is not None and (now - cache["fetched_at"]) < CACHE_TTL:
+        return cache["data"]
+    url = f"{API_BASE}/{path}"
+    try:
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "wc2026-coverage/0.1 (github local app)"},
+        )
+        with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        cache["data"] = data
+        cache["fetched_at"] = now
+        return data
+    except Exception as e:
+        logging.warning(f"worldcup26.ir {path} fetch failed: {e}")
+        return cache["data"]  # stale or None
+
+
+def fetch_stadiums() -> list[dict[str, Any]]:
+    """Fetch all WC 2026 stadiums. Cached 5 min.
+
+    Returns: list of stadium dicts with keys: id, name_en, city_en,
+    country_en, capacity, region, fifa_name.
+    """
+    data = _fetch_endpoint("stadiums", "stadiums")
+    if data is None:
+        return []
+    return data.get("stadiums", [])
+
+
+def fetch_groups() -> list[dict[str, Any]]:
+    """Fetch all WC 2026 groups with current standings. Cached 5 min.
+
+    Returns: list of group dicts with keys: name, teams[].
+    Each team: {team_id, mp, w, d, l, pts, gf, ga, gd}.
+    """
+    data = _fetch_endpoint("groups", "groups")
+    if data is None:
+        return []
+    return data.get("groups", [])
+
+
+def fetch_teams() -> list[dict[str, Any]]:
+    """Fetch all WC 2026 teams. Cached 5 min.
+
+    Returns: list of team dicts with keys: id, name_en, flag, fifa_code, iso2, groups.
+    """
+    data = _fetch_endpoint("teams", "teams")
+    if data is None:
+        return []
+    return data.get("teams", [])
+
+
+def get_teams_by_id() -> dict[str, dict[str, Any]]:
+    """Return {team_id: team_dict} for all 48 teams, cached.
+
+    Used by the frontend to render standings with team names + flags.
+    """
+    return {t["id"]: t for t in fetch_teams() if t.get("id")}
 
 
 def _fetch_raw() -> list[dict[str, Any]]:
@@ -197,9 +272,83 @@ def fetch_details_for_matches(matches: list[dict[str, Any]]) -> dict[str, dict[s
 
 
 def clear_cache() -> None:
-    """Clear the in-memory cache (for testing)."""
+    """Clear all in-memory caches (for testing or forced refresh)."""
     _cache["data"] = None
     _cache["fetched_at"] = 0.0
+    for c in _endpoint_caches.values():
+        c["data"] = None
+        c["fetched_at"] = 0.0
+
+
+def _normalize_city(city: str) -> str:
+    """Normalize a city name for fuzzy matching.
+
+    - Lowercase
+    - Strip parenthetical suffixes like " (Foxborough)" → "boston"
+    - Collapse whitespace
+    """
+    if not city:
+        return ""
+    s = city.strip().lower()
+    # Remove "(...)" parenthetical
+    s = re.sub(r"\s*\([^)]*\)\s*", " ", s)
+    # Collapse spaces
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
+
+def find_stadium_by_city(city: str | None) -> dict[str, Any] | None:
+    """Find a stadium by host city name (used to enrich ICS venues).
+
+    Args:
+        city: ICS venue string like "Mexico City" or "Boston (Foxborough)"
+
+    Returns: stadium dict {id, name_en, city_en, country_en, capacity, ...}
+             or None if no match.
+    """
+    if not city:
+        return None
+    target = _normalize_city(city)
+    if not target:
+        return None
+    stadiums = fetch_stadiums()
+    # First pass: exact normalized match
+    for s in stadiums:
+        if _normalize_city(s.get("city_en", "")) == target:
+            return s
+    # Second pass: substring match (e.g., "new york" in "new york/new jersey")
+    for s in stadiums:
+        c = _normalize_city(s.get("city_en", ""))
+        if c and (c in target or target in c):
+            return s
+    return None
+
+
+def find_group_standings(group_letter: str | None) -> list[dict[str, Any]] | None:
+    """Find current standings for a group letter (A-L).
+
+    Returns: list of team standings sorted by pts desc, gd desc, gf desc, OR
+             None if group not found.
+    Each entry: {team_id, mp, w, d, l, pts, gf, ga, gd}.
+    """
+    if not group_letter:
+        return None
+    target = group_letter.strip().upper()
+    if not target:
+        return None
+    groups = fetch_groups()
+    for g in groups:
+        if (g.get("name") or "").strip().upper() == target:
+            teams = g.get("teams", []) or []
+            # Sort by pts desc, gd desc, gf desc
+            def _key(t: dict[str, Any]) -> tuple[int, int, int]:
+                return (
+                    _to_int(t.get("pts")),
+                    _to_int(t.get("gd")),
+                    _to_int(t.get("gf")),
+                )
+            return sorted(teams, key=_key, reverse=True)
+    return None
 
 
 def last_fetch_age_seconds() -> float | None:
