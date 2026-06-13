@@ -176,20 +176,50 @@ def parse_scorers(scorers_str: str | None) -> list[dict[str, Any]]:
 
 
 def _parse_scorer_strings(items: list[str]) -> list[dict[str, Any]]:
-    """Parse list of 'Player Name N' strings into structured goals."""
+    """Parse list of 'Player Name N' strings into structured goals.
+
+    Supports stoppage time (e.g., "F. Balogun 45'+5'") and suffixes
+    (e.g., "D. Bobadilla 7'(OG)" for own goal). The returned dict has:
+        - player: str
+        - minute: int (the base minute, e.g., 45)
+        - stoppage: int | None (the +N part, e.g., 5)
+        - type: str | None (e.g., "OG" for own goal, "P" for penalty)
+    """
+    # Pattern: name + space + minute + optional '+stoppage + optional (suffix) + optional '
+    # Order matters: ' before ( suffix because data has "7'(OG)" not "7(OG)'"
+    # Stoppage uses "'" before the +N (e.g., "45'+5'")
+    # Suffix uses "'" before the (XX) (e.g., "7'(OG)")
+    pattern = re.compile(
+        r"^(.+?)\s+"                      # player name
+        r"(\d{1,3})"                       # minute
+        r"(?:'(\+(\d{1,3}))?)?"            # optional '+N stoppage (preceded by ')
+        r"(?:\(([^)]+)\))?"                # optional (suffix) like (OG), (P)
+        r"'?\s*$"                          # optional trailing apostrophe + end
+    )
+    # Map raw API suffix codes to our internal goal types
+    _SUFFIX_TO_TYPE = {
+        "OG": "own_goal",
+        "P": "penalty",
+        "PK": "penalty",
+    }
     goals = []
     for item in items:
-        # Match: "Player Name" followed by "NN'" or "NN"
-        # Player name can have spaces, dots (e.g., "I.B. Hwang"), etc.
-        m = re.match(r"^(.+?)\s+(\d{1,3})\s*'?\s*$", item.strip())
+        item = item.strip()
+        if not item:
+            continue
+        m = pattern.match(item)
         if m:
-            goals.append({
+            raw_type = m.group(5) or None
+            goal = {
                 "player": m.group(1).strip(),
                 "minute": int(m.group(2)),
-            })
-        elif item.strip():
+                "stoppage": int(m.group(4)) if m.group(4) else None,
+                "type": _SUFFIX_TO_TYPE.get(raw_type) if raw_type else None,
+            }
+            goals.append(goal)
+        elif item:
             # No minute found, just add the player with minute 0
-            goals.append({"player": item.strip(), "minute": 0})
+            goals.append({"player": item, "minute": 0, "stoppage": None, "type": None})
     return goals
 
 

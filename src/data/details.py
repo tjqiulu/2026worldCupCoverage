@@ -116,7 +116,11 @@ def load_details() -> dict[str, dict[str, Any]]:
 
 
 def save_details(details: dict[str, dict[str, Any]]) -> None:
-    """Save details to disk, preserving any _comment key."""
+    """Save details to disk, preserving any _comment key.
+
+    Also invalidates the _load() lru_cache so subsequent reads see the new data.
+    Plan 016 fix: previously the lru_cache held stale data until server restart.
+    """
     current: dict[str, Any] = {}
     if DETAILS_FILE.exists():
         try:
@@ -132,7 +136,7 @@ def save_details(details: dict[str, dict[str, Any]]) -> None:
     DETAILS_FILE.write_text(
         json.dumps(new_data, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    # Invalidate the cache so next load picks up the change
+    # Invalidate the lru_cache so the next get_details() call reads fresh data
     _load.cache_clear()
 
 
@@ -176,7 +180,7 @@ def validate_entry(entry: Any) -> bool:
                 return False
             if not isinstance(g.get("minute"), int) or g["minute"] < 0:
                 return False
-            if "type" in g and g["type"] not in VALID_GOAL_TYPES:
+            if g.get("type") is not None and g["type"] not in VALID_GOAL_TYPES:
                 return False
     return True
 

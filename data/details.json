@@ -9,11 +9,15 @@
       {
         "player": "J. Quiñones",
         "minute": 9,
+        "stoppage": null,
+        "type": null,
         "team": "home"
       },
       {
         "player": "R. Jiménez",
         "minute": 67,
+        "stoppage": null,
+        "type": null,
         "team": "home"
       }
     ]
@@ -28,16 +32,22 @@
       {
         "player": "I.B. Hwang",
         "minute": 67,
+        "stoppage": null,
+        "type": null,
         "team": "home"
       },
       {
         "player": "H.G. Oh",
         "minute": 80,
+        "stoppage": null,
+        "type": null,
         "team": "home"
       },
       {
         "player": "L. Krejčí",
         "minute": 59,
+        "stoppage": null,
+        "type": null,
         "team": "away"
       }
     ]
@@ -52,14 +62,62 @@
       {
         "player": "C. Larin",
         "minute": 11,
+        "stoppage": null,
+        "type": null,
         "team": "home"
       },
       {
         "player": "Jovo Lukić",
         "minute": 21,
+        "stoppage": null,
+        "type": null,
         "team": "away"
       }
     ]
   },
-  "_comment": "Manually maintained match results. Schema: src/data/details.py. See docs/maintenance/match-details.md for how to update. NO DATA YET - WC2026 starts 2026-06-11. Add entries here as matches are played to show scores + goalscorers in the UI."
+  "fifa-wc-2026-fdf1bfc654f3@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 4,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "D. Bobadilla",
+        "minute": 7,
+        "stoppage": null,
+        "type": "own_goal",
+        "team": "home"
+      },
+      {
+        "player": "F. Balogun",
+        "minute": 31,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "F. Balogun",
+        "minute": 45,
+        "stoppage": 5,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "G. Reyna",
+        "minute": 90,
+        "stoppage": 8,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Maurício",
+        "minute": 73,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

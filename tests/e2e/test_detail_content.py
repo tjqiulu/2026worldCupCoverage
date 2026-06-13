@@ -150,51 +150,43 @@ class TestStandingsSection:
 
 class TestCountdownSection:
     def test_countdown_for_upcoming_match(self, page: Page):
-        # Find an upcoming group match (not the first, which is finished)
+        # Robustly find an upcoming match by status, not by index
+        target = page.evaluate("""() => {
+            const m = allMatches.find(m => m.date_utc > new Date().toISOString());
+            return m ? m.match_id : null;
+        }""")
+        if not target:
+            pytest.skip("No upcoming match in data (tournament may be over)")
         page.click('button.tab[data-tab="matches"]')
         page.wait_for_selector('#matches-view.active .match-card', timeout=10_000)
-        # Skip the first 2 (finished), click 3rd (Group A, upcoming? actually first 3 are MEX-RSA, KOR-CZE, CAN-BIH which are all finished)
-        # Click an early one that's not yet played
-        # The first 3 group matches of MD1 are all finished. Click the 6th (USA vs PAR was 0-0 notstarted).
-        cards = page.locator('#matches-view .match-card')
-        # Iterate to find an upcoming one
-        for i in range(20):
-            cards.nth(i).click()
-            page.wait_for_selector('#match-modal:not([hidden])', timeout=5_000)
-            page.wait_for_timeout(500)
-            cd = page.locator('#modal-countdown-section')
-            if cd.is_visible():
-                # Found an upcoming match
-                time_text = page.locator('#modal-countdown-time').text_content()
-                assert time_text and time_text != "--:--:--"
-                assert "天" in time_text or ":" in time_text  # Chinese "X天" or "HH:MM:SS"
-                # Should also have stadium section
-                assert page.locator('#modal-stadium-section').is_visible()
-                page.screenshot(path="tests/e2e/screenshots/modal_countdown.png", full_page=True)
-                return
-            # Close and try next
-            page.click('.match-modal-close')
-            page.wait_for_timeout(200)
-        pytest.fail("No upcoming match found in first 20 cards")
+        page.click(f'[data-id="{target}"]')
+        page.wait_for_selector('#match-modal:not([hidden])', timeout=5_000)
+        page.wait_for_timeout(800)
+        cd = page.locator('#modal-countdown-section')
+        assert cd.is_visible(), "Countdown section should be visible for upcoming match"
+        time_text = page.locator('#modal-countdown-time').text_content()
+        assert time_text and time_text != "--:--:--"
+        assert "天" in time_text or ":" in time_text
+        page.screenshot(path="tests/e2e/screenshots/modal_countdown.png", full_page=True)
 
     def test_countdown_updates_over_time(self, page: Page):
-        # Same approach: find an upcoming match, capture time, wait, verify it changed
+        # Find any upcoming match
+        target = page.evaluate("""() => {
+            const m = allMatches.find(m => m.date_utc > new Date().toISOString());
+            return m ? m.match_id : null;
+        }""")
+        if not target:
+            pytest.skip("No upcoming match in data")
         page.click('button.tab[data-tab="matches"]')
         page.wait_for_selector('#matches-view.active .match-card', timeout=10_000)
-        cards = page.locator('#matches-view .match-card')
-        for i in range(20):
-            cards.nth(i).click()
-            page.wait_for_selector('#match-modal:not([hidden])', timeout=5_000)
-            page.wait_for_timeout(500)
-            if page.locator('#modal-countdown-section').is_visible():
-                t1 = page.locator('#modal-countdown-time').text_content()
-                page.wait_for_timeout(1500)
-                t2 = page.locator('#modal-countdown-time').text_content()
-                assert t1 != t2, f"Countdown didn't update: {t1} == {t2}"
-                return
-            page.click('.match-modal-close')
-            page.wait_for_timeout(200)
-        pytest.skip("No upcoming match found")
+        page.click(f'[data-id="{target}"]')
+        page.wait_for_selector('#match-modal:not([hidden])', timeout=5_000)
+        page.wait_for_timeout(500)
+        assert page.locator('#modal-countdown-section').is_visible()
+        t1 = page.locator('#modal-countdown-time').text_content()
+        page.wait_for_timeout(1500)
+        t2 = page.locator('#modal-countdown-time').text_content()
+        assert t1 != t2, f"Countdown didn't update: {t1} == {t2}"
 
     def test_countdown_hidden_for_finished(self, page: Page):
         _open_first_group_modal(page)

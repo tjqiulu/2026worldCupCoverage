@@ -842,10 +842,14 @@ function renderModalGoals(details, match) {
                 : '';
         const typeBadge = g.type === 'penalty' ? ' <span class="goal-badge goal-pen">P</span>'
             : g.type === 'own_goal' ? ' <span class="goal-badge goal-og">OG</span>' : '';
+        // Plan 016 fix: render stoppage time as "45'+5'" instead of just "45'"
+        const minuteStr = g.stoppage
+            ? `${g.minute}'+${g.stoppage}'`
+            : `${g.minute}'`;
         return `<li class="goal-row">
             <span class="goal-flag">${flag}</span>
             <span class="goal-player">${escapeHtml(g.player)}${typeBadge}</span>
-            <span class="goal-minute">${g.minute}'</span>
+            <span class="goal-minute">${minuteStr}</span>
         </li>`;
     }).join('');
     return `<div class="modal-goals-label">进球 Goals</div>

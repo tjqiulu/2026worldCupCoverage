@@ -35,13 +35,13 @@ class TestParseScorers:
     def test_proper_json_array(self):
         result = parse_scorers(RAW_JSON_ARRAY)
         assert result == [
-            {"player": "I.B. Hwang", "minute": 67},
-            {"player": "H.G. Oh", "minute": 80},
+            {"player": "I.B. Hwang", "minute": 67, "stoppage": None, "type": None},
+            {"player": "H.G. Oh", "minute": 80, "stoppage": None, "type": None},
         ]
 
     def test_single_json_item(self):
         result = parse_scorers(RAW_SINGLE)
-        assert result == [{"player": "L. Krejčí", "minute": 59}]
+        assert result == [{"player": "L. Krejčí", "minute": 59, "stoppage": None, "type": None}]
 
     @pytest.mark.parametrize("raw", ["null", "NULL", "", "{}"])
     def test_empty(self, raw):
@@ -51,7 +51,7 @@ class TestParseScorers:
         # Use actual Unicode chars (U+201C, U+201D)
         raw = '{\u201cJ. Smith 10\u201d}'
         result = parse_scorers(raw)
-        assert result == [{"player": "J. Smith", "minute": 10}]
+        assert result == [{"player": "J. Smith", "minute": 10, "stoppage": None, "type": None}]
 
 
 # === _to_int ===
@@ -378,3 +378,128 @@ def _fetch_real_games():
     from src.data.worldcup_api import _fetch_raw, clear_cache
     clear_cache()
     return _fetch_raw()
+
+
+# === Plan 016: Stoppage time + own goal parser (the real bug) ===
+# User reported: USA 4-1 Paraguay modal showed all stoppage-time goals as 0'
+# and own goal's player name as "D. Bobadilla 7'(OG)"
+
+class TestScorerStringParser:
+    """Tests for _parse_scorer_strings — handles minute + optional stoppage + optional type suffix."""
+
+    def test_simple_minute(self):
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["F. Balogun 31'"])
+        assert result == [{"player": "F. Balogun", "minute": 31, "stoppage": None, "type": None}]
+
+    def test_minute_with_stoppage_45_plus_5(self):
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["F. Balogun 45'+5'"])
+        assert result == [{"player": "F. Balogun", "minute": 45, "stoppage": 5, "type": None}]
+
+    def test_minute_with_stoppage_90_plus_8(self):
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["G. Reyna 90'+8'"])
+        assert result == [{"player": "G. Reyna", "minute": 90, "stoppage": 8, "type": None}]
+
+    def test_own_goal_suffix(self):
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["D. Bobadilla 7'(OG)"])
+        assert result == [{"player": "D. Bobadilla", "minute": 7, "stoppage": None, "type": "own_goal"}]
+
+    def test_penalty_suffix(self):
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["Player 50'(P)"])
+        assert result[0]["type"] == "penalty"
+        assert result[0]["minute"] == 50
+
+    def test_real_usa_paraguay_full(self):
+        """The exact data from the user's bug report."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        raw = '{"D. Bobadilla 7\'(OG)","F. Balogun 31\'","F. Balogun 45\'+5\'","G. Reyna 90\'+8\'"}'
+        # Strip outer braces, wrap as list
+        s = raw[1:-1]
+        import json
+        arr = json.loads(f"[{s}]")
+        result = _parse_scorer_strings(arr)
+        assert len(result) == 4
+        assert result[0] == {"player": "D. Bobadilla", "minute": 7, "stoppage": None, "type": "own_goal"}
+        assert result[1] == {"player": "F. Balogun", "minute": 31, "stoppage": None, "type": None}
+        assert result[2] == {"player": "F. Balogun", "minute": 45, "stoppage": 5, "type": None}
+        assert result[3] == {"player": "G. Reyna", "minute": 90, "stoppage": 8, "type": None}
+
+    def test_unparseable_returns_minute_zero(self):
+        """Items that don't match any pattern still get added with minute=0."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["some weird name"])
+        assert result == [{"player": "some weird name", "minute": 0, "stoppage": None, "type": None}]
+
+
+class TestSaveDetailsInvalidatesCache:
+    """Plan 016 fix: save_details() must invalidate _load() lru_cache so subsequent
+    /api/matches requests see the newly-saved data (previously the cache held stale data)."""
+
+    def test_cache_invalidated_on_save(self, tmp_path, monkeypatch):
+        import json
+        from src.data import details
+        # Point DETAILS_FILE at a temp file
+        test_file = tmp_path / "details.json"
+        test_file.write_text(json.dumps({"mid1": {
+            "status": "final", "score": {"home": 1, "away": 0},
+            "goalscorers": [{"team": "home", "player": "A", "minute": 10, "stoppage": None, "type": None}]
+        }}))
+        monkeypatch.setattr(details, "DETAILS_FILE", test_file)
+        # First read populates cache
+        details._load.cache_clear()
+        d1 = details._load()
+        assert "mid1" in d1
+        # Modify file on disk
+        test_file.write_text(json.dumps({"mid2": {
+            "status": "final", "score": {"home": 2, "away": 0},
+            "goalscorers": []
+        }}))
+        # Without invalidation, _load would return cached
+        d_pre = details._load()
+        assert "mid2" not in d_pre, "lru_cache is hiding the new entry (this is the bug)"
+        # Now save_details should clear the cache
+        details.save_details({"mid2": {"status": "final", "score": {"home": 2, "away": 0}, "goalscorers": []}})
+        d_post = details._load()
+        assert "mid2" in d_post, "save_details should have invalidated the cache"
+
+
+class TestValidatorHandlesNullType:
+    """Plan 016 fix: validate_entry must accept type=null (not 'malformed')."""
+
+    def test_goalscorer_with_null_type_is_valid(self):
+        from src.data.details import validate_entry
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                {"team": "home", "player": "Test", "minute": 10, "stoppage": None, "type": None}
+            ],
+        }
+        assert validate_entry(entry) is True
+
+    def test_goalscorer_without_type_field_is_valid(self):
+        """Backward compat: old data without explicit type=null should still work."""
+        from src.data.details import validate_entry
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                {"team": "home", "player": "Test", "minute": 10}
+            ],
+        }
+        assert validate_entry(entry) is True
+
+    def test_goalscorer_with_invalid_type_is_invalid(self):
+        from src.data.details import validate_entry
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                {"team": "home", "player": "Test", "minute": 10, "type": "weird"}
+            ],
+        }
+        assert validate_entry(entry) is False
