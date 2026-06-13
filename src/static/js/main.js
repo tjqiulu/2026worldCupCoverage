@@ -80,7 +80,14 @@ async function loadMatches() {
                 console.warn(`Fetch attempt ${attempt} failed, retrying in ${delay}ms...`);
                 await new Promise(r => setTimeout(r, delay));
             } else {
-                const errHtml = `<p class="error">加载失败: ${escapeHtml(e.message)}</p>`;
+                // Plan 016: 'Failed to fetch' is the most common error when the Flask
+                // server has died (e.g., process was killed). Show a retry button so
+                // the user doesn't have to hard-refresh the whole PWA.
+                const errHtml = `<div class="error-box">
+                    <p class="error">加载失败: ${escapeHtml(e.message)}</p>
+                    <p class="error-hint">服务可能已退出 · 点击重试 · 或 <code>bin/serve.sh</code> 重启服务</p>
+                    <button class="error-retry-btn" onclick="window.location.reload()">🔄 重试 Retry</button>
+                </div>`;
                 matchesContainer.innerHTML = errHtml;
                 bracketContainer.innerHTML = errHtml;
             }

@@ -983,6 +983,45 @@ footer a:hover {
     background: #14253D;
 }
 
+/* Plan 016: Error box with retry button (shown when /api/matches fails) */
+.error-box {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 480px;
+    margin: 40px auto;
+}
+.error-box .error {
+    color: #E63946;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+.error-box .error-hint {
+    color: #888;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+.error-box .error-hint code {
+    background: #f5f5f5;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #1D3557;
+}
+.error-box .error-retry-btn {
+    background: #1D3557;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.error-box .error-retry-btn:hover {
+    background: #14253D;
+}
+
 /* Plan 015: Modal section labels (stadium, standings, countdown) */
 .modal-section-label {
     font-size: 11px;
