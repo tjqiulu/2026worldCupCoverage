@@ -873,6 +873,27 @@ footer a:hover {
     font-size: 12px;
     padding-top: 4px;
 }
+.modal-score-manual-hint {
+    text-align: center;
+    color: #888;
+    font-size: 12px;
+    padding: 10px 12px 4px;
+    line-height: 1.5;
+    background: #fff8e6;
+    border-radius: 4px;
+    margin-top: 6px;
+    border: 1px solid #ffe9a8;
+}
+.modal-score-manual-hint a {
+    color: #1D3557;
+    text-decoration: underline;
+}
+.modal-score-manual-hint small {
+    display: inline-block;
+    margin-top: 4px;
+    color: #999;
+    font-size: 11px;
+}
 
 .modal-goals-list {
     list-style: none;
@@ -1095,4 +1116,150 @@ footer a:hover {
 .countdown-kickoff {
     font-size: 12px;
     color: rgba(255, 255, 255, 0.8);
+}
+
+/* === Plan 016: Widget mode (desktop background, compact view) === */
+
+body.widget-mode {
+    background: transparent;
+    margin: 0;
+    padding: 8px;
+    min-height: 100vh;
+}
+body.widget-mode header,
+body.widget-mode nav.tabs,
+body.widget-mode footer {
+    display: none;
+}
+body.widget-mode main {
+    padding: 0;
+}
+body.widget-mode .view {
+    display: none;
+}
+body.widget-mode .widget-view {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.widget-view {
+    font-size: 13px;
+    color: #1D3557;
+}
+.widget-empty {
+    text-align: center;
+    color: #999;
+    font-size: 12px;
+    padding: 20px;
+}
+.widget-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(29, 53, 87, 0.15);
+    border-left: 3px solid #1D3557;
+    border-radius: 4px;
+    padding: 6px 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.widget-card:hover {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+.widget-card[data-status="live"] {
+    border-left-color: #E63946;
+    background: rgba(255, 245, 245, 0.95);
+}
+.widget-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 2px;
+}
+.widget-team {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+.widget-team.away {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+.widget-team-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1D3557;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.widget-team .fi {
+    width: 20px;
+    height: 14px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+.widget-vs {
+    color: #aaa;
+    font-size: 11px;
+    font-style: italic;
+}
+.widget-score {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1D3557;
+    font-variant-numeric: tabular-nums;
+    padding: 0 6px;
+}
+.widget-score.live {
+    color: #E63946;
+}
+.widget-pending {
+    font-size: 10px;
+    color: #999;
+    background: #f5f5f5;
+    padding: 1px 6px;
+    border-radius: 2px;
+}
+.widget-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: #888;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    padding-top: 3px;
+    margin-top: 3px;
+}
+.widget-time {
+    font-weight: 600;
+    color: #555;
+    font-variant-numeric: tabular-nums;
+}
+.widget-stage {
+    color: #888;
+}
+.widget-status {
+    margin-left: auto;
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.widget-status.status-live {
+    background: #E63946;
+    color: white;
+}
+.widget-status.status-final {
+    background: #999;
+    color: white;
+}
+.widget-status.status-scheduled {
+    background: #e0e0e0;
+    color: #666;
 }

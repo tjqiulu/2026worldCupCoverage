@@ -29,6 +29,7 @@ from src.data.details import (
 from src.data.ics_fetcher import fetch_ics  # noqa: E402
 from src.data.ics_parser import parse_ics  # noqa: E402
 from src.data.worldcup_api import (  # noqa: E402
+    clear_cache as clear_api_cache,
     fetch_details_for_matches,
     find_group_standings,
     find_stadium_by_city,
@@ -112,6 +113,10 @@ def create_app() -> Flask:
     def api_refresh() -> Any:
         try:
             matches = _refresh_matches()
+            # Plan 016: bypass the 5-min in-memory cache so a manual refresh
+            # always hits the worldcup26.ir API (the previous behaviour could
+            # hide a freshly-published score for up to 5 minutes).
+            clear_api_cache()
             # Plan 012: also pull live scores from worldcup26.ir
             scores_updated = 0
             try:

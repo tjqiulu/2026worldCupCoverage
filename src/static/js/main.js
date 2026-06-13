@@ -64,8 +64,13 @@ async function loadMatches() {
             // Plan 015: load teams BEFORE first render so modal can show
             // team names + flags in standings. Failure is non-fatal.
             await loadTeams();
-            renderMatches(allMatches);
-            renderBracket(allMatches);
+            // Plan 016: widget mode takes over rendering
+            if (_isWidgetMode()) {
+                initWidgetMode();
+            } else {
+                renderMatches(allMatches);
+                renderBracket(allMatches);
+            }
             attachMatchCardClickHandlers();
             scrollToToday();
             return;  // success
@@ -126,6 +131,116 @@ function renderMatches(matches) {
         html += `</section>`;
     }
     matchesContainer.innerHTML = html;
+}
+
+// === Plan 016: Widget view (compact, desktop-background mode) ===
+
+const WIDGET_REFRESH_MS = 60_000;
+let _widgetTimerId = null;
+
+function initWidgetMode() {
+    if (!_isWidgetMode()) return;
+    document.body.classList.add('widget-mode');
+    // Load teams first (for standings display in modal, if user clicks)
+    loadTeams().then(() => {
+        renderWidget(allMatches);
+        attachMatchCardClickHandlers();
+        // Auto-refresh every 60s (silent in background)
+        _widgetTimerId = setInterval(() => {
+            fetch('/api/matches')
+                .then(r => r.ok ? r.json() : null)
+                .then(fresh => {
+                    if (fresh) {
+                        allMatches = fresh;
+                        renderWidget(allMatches);
+                        attachMatchCardClickHandlers();
+                    }
+                })
+                .catch(e => console.warn('Widget auto-refresh failed:', e));
+        }, WIDGET_REFRESH_MS);
+    });
+}
+
+function _isWidgetMode() {
+    return new URLSearchParams(window.location.search).get('view') === 'widget';
+}
+
+function renderWidget(matches) {
+    const widgetEl = document.getElementById('widget-view');
+    if (!widgetEl) return;
+    const today = todayBeijing();
+    // Find today's matches; if none, show next matchday
+    let shown = matches.filter(m => beijingDateStr(m.date_utc) === today);
+    if (!shown.length) {
+        // Sort by date_utc, take next 5 upcoming
+        shown = [...matches]
+            .sort((a, b) => a.date_utc.localeCompare(b.date_utc))
+            .filter(m => m.date_utc > new Date().toISOString())
+            .slice(0, 5);
+    } else {
+        // Also include live / recent (last 6 hours)
+        const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
+        const recent = matches
+            .filter(m => m.date_utc < today && m.date_utc >= sixHoursAgo
+                && beijingDateStr(m.date_utc) === today)
+            .slice(-3);
+        // De-dup
+        const ids = new Set(shown.map(m => m.match_id));
+        for (const r of recent) if (!ids.has(r.match_id)) shown.unshift(r);
+    }
+    if (!shown.length) {
+        widgetEl.innerHTML = '<p class="widget-empty">暂无比赛</p>';
+        return;
+    }
+    let html = '';
+    for (const m of shown) {
+        html += renderWidgetCard(m);
+    }
+    widgetEl.innerHTML = html;
+}
+
+function renderWidgetCard(m) {
+    const time = beijingTimeStr(m.date_utc);
+    const status = getEffectiveStatus(m);
+    const homeFlag = m.home && m.home.code_iso
+        ? `<span class="fi fi-${escapeHtml(m.home.code_iso)}"></span>` : '';
+    const awayFlag = m.away && m.away.code_iso
+        ? `<span class="fi fi-${escapeHtml(m.away.code_iso)}"></span>` : '';
+    const stageLabel = m.group
+        ? `G${escapeHtml(m.group)}${m.matchday ? '·M' + escapeHtml(String(m.matchday)) : ''}`
+        : labelStage(m.stage).replace(/1\/|1\/8|1\/16|1\/4/g, '').trim();
+    let middle = '<span class="widget-vs">vs</span>';
+    if ((status === 'final' || status === 'live') && m.details && m.details.score) {
+        const s = m.details.score;
+        const liveClass = status === 'live' ? ' live' : '';
+        middle = `<span class="widget-score${liveClass}">${s.home} - ${s.away}</span>`;
+    } else if (status === 'final') {
+        middle = '<span class="widget-pending">待更新</span>';
+    }
+    return `<div class="widget-card" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
+        <div class="widget-row">
+            <div class="widget-team home">
+                <span class="widget-team-name">${escapeHtml(m.home.name_zh || m.home.name)}</span>
+                ${homeFlag}
+            </div>
+            ${middle}
+            <div class="widget-team away">
+                ${awayFlag}
+                <span class="widget-team-name">${escapeHtml(m.away.name_zh || m.away.name)}</span>
+            </div>
+        </div>
+        <div class="widget-meta">
+            <span class="widget-time">${escapeHtml(time)}</span>
+            <span class="widget-stage">${stageLabel}</span>
+            <span class="widget-status status-${status}">${widgetStatusLabel(status)}</span>
+        </div>
+    </div>`;
+}
+
+function widgetStatusLabel(status) {
+    return ({
+        final: '完场', live: 'LIVE', scheduled: '未开赛',
+    })[status] || status;
 }
 
 function renderMatchCard(m) {
@@ -742,7 +857,11 @@ function renderModalFinalNoDetails() {
         <div class="modal-score-pending">
             比赛已结束 · 比分待更新
         </div>
-        <div class="modal-score-hint">Match ended · Score pending update</div>`;
+        <div class="modal-score-hint">Match ended · Score pending update</div>
+        <div class="modal-score-manual-hint">
+            💡 worldcup26.ir 还未录入该场比分 · 点刷新可重拉 · 仍没有可手动加
+            <br><small>worldcup26.ir has not posted this match's score yet. Try Refresh. If still missing, you can <a href="https://github.com/tjqiulu/2026worldCupCoverage/blob/main/data/details.json" target="_blank" rel="noopener">add it manually to details.json</a>.</small>
+        </div>`;
 }
 
 // === Plan 015: Stadium, Standings, Countdown ===
@@ -875,7 +994,7 @@ function closeMatchModal() {
 }
 
 function attachMatchCardClickHandlers() {
-    document.querySelectorAll('.match-card, .bracket-card').forEach(card => {
+    document.querySelectorAll('.match-card, .bracket-card, .widget-card').forEach(card => {
         if (card.dataset.id && !card.dataset.clickBound) {
             card.addEventListener('click', () => showMatchModal(card.dataset.id));
             card.dataset.clickBound = '1';
