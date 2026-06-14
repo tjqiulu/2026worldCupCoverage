@@ -123,5 +123,51 @@
       }
     ]
   },
+  "fifa-wc-2026-11a1e8291690@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "B. Khoukhi",
+        "minute": 90,
+        "stoppage": 5,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Breel Embolo 17' (p)",
+        "minute": 0,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-51c5def6e311@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "V. Júnior",
+        "minute": 32,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "I. Saibari",
+        "minute": 21,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }
