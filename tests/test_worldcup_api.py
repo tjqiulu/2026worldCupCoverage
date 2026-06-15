@@ -126,24 +126,41 @@ class TestFindMatchId:
 
 class TestMergeFromApi:
     def test_existing_entry_not_overwritten(self):
+        """Plan 017: COMPLETE existing entries win over API (preserve manual corrections)."""
         from src.data.details import merge_from_api
         existing = {
-            "m1": {"status": "final", "score": {"home": 99, "away": 99}, "note": "manual"},
+            "m1": {
+                "status": "final",
+                "score": {"home": 2, "away": 1},
+                "goalscorers": [
+                    {"team": "home", "player": "A", "minute": 10},
+                    {"team": "home", "player": "B", "minute": 50},
+                    {"team": "away", "player": "C", "minute": 70},
+                ],
+                "note": "manual",
+            },
         }
-        api = {"m1": {"status": "final", "score": {"home": 2, "away": 0}}}
-        merged, added = merge_from_api(existing, api)
-        assert merged["m1"]["score"] == {"home": 99, "away": 99}  # existing wins
-        assert "note" in merged["m1"]
-        assert added == 0
+        api = {"m1": {"status": "final", "score": {"home": 2, "away": 1},
+                      "goalscorers": [
+                          {"team": "home", "player": "A", "minute": 10},
+                          {"team": "home", "player": "B", "minute": 50},
+                          {"team": "away", "player": "C", "minute": 70},
+                      ]}}
+        merged, changed, overwritten = merge_from_api(existing, api)
+        assert merged["m1"]["score"] == {"home": 2, "away": 1}  # existing wins
+        assert "note" in merged["m1"]  # manual correction preserved
+        assert changed == 0
+        assert overwritten == 0
 
     def test_new_entry_added(self):
         from src.data.details import merge_from_api
         existing = {"m1": {"status": "final"}}
         api = {"m2": {"status": "final", "score": {"home": 1, "away": 0}}}
-        merged, added = merge_from_api(existing, api)
+        merged, changed, overwritten = merge_from_api(existing, api)
         assert "m2" in merged
         assert merged["m2"]["score"] == {"home": 1, "away": 0}
-        assert added == 1
+        assert changed == 1
+        assert overwritten == 0
 
 
 # === clear_cache ===

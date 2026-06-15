@@ -138,10 +138,10 @@
         "team": "home"
       },
       {
-        "player": "Breel Embolo 17' (p)",
-        "minute": 0,
+        "player": "Breel Embolo",
+        "minute": 17,
         "stoppage": null,
-        "type": null,
+        "type": "penalty",
         "team": "away"
       }
     ]
@@ -168,6 +168,215 @@
         "team": "away"
       }
     ]
+  },
+  "fifa-wc-2026-ec4c7885a3a4@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "J. McGinn",
+        "minute": 28,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-998d2005257f@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Nestory Irankunda",
+        "minute": 27,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "C. Metcalfe",
+        "minute": 75,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-764217ec91b0@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 7,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Felix Nmecha",
+        "minute": 7,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "N. Schlotterbeck",
+        "minute": 38,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "K. Havertz",
+        "minute": 45,
+        "stoppage": 5,
+        "type": "penalty",
+        "team": "home"
+      },
+      {
+        "player": "J. Musiala",
+        "minute": 47,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "N. Brown",
+        "minute": 68,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "D. Undav",
+        "minute": 78,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "K. Havertz",
+        "minute": 88,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "L. Comenencia",
+        "minute": 21,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-744bfbfd7938@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Virgil van Dijk",
+        "minute": 51,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "C. Summerville",
+        "minute": 64,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "K. Nakamura",
+        "minute": 57,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "K. Ogawa",
+        "minute": 89,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-0ef2205260cd@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "A. Diallo",
+        "minute": 90,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-df779f16393a@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 5,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Y. Ayari",
+        "minute": 7,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "A. Isak",
+        "minute": 30,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "O. Rekik",
+        "minute": 43,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "V. Gyökeres",
+        "minute": 60,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Svanberg",
+        "minute": 84,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Y. Ayari",
+        "minute": 90,
+        "stoppage": 5,
+        "type": null,
+        "team": "home"
+      }
+    ],
+    "_source": "新华社/央视 2026-06-15 12:00-12:15 报道（伊萨克/哲凯赖什互相传射，阿亚里梅开二度）"
   },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

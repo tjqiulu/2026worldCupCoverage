@@ -86,26 +86,77 @@ def enrich_matches(matches: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 # === Plan 012: Merge from worldcup26.ir API ===
 
+def _is_incomplete(entry: dict[str, Any]) -> bool:
+    """Return True if a manually-maintained entry looks incomplete.
+
+    Heuristic (Plan 017 + 017.1):
+    - A 'final' entry with a score is incomplete if its goalscorers list
+      is shorter than the total goals implied by the score.
+    - A 'final' entry is also incomplete if ANY goal has minute=0 — real
+      match goals are minute 1+, so minute=0 is a strong signal of
+      malformed hand-maintained data (e.g. minute info accidentally
+      stuffed into the player name string like "K. Havertz 45'+5'(p)").
+
+    Returns False when we can't tell (e.g., no score, no goalscorers key).
+    """
+    score = entry.get("score") or {}
+    goals = entry.get("goalscorers") or []
+    if not isinstance(score, dict):
+        return False
+    if "home" not in score or "away" not in score:
+        return False
+    home = score.get("home")
+    away = score.get("away")
+    if not isinstance(home, int) or not isinstance(away, int):
+        return False
+    if home < 0 or away < 0:
+        return False
+    if len(goals) < (home + away):
+        return True
+    # Plan 017.1: any goal with minute=0 is treated as malformed
+    if any(
+        isinstance(g, dict) and g.get("minute") == 0
+        for g in goals
+    ):
+        return True
+    return False
+
+
 def merge_from_api(
     existing: dict[str, dict[str, Any]],
     api_details: dict[str, dict[str, Any]],
-) -> tuple[dict[str, dict[str, Any]], int]:
+) -> tuple[dict[str, dict[str, Any]], int, int]:
     """Merge API-fetched details into existing details.
 
-    Rules:
-    - Existing entries (manually maintained) take priority — never overwritten by API.
-    - New entries from API are added to existing.
-    - Returns (merged_dict, num_added) where num_added is the number of
-      new entries (not overwriting existing).
+    Rules (Plan 017):
+    - Existing entries with a COMPLETE goalscorers list win over API
+      (protects manual corrections like the Larin 78' fix in 965e9ac9ce78).
+    - Existing entries that look INCOMPLETE (goalscorers count < score sum)
+      are OVERWRITTEN by the API entry — the API is treated as the
+      authoritative source for finished games we have a hand-maintained stub for.
+    - New entries from the API are added.
+    - Returns (merged_dict, num_changed, num_overwritten) where:
+        - num_changed = num_added + num_overwritten
+        - num_overwritten = entries where the API replaced an incomplete stub
     """
     added = 0
+    overwritten = 0
     merged = dict(existing)  # copy
     for mid, api_entry in api_details.items():
         if mid not in merged:
             merged[mid] = api_entry
             added += 1
-        # else: existing entry wins, skip API
-    return merged, added
+            continue
+        existing_entry = merged[mid]
+        if _is_incomplete(existing_entry):
+            logging.warning(
+                f"merge_from_api: {mid} existing entry is incomplete "
+                f"(goalscorers < score sum), overriding with API data"
+            )
+            merged[mid] = api_entry
+            overwritten += 1
+        # else: existing entry is complete, keep it (manual corrections win)
+    return merged, added + overwritten, overwritten
 
 
 def load_details() -> dict[str, dict[str, Any]]:

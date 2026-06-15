@@ -124,7 +124,7 @@ def create_app() -> Flask:
                 if api_details:
                     from src.data.details import load_details
                     existing = load_details()
-                    merged, scores_updated = merge_from_api(existing, api_details)
+                    merged, scores_updated, _ = merge_from_api(existing, api_details)
                     if scores_updated > 0:
                         save_details(merged)
             except Exception as api_err:
