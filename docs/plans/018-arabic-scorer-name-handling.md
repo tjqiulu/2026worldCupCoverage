@@ -1,7 +1,8 @@
 # Plan 018 — 阿拉伯文进球者名字处理（Belgium vs Egypt 脏数据）
 
-> **状态**: `planned`（待 user 决定方案）
+> **状态**: `planned` → `in-progress`（已选方案 D）
 > **创建日期**: 2026-06-16
+> **决策日期**: 2026-06-16
 > **关联 plan**: [017-incomplete-details-api-override.md](017-incomplete-details-api-override.md)（覆盖策略）, [012-worldcup26-api-integration.md](012-worldcup26-api-integration.md)（API 集成）
 
 ## 背景
@@ -129,12 +130,23 @@ Plan 017 的 `_is_incomplete` 判定是 `len(goals) < home+away`。Belgium vs Eg
 
 理由：根因是"数据脏"而不是"缺转写"，过早做方案 A/B 都是在掩盖脏数据；让数据自曝其短（多观察几天）再做决策更稳。
 
+## 已决策
+
+**2026-06-16 07:17**：用户选择 **方案 D**（仅入 backlog，不改代码）。
+
+- [x] Plan 文档（本文）
+- [x] `docs/backlog/README.md` 新增 P2-008 条目
+- [x] 等 6/16 比赛日结束再回头观察 Arabic-only 是不是孤例
+- [ ] 后续若触发方案 A 或 B，再起新 plan（不重写本 plan）
+
 ## 待用户决策
 
-1. 走推荐（方案 D → 看几天）？
-2. 还是现在就 A（手动改 + 加 `_protected_from_api` 标志）？
-3. 还是 B（加 transliteration，赌这是个普遍问题）？
-4. 还是 C（前端兜底 + tooltip）？
+~~1. 走推荐（方案 D → 看几天）？~~
+~~2. 还是现在就 A（手动改 + 加 `_protected_from_api` 标志）？~~
+~~3. 还是 B（加 transliteration，赌这是个普遍问题）？~~
+~~4. 还是 C（前端兜底 + tooltip）？~~
+
+**已选 D，见"已决策"段。**
 
 ## 影响
 

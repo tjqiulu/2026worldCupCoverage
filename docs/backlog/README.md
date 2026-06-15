@@ -88,6 +88,18 @@
 ### P2-006: 移动端 PWA
 ### P2-007: 多赛事支持（欧冠、欧洲杯等）
 
+### P2-008: worldcup26.ir 阿拉伯文进球者名字（Belgium vs Egypt 脏数据）
+- **状态**: open
+- **创建日期**: 2026-06-16
+- **Plan**: [018-arabic-scorer-name-handling.md](../plans/018-arabic-scorer-name-handling.md)
+- **描述**: worldcup26.ir API 对某些比赛（目前发现 Belgium vs Egypt match_id `fifa-wc-2026-323786f24db4`）返回的 `home_scorers` / `away_scorers` 是纯阿拉伯文，且疑似字段错位（两进球者 Mohamed Hany、Imam Ashour 都是埃及 Al Ahly 球员，被错分配到不同队）
+- **验收**:
+  - 6/16 比赛日结束后，重新跑全量排查（`fetch /get/games` 过滤非 ASCII scorer 名字）
+  - 如果 Arabic-only 仍只此 1 场 → 走 Plan 018 方案 A：手维护 + 新增 `_protected_from_api` 标志位
+  - 如果出现第 2 场 → 走 Plan 018 方案 B：在 `src/data/worldcup_api.py` 拉取层做 Arabic → Latin transliteration
+  - 修复后 Belgium vs Egypt 详情页显示 Latin 转写（如 "Imam Ashour"）而非阿拉伯文
+- **暂不修原因**: 根因是数据脏（不是缺 transliteration），过早修会掩盖问题；等更多比赛结束后看趋势再决策更稳
+
 ## 长期（V2+）
 
 - 多用户/账号系统
@@ -97,3 +109,4 @@
 ## 修订日志
 
 - 2026-06-12: 创建，初始化 4 阶段路线图 + 14 个条目
+- 2026-06-16: 新增 P2-008（worldcup26.ir 阿拉伯文进球者名字）
