@@ -1,6 +1,6 @@
 # Plan 023 — 移动端适配（手机访问可用）
 
-> **状态**: `planned`
+> **状态**: `planned` → `completed`
 > **创建日期**: 2026-06-16
 > **关联 plan**: [022-cloudflare-quick-tunnel.md](022-cloudflare-quick-tunnel.md)（前置：手机 4G 已能访问，正是这次发现 mobile 不友好）, [015-detail-page-content.md](015-detail-page-content.md)（modal 设计参考）, [019-standings-gf-ga-gd-columns.md](019-standings-gf-ga-gd-columns.md)（10 列 standings）
 > **用户驱动**: 18:14 "手机能打开了，页面没适配手机屏幕尺寸，想想办法先？"
