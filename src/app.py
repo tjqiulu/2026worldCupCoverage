@@ -43,7 +43,9 @@ DATA_DIR = PROJECT_ROOT / "data"
 MATCHES_FILE = DATA_DIR / "matches.json"
 
 # Server config
-HOST = "127.0.0.1"
+# LAN-accessible: 0.0.0.0 binds to all interfaces (phone on same WiFi
+# can reach via http://192.168.1.44:8766). Loopback-only was 127.0.0.1.
+HOST = "0.0.0.0"
 PORT = 8766
 
 # Debug mode: off by default for end-user launches (set FLASK_DEBUG=1 to enable)
