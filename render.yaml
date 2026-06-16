@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: wc2026-coverage
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "src.app:create_app()" --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.21
+      - key: FLASK_DEBUG
+        value: "0"
+    plan: free
+    autoDeploy: true

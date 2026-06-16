@@ -45,8 +45,10 @@ MATCHES_FILE = DATA_DIR / "matches.json"
 # Server config
 # LAN-accessible: 0.0.0.0 binds to all interfaces (phone on same WiFi
 # can reach via http://192.168.1.44:8766). Loopback-only was 127.0.0.1.
+# Plan 021: PORT reads $PORT env var (Render injects 10000) with
+# local default 8766 — backward compatible with `python src/app.py`.
 HOST = "0.0.0.0"
-PORT = 8766
+PORT = int(os.environ.get("PORT", 8766))
 
 # Debug mode: off by default for end-user launches (set FLASK_DEBUG=1 to enable)
 # When debug=True, Flask uses a reloader that spawns a child process on startup,
