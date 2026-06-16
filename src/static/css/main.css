@@ -1135,6 +1135,12 @@ footer a:hover {
     font-size: 14px;
 }
 
+/* Plan 019: GF/GA/GD columns — tabular-nums + visual weight on GD */
+.standings-gd {
+    font-weight: 600;
+    color: #1D3557;
+}
+
 /* Plan 015: Countdown */
 .modal-countdown-card {
     background: linear-gradient(135deg, #1D3557 0%, #2A4A75 100%);

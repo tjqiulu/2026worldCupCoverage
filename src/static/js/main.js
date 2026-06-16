@@ -906,6 +906,13 @@ function _teamName(teamId) {
     return `Team ${teamId}`;
 }
 
+function _gdStr(v) {
+    // Plan 019: format goal difference with explicit + / - sign
+    const n = _numOrZero(v);
+    if (n > 0) return `+${n}`;
+    return String(n);
+}
+
 function renderModalStandings(match) {
     const rows = match.standings.map((t, i) => {
         const rank = i + 1;
@@ -918,6 +925,9 @@ function renderModalStandings(match) {
             <td class="standings-num">${_numOrZero(t.w)}</td>
             <td class="standings-num">${_numOrZero(t.d)}</td>
             <td class="standings-num">${_numOrZero(t.l)}</td>
+            <td class="standings-num">${_numOrZero(t.gf)}</td>
+            <td class="standings-num">${_numOrZero(t.ga)}</td>
+            <td class="standings-num standings-gd">${_gdStr(t.gd)}</td>
             <td class="standings-num standings-pts"><strong>${_numOrZero(t.pts)}</strong></td>
         </tr>`;
     }).join('');
@@ -932,6 +942,9 @@ function renderModalStandings(match) {
                         <th class="standings-num">胜 W</th>
                         <th class="standings-num">平 D</th>
                         <th class="standings-num">负 L</th>
+                        <th class="standings-num">进 GF</th>
+                        <th class="standings-num">失 GA</th>
+                        <th class="standings-num">净 GD</th>
                         <th class="standings-num">分 Pts</th>
                     </tr>
                 </thead>
