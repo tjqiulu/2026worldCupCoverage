@@ -186,6 +186,8 @@ button:disabled {
     }
 }
 
+/* Plan 023: Mobile responsive (B方案 — 容器 + modal 全屏) */
+
 /* States */
 .loading, .error {
     padding: 40px 20px;
@@ -463,6 +465,7 @@ footer a:hover {
 .bracket-mirror-wrapper {
     position: relative;
     min-width: 950px;
+
 }
 
 .bracket-lines {
@@ -1318,4 +1321,66 @@ body.widget-mode .widget-view {
 .widget-status.status-scheduled {
     background: #e0e0e0;
     color: #666;
+}
+
+@media (max-width: 767px) {
+    /* 容器铺满 + 减小 padding + 兑底防横向滚动 */
+    body {
+        max-width: 100%;
+        padding: 12px 14px 32px;
+        font-size: 14px;
+        overflow-x: hidden;
+    }
+    /* 对阵图（bracket）在手机是垃圾体验 — 默认隐藏 */
+    /* 强制让 matches-view 显示，不需 JS */
+    #bracket-view { display: none !important; }
+    #matches-view { display: block !important; }
+    .tabs { display: none; }
+    /* match card 紧凑一点 */
+    .match-card {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    .match-team {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+    .match-card {
+        flex-wrap: wrap;
+    }
+    /* modal 全屏化 */
+    .match-modal-card {
+        min-width: 0;
+        max-width: none;
+        width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        padding: 20px 16px 16px;
+        box-shadow: none;
+    }
+    .match-modal-close {
+        top: 8px;
+        right: 8px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+    /* standings 表横滑（已有 overflow-x:auto） — 减小 padding 让 10 列能挤进去 */
+    .modal-standings-table {
+        font-size: 11px;
+    }
+    .modal-standings-table th,
+    .modal-standings-table td {
+        padding: 6px 4px;
+    }
+    /* header 不溢出 */
+    header h1 {
+        font-size: 18px;
+    }
+    header button {
+        min-height: 44px;
+        min-width: 44px;
+    }
 }
