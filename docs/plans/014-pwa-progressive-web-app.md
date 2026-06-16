@@ -1,6 +1,7 @@
 # Plan 014 — PWA (Progressive Web App)
 
 > **状态**: `proposed` → 用户"pwa搞一把" → `planned` → 执行 → `completed` ✅
+> **2026-06-16**: 被 [Plan 024](024-pwa-activation.md) 验证激活（8/8 closure audit PASS），PWA 仍功能完整
 > **完成日期**: 2026-06-13
 > **结果**: 243/243 测试通过（其中 15 个新增 PWA e2e），0 回归
 > **commit**: (下方 git 提交)
