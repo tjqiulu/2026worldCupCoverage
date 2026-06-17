@@ -378,5 +378,177 @@
     ],
     "_source": "新华社/央视 2026-06-15 12:00-12:15 报道（伊萨克/哲凯赖什互相传射，阿亚里梅开二度）"
   },
+  "fifa-wc-2026-95c833b74439@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "goalscorers": []
+  },
+  "fifa-wc-2026-323786f24db4@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "محمد هانی",
+        "minute": 66,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "امام آشور",
+        "minute": 19,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-b9f4734fd923@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Abdallh Alamri",
+        "minute": 41,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Maksimilianv Araivkhv",
+        "minute": 80,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-af1e7aa5490e@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Ramin Rzaiian",
+        "minute": 32,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Mohamed Mhbi",
+        "minute": 64,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Ali Jast",
+        "minute": 7,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Ali Jast",
+        "minute": 54,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-0f846365870d@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "K. Mbappé",
+        "minute": 66,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "B. Barcola",
+        "minute": 82,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "K. Mbappé",
+        "minute": 90,
+        "stoppage": 6,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "I. Mbaye",
+        "minute": 90,
+        "stoppage": 5,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-cccee6959e93@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 4
+    },
+    "goalscorers": [
+      {
+        "player": "Aimn Hsin",
+        "minute": 39,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Arling Halnd",
+        "minute": 29,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Arling Halnd",
+        "minute": 43,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Liv Avstigard",
+        "minute": 76,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Aimn Hsin",
+        "minute": 90,
+        "stoppage": 7,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

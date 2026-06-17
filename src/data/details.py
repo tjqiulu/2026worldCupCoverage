@@ -252,3 +252,113 @@ def file_exists() -> bool:
 def file_path() -> Path:
     """Path to details.json (for documentation/maintenance)."""
     return DETAILS_FILE
+
+
+# === Plan 025: Local standings derivation ===
+# worldcup26.ir `/get/groups` is sometimes stale (Iraq-Norway 2026-06-17:
+# match finished at 06:00, but the API's standings still showed 0 PTS
+# for both teams). We derive standings from our own details.json as
+# the source of truth — it's always in sync with goalscorers, and we
+# get instant updates after /api/refresh.
+
+def compute_standings_from_details(
+    group_letter: str | None,
+    all_details: dict[str, dict[str, Any]],
+    matches: list[dict[str, Any]],
+    team_name_to_id: dict[str, str] | None = None,
+) -> list[dict[str, Any]] | None:
+    """Compute group standings from local final-match data.
+
+    Returns: list of {team_id, mp, w, d, l, pts, gf, ga, gd} sorted by
+    pts desc, gd desc, gf desc (FIFA standard tie-breakers).
+    Returns None if the group has no final matches in our data
+    (caller should then fall back to the API).
+
+    Args:
+        group_letter: e.g. "A", "B", ..., "L" (case-insensitive)
+        all_details: {match_id: details_entry} — usually from load_details()
+        matches: list of all match dicts (each with 'group', 'home', 'away')
+        team_name_to_id: optional pre-built {team_name: team_id} map.
+            If None, caller is responsible for providing one (so this
+            function doesn't depend on worldcup_api).
+    """
+    if not group_letter:
+        return None
+    target = group_letter.strip().upper()
+    if not target:
+        return None
+
+    if team_name_to_id is None:
+        # Without a team-name map we can't return team_ids (frontend needs them).
+        # Caller (find_group_standings wrapper) should pass one in.
+        return None
+
+    # Filter matches in this group that are final in our data
+    final_mids: set[str] = {
+        mid for mid, entry in all_details.items()
+        if isinstance(entry, dict) and entry.get("status") == "final"
+    }
+    group_matches = [
+        m for m in matches
+        if (m.get("group") or "").strip().upper() == target
+        and m.get("match_id") in final_mids
+    ]
+    if not group_matches:
+        return None
+
+    # Accumulate per team
+    stats: dict[str, dict[str, int]] = {}
+
+    def _ensure(tid: str) -> None:
+        if tid not in stats:
+            stats[tid] = {"mp": 0, "w": 0, "d": 0, "l": 0, "gf": 0, "ga": 0, "pts": 0}
+
+    for m in group_matches:
+        d = all_details.get(m["match_id"], {})
+        score = d.get("score") or {}
+        if not isinstance(score, dict):
+            continue
+        h = score.get("home")
+        a = score.get("away")
+        if not isinstance(h, int) or not isinstance(a, int):
+            continue
+        home_name = (m.get("home") or {}).get("name") or ""
+        away_name = (m.get("away") or {}).get("name") or ""
+        home_id = team_name_to_id.get(home_name)
+        away_id = team_name_to_id.get(away_name)
+        if not home_id or not away_id:
+            continue  # can't attribute stats without a team_id
+
+        _ensure(home_id)
+        _ensure(away_id)
+        stats[home_id]["mp"] += 1
+        stats[home_id]["gf"] += h
+        stats[home_id]["ga"] += a
+        stats[away_id]["mp"] += 1
+        stats[away_id]["gf"] += a
+        stats[away_id]["ga"] += h
+
+        if h > a:
+            stats[home_id]["w"] += 1
+            stats[home_id]["pts"] += 3
+            stats[away_id]["l"] += 1
+        elif h < a:
+            stats[away_id]["w"] += 1
+            stats[away_id]["pts"] += 3
+            stats[home_id]["l"] += 1
+        else:
+            stats[home_id]["d"] += 1
+            stats[away_id]["d"] += 1
+            stats[home_id]["pts"] += 1
+            stats[away_id]["pts"] += 1
+
+    # Compute GD and assemble
+    result: list[dict[str, Any]] = []
+    for tid, s in stats.items():
+        s2 = dict(s)
+        s2["gd"] = s2["gf"] - s2["ga"]
+        s2["team_id"] = tid
+        result.append(s2)
+    # Sort: pts desc, gd desc, gf desc (FIFA standard)
+    result.sort(key=lambda t: (t["pts"], t["gd"], t["gf"]), reverse=True)
+    return result

@@ -452,6 +452,77 @@ class TestScorerStringParser:
         assert result == [{"player": "some weird name", "minute": 0, "stoppage": None, "type": None}]
 
 
+# === Plan 025: worldcup26.ir API started returning stoppage time with the
+# apostrophe AFTER the +N (e.g., "K. Mbappé 90+6'") instead of before
+# (e.g., "K. Mbappé 90'+6'"). The old regex didn't match the new format,
+# so every stoppage goal fell into the "no minute found" branch and was
+# stored as player=item, minute=0. Frontend then displayed "0'".
+#
+# These tests pin the new behavior so a future format change doesn't silently
+# regress the whole pipeline (Plan 017.1 was being bypassed by the bad parser).
+# ===
+
+class TestStoppageTimeParserPlan025:
+    """Plan 025: stoppage time parser must accept all three apostrophe variants
+    seen in worldcup26.ir API output, plus keep OG/P suffix support."""
+
+    def test_stoppage_apostrophe_after_90_plus_6(self):
+        """The exact bug case from France-Senegal (2026-06-17 09:35)."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["K. Mbappé 90+6'"])
+        assert result == [{"player": "K. Mbappé", "minute": 90, "stoppage": 6, "type": None}]
+
+    def test_stoppage_apostrophe_before_old_format_90_plus_6(self):
+        """Old format (Plan 016) must still work — don't regress."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["K. Mbappé 90'+6'"])
+        assert result == [{"player": "K. Mbappé", "minute": 90, "stoppage": 6, "type": None}]
+
+    def test_stoppage_no_apostrophes_at_all(self):
+        """Some API responses omit apostrophes entirely."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["K. Mbappé 90+6"])
+        assert result == [{"player": "K. Mbappé", "minute": 90, "stoppage": 6, "type": None}]
+
+    def test_real_iraq_norway_full(self):
+        """The exact data from Iraq-Norway bug (2026-06-17 09:48). 5 goals
+        in the new API format — must all parse correctly."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        # Build the raw API string via concatenation to avoid quote-escaping hell
+        items = [
+            "Aimn Hsin 39'",
+            "Arling Halnd 29'",
+            "Arling Halnd 43'",
+            "Liv Avstigard 76'",
+            "Aimn Hsin 90+7'",
+        ]
+        result = _parse_scorer_strings(items)
+        assert len(result) == 5
+        assert result[0] == {"player": "Aimn Hsin", "minute": 39, "stoppage": None, "type": None}
+        assert result[1] == {"player": "Arling Halnd", "minute": 29, "stoppage": None, "type": None}
+        assert result[2] == {"player": "Arling Halnd", "minute": 43, "stoppage": None, "type": None}
+        assert result[3] == {"player": "Liv Avstigard", "minute": 76, "stoppage": None, "type": None}
+        # The previously-broken stoppage goal:
+        assert result[4] == {"player": "Aimn Hsin", "minute": 90, "stoppage": 7, "type": None}
+
+    def test_own_goal_suffix_still_works(self):
+        """OG suffix must keep working (Plan 016) — apostrophe can land
+        before the parens, not just before +N."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["D. Bobadilla 7'(OG)"])
+        assert result == [{"player": "D. Bobadilla", "minute": 7, "stoppage": None, "type": "own_goal"}]
+
+    def test_stoppage_combined_with_og_suffix(self):
+        """Edge case: stoppage + own goal in one goal. Probably never happens
+        in real data, but the regex must not break on it."""
+        from src.data.worldcup_api import _parse_scorer_strings
+        result = _parse_scorer_strings(["Player 90+5'(OG)"])
+        assert result[0]["player"] == "Player"
+        assert result[0]["minute"] == 90
+        assert result[0]["stoppage"] == 5
+        assert result[0]["type"] == "own_goal"
+
+
 class TestLoadReadsFromDisk:
     """Plan 016: _load() must always read from disk (no cache) so manual edits
     to details.json are immediately visible to the running server."""

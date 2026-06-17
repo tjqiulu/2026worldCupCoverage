@@ -9,6 +9,7 @@ from src.data.details import (
     DETAILS_FILE,
     _is_incomplete,
     all_details,
+    compute_standings_from_details,
     enrich_match,
     enrich_matches,
     file_exists,
@@ -370,3 +371,145 @@ class TestMergeFromApi:
         assert havertz[0]["minute"] == 45
         assert havertz[0]["stoppage"] == 5
         assert havertz[0]["type"] == "penalty"
+
+
+# === Plan 025: Local standings derivation ===
+# worldcup26.ir /get/groups is sometimes stale. We compute standings from
+# our own details.json as the source of truth. These tests pin the
+# behavior so a future refactor doesn't break the Iraq-Norway / France-
+# Senegal consistency guarantee.
+
+class TestComputeStandingsFromDetails:
+    """Plan 025: compute_standings_from_details derives MP/W/D/L/GF/GA/GD/PTS
+    from local final-match data. Same shape as the API response so the
+    frontend (and the modal) can use it transparently."""
+
+    def test_group_with_no_final_matches_returns_none(self):
+        """Group where no match is final yet → caller should fall back to API."""
+        details = {"m1": {"status": "scheduled"}}
+        matches = [{"match_id": "m1", "group": "I", "home": {"name": "Iraq"}, "away": {"name": "Norway"}}]
+        result = compute_standings_from_details("I", details, matches, {"Iraq": "35", "Norway": "36"})
+        assert result is None
+
+    def test_single_final_match_yields_correct_stats(self):
+        """Iraq 1-4 Norway → Iraq 1MP 0W 0D 1L 1GF 4GA -3GD 0PTS;
+        Norway 1MP 1W 0D 0L 4GF 1GA +3GD 3PTS. Norway ranked first."""
+        details = {
+            "m1": {
+                "status": "final",
+                "score": {"home": 1, "away": 4},
+            }
+        }
+        matches = [{
+            "match_id": "m1", "group": "I",
+            "home": {"name": "Iraq"}, "away": {"name": "Norway"},
+        }]
+        result = compute_standings_from_details(
+            "I", details, matches, {"Iraq": "35", "Norway": "36"}
+        )
+        assert result is not None
+        assert len(result) == 2
+        # Norway (winner) should be first
+        assert result[0]["team_id"] == "36"
+        assert result[0] == {"team_id": "36", "mp": 1, "w": 1, "d": 0, "l": 0, "gf": 4, "ga": 1, "gd": 3, "pts": 3}
+        # Iraq (loser) second
+        assert result[1]["team_id"] == "35"
+        assert result[1] == {"team_id": "35", "mp": 1, "w": 0, "d": 0, "l": 1, "gf": 1, "ga": 4, "gd": -3, "pts": 0}
+
+    def test_draw_yields_one_point_each(self):
+        """1-1 draw → both teams get 1 point."""
+        details = {"m1": {"status": "final", "score": {"home": 1, "away": 1}}}
+        matches = [{
+            "match_id": "m1", "group": "A",
+            "home": {"name": "Mexico"}, "away": {"name": "Sweden"},
+        }]
+        result = compute_standings_from_details(
+            "A", details, matches, {"Mexico": "01", "Sweden": "02"}
+        )
+        assert result[0]["pts"] == 1
+        assert result[1]["pts"] == 1
+        assert result[0]["d"] == 1
+        assert result[0]["gd"] == 0
+
+    def test_group_filter_excludes_other_groups(self):
+        """A final match in group A should NOT affect group I standings."""
+        details = {
+            "m_a": {"status": "final", "score": {"home": 5, "away": 0}},
+            "m_i": {"status": "final", "score": {"home": 1, "away": 4}},
+        }
+        matches = [
+            {"match_id": "m_a", "group": "A", "home": {"name": "X"}, "away": {"name": "Y"}},
+            {"match_id": "m_i", "group": "I", "home": {"name": "Iraq"}, "away": {"name": "Norway"}},
+        ]
+        result = compute_standings_from_details(
+            "I", details, matches, {"Iraq": "35", "Norway": "36", "X": "99", "Y": "98"}
+        )
+        # Should only have Iraq and Norway
+        team_ids = {t["team_id"] for t in result}
+        assert team_ids == {"35", "36"}
+        # Should NOT include X or Y
+        assert "99" not in team_ids
+        assert "98" not in team_ids
+
+    def test_sort_order_pts_then_gd_then_gf(self):
+        """Two teams with same PTS: higher GD ranks first (FIFA standard).
+        Tie on GD: higher GF ranks first."""
+        details = {
+            "m1": {"status": "final", "score": {"home": 3, "away": 0}},  # A wins big
+            "m2": {"status": "final", "score": {"home": 1, "away": 0}},  # B wins small
+        }
+        matches = [
+            {"match_id": "m1", "group": "X", "home": {"name": "A"}, "away": {"name": "C"}},
+            {"match_id": "m2", "group": "X", "home": {"name": "B"}, "away": {"name": "D"}},
+        ]
+        result = compute_standings_from_details(
+            "X", details, matches, {"A": "1", "B": "2", "C": "3", "D": "4"}
+        )
+        # A: 3pts, GD=+3, GF=3
+        # B: 3pts, GD=+1, GF=1
+        # A should rank higher than B (same PTS, but A has better GD)
+        assert result[0]["team_id"] == "1"
+        assert result[1]["team_id"] == "2"
+
+    def test_unknown_team_names_are_skipped(self):
+        """If team_name_to_id doesn't have a team, that match is skipped
+        (we can't attribute stats without a team_id)."""
+        details = {"m1": {"status": "final", "score": {"home": 1, "away": 0}}}
+        matches = [{
+            "match_id": "m1", "group": "I",
+            "home": {"name": "Unknown Country"}, "away": {"name": "Norway"},
+        }]
+        result = compute_standings_from_details(
+            "I", details, matches, {"Norway": "36"}  # no mapping for "Unknown Country"
+        )
+        # Should be None because no match could be fully attributed
+        # (home team is missing from the map)
+        # OR if we DO get a partial result with only Norway, that's also OK
+        # but the safest guarantee: don't crash, don't fabricate stats
+        if result is not None:
+            # If result, must not include fabricated team_id for Unknown Country
+            for t in result:
+                assert t["team_id"] in {"36"}
+
+    def test_real_iraq_norway_and_france_senegal(self):
+        """Integration: simulate the exact Group I state at 2026-06-17 10:00
+        — France-Senegal (3-1) + Iraq-Norway (1-4). France and Norway
+        should be tied on 3 PTS, ordered by GD (France +2, Norway +3)."""
+        details = {
+            "fr": {"status": "final", "score": {"home": 3, "away": 1}},  # France-Senegal
+            "iq": {"status": "final", "score": {"home": 1, "away": 4}},  # Iraq-Norway
+        }
+        matches = [
+            {"match_id": "fr", "group": "I", "home": {"name": "France"}, "away": {"name": "Senegal"}},
+            {"match_id": "iq", "group": "I", "home": {"name": "Iraq"}, "away": {"name": "Norway"}},
+        ]
+        result = compute_standings_from_details(
+            "I", details, matches,
+            {"France": "33", "Senegal": "34", "Iraq": "35", "Norway": "36"},
+        )
+        # Sort: Norway (3pts, +3) > France (3pts, +2) > Senegal (0pts, -2) > Iraq (0pts, -3)
+        assert [t["team_id"] for t in result] == ["36", "33", "34", "35"]
+        assert result[0] == {"team_id": "36", "mp": 1, "w": 1, "d": 0, "l": 0, "gf": 4, "ga": 1, "gd": 3, "pts": 3}
+        assert result[1] == {"team_id": "33", "mp": 1, "w": 1, "d": 0, "l": 0, "gf": 3, "ga": 1, "gd": 2, "pts": 3}
+        assert result[2] == {"team_id": "34", "mp": 1, "w": 0, "d": 0, "l": 1, "gf": 1, "ga": 3, "gd": -2, "pts": 0}
+        assert result[3] == {"team_id": "35", "mp": 1, "w": 0, "d": 0, "l": 1, "gf": 1, "ga": 4, "gd": -3, "pts": 0}

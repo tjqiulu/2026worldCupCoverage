@@ -185,15 +185,20 @@ def _parse_scorer_strings(items: list[str]) -> list[dict[str, Any]]:
         - stoppage: int | None (the +N part, e.g., 5)
         - type: str | None (e.g., "OG" for own goal, "P" for penalty)
     """
-    # Pattern: name + space + minute + optional '+stoppage + optional (suffix) + optional '
+    # Pattern: name + space + minute + optional stoppage + optional (suffix) + optional '
     # Order matters: ' before ( suffix because data has "7'(OG)" not "7(OG)'"
-    # Stoppage uses "'" before the +N (e.g., "45'+5'")
-    # Suffix uses "'" before the (XX) (e.g., "7'(OG)")
+    # Stoppage: worldcup26.ir API is inconsistent — supports both:
+    #   - "45'+5'" (apostrophe before +N, then trailing apostrophe)
+    #   - "90+6'"  (apostrophe only after +N — newer format seen in 2026-06-17)
+    #   - "90+6"   (no apostrophes at all — also seen occasionally)
+    # Plan 025: regex now accepts all three forms. The stoppage capture group
+    # is `(\d{1,3})`; surrounding apostrophes and the + sign are anchored but
+    # not captured, so any of the three variants match.
     pattern = re.compile(
         r"^(.+?)\s+"                      # player name
         r"(\d{1,3})"                       # minute
-        r"(?:'(\+(\d{1,3}))?)?"            # optional '+N stoppage (preceded by ')
-        r"(?:\(([^)]+)\))?"                # optional (suffix) like (OG), (P)
+        r"(?:'?\+(\d{1,3})'?)?"            # optional +N stoppage (apostrophes optional, any side)
+        r"(?:'?\(([^)]+)\))?"              # optional '(suffix) like (OG), (P) — apostrophe can land here too
         r"'?\s*$"                          # optional trailing apostrophe + end
     )
     # Map raw API suffix codes to our internal goal types
@@ -209,11 +214,13 @@ def _parse_scorer_strings(items: list[str]) -> list[dict[str, Any]]:
             continue
         m = pattern.match(item)
         if m:
-            raw_type = m.group(5) or None
+            # Plan 025: group numbering changed (stoppage moved from g4→g3,
+            # suffix moved from g5→g4) when we made apostrophe optional around +N.
+            raw_type = m.group(4) or None
             goal = {
                 "player": m.group(1).strip(),
                 "minute": int(m.group(2)),
-                "stoppage": int(m.group(4)) if m.group(4) else None,
+                "stoppage": int(m.group(3)) if m.group(3) else None,
                 "type": _SUFFIX_TO_TYPE.get(raw_type) if raw_type else None,
             }
             goals.append(goal)

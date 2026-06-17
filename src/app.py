@@ -22,7 +22,9 @@ from flask import Flask, jsonify, render_template, request  # noqa: E402
 
 from src.data.countries import enrich_matches  # noqa: E402
 from src.data.details import (
+    compute_standings_from_details,
     enrich_matches as enrich_details_matches,
+    load_details,
     merge_from_api,
     save_details,
 )
@@ -76,6 +78,41 @@ def _refresh_matches() -> list[dict[str, Any]]:
     return matches
 
 
+def _local_or_api_standings(
+    group_letter: str,
+    matches: list[dict[str, Any]],
+) -> list[dict[str, Any]] | None:
+    """Plan 025: Compute standings locally from details.json; fall back
+    to worldcup26.ir API only if we have no final matches in this group.
+
+    The local data is always in sync with the goalscorers we display, so
+    showing locally-derived standings guarantees the modal is internally
+    consistent. The API's `/get/groups` is sometimes stale (we saw Iraq-
+    Norway still at 0 PTS hours after the match finished on 2026-06-17).
+    """
+    try:
+        all_details = load_details()
+        # Build {team_name_en: team_id} map from the teams endpoint.
+        # The teams list is cached for 5 min in worldcup_api.
+        teams = get_teams_by_id()
+        name_to_id: dict[str, str] = {}
+        for tid, t in teams.items():
+            for k in (t.get("name_en"), t.get("fifa_code")):
+                if k:
+                    name_to_id[str(k)] = str(tid)
+        local = compute_standings_from_details(
+            group_letter, all_details, matches, name_to_id
+        )
+        if local is not None:
+            return local
+    except Exception as e:
+        # Don't break the request on local failure — fall back to API.
+        print(f"Warning: local standings computation failed: {e}")
+
+    # Fallback: worldcup26.ir API
+    return find_group_standings(group_letter)
+
+
 def create_app() -> Flask:
     """Flask app factory."""
     app = Flask(__name__)
@@ -105,7 +142,11 @@ def create_app() -> Flask:
                     m["venue"] = venue
             # Group standings: only for group stage with a valid group letter
             if m.get("stage") == "group" and m.get("group"):
-                standings = find_group_standings(m["group"])
+                # Plan 025: local-first — worldcup26.ir `/get/groups` is
+                # sometimes stale (Iraq-Norway 2026-06-17 had API showing
+                # 0 PTS hours after the match finished). We compute from
+                # our own details.json as the source of truth.
+                standings = _local_or_api_standings(m["group"], matches)
                 if standings is not None:
                     m["standings"] = standings
         date = request.args.get("date")
