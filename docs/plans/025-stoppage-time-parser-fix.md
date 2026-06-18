@@ -196,6 +196,32 @@ Parser 修完后，跑一次 `/api/refresh`（脚本或 curl），让 merge_from
 - **standings 兜底不入本 plan**：避免 scope creep，先看 API 表现
 - **测试数据驱动**：5 个新测试覆盖 parser 行为，下次回归一目了然
 
+## Closeout（2026-06-18 视觉通过 → 收尾）
+
+> **状态**: `completed`（2026-06-18 用户视觉确认 Gate 8 通过）
+
+### 8-Gate Audit 总结
+- **G1-G7 自动化 ✅**：parser 5 种格式全过、213 pytest 全过、details.json 无 minute=0、I 组 standings 走本地推导 fallback
+- **G8 视觉 ✅**：用户 2026-06-18 11:32 确认 90+5' / 90+6' / 90+7' 补时进球显示正常
+
+### 最终改动
+- `src/data/worldcup_api.py` — `_parse_scorer_strings` 正则双向支持 `90+N'` / `90'+N'`
+- `src/data/details.py` — 新增 `compute_standings_from_details()` 本地推导
+- `src/app.py` — `_local_or_api_standings()` wrapper，先本地后 API
+- `tests/test_worldcup_api.py` — `TestStoppageTimeParserPlan025` 6 个 case
+- `tests/test_details.py` — `TestComputeStandingsFromDetails` 7 个 case
+- `data/details.json` — 5 场新增 + France-Senegal 修复 + Iraq-Norway Aimn Hsin 90+7'
+
+### 关键收获
+- **parser bug 是真根因** — v1 计划"手动修数据"是错的，每次 `/api/refresh` 会用错误 parser 重新生成 malformed entry
+- **Plan 017.1 的 `_is_incomplete` 救不了上游 bug** — 上游坏数据被认为"完整"，触发覆盖等于用同样错数据替换
+- **本地 standings 推导** — 比依赖 API 更新更可靠，API 滞后时仍能展示正确数据
+
+### Next-Session Pickup Notes
+- Plan 025 完结后，6/17 之后新增比赛（commit `57e9378` 后）会走修好的 parser，预期不再有 `90+N'` → 0' 问题
+- 后续如发现新格式（如 `45+10'`, `90+2'(P)`）→ 加单测即可
+- 仍 parked 的 P2-008：Belgium vs Egypt 阿语脏数据（见 Plan 018），下一轮候选 plan 调研
+
 ## 不破坏什么
 
 - `find_group_standings` / `fetch_groups` / 前端 standings 渲染：全不动

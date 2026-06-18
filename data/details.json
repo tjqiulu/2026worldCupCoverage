@@ -550,5 +550,155 @@
       }
     ]
   },
+  "fifa-wc-2026-3d712cde556f@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Livnl Msi",
+        "minute": 17,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Livnl Msi",
+        "minute": 60,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Livnl Msi",
+        "minute": 76,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-647e537b682d@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Rvmanv Ashmid",
+        "minute": 21,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Izn Alarb",
+        "minute": 76,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Ali Avlvan",
+        "minute": 50,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-762d3e9456fd@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "J. Neves",
+        "minute": 6,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Y. Wissa",
+        "minute": 45,
+        "stoppage": 5,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-1d9bf69d0e64@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 4,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "H. Kane",
+        "minute": 12,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "H. Kane",
+        "minute": 42,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "J. Bellingham",
+        "minute": 47,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "M. Rashford",
+        "minute": 85,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "M. Baturina",
+        "minute": 36,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "P. Musa",
+        "minute": 45,
+        "stoppage": 5,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-3cf93686bcf8@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Kalb Iirnki",
+        "minute": 90,
+        "stoppage": 5,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }
