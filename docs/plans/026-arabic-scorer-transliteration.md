@@ -1,6 +1,6 @@
 # Plan 026 — Arabic 进球者名字 transliteration + 漏标 own_goal 修复
 
-> **状态**: `proposed` (2026-06-18 11:59) → `planned` (2026-06-18 12:04 plan-audit APPROVED-WITH-MINOR)
+> **状态**: `proposed` (2026-06-18 11:59) → `planned` (2026-06-18 12:04 plan-audit APPROVED-WITH-MINOR) → `completed` (2026-06-18 16:13 用户 G8 视觉确认通过)
 > **plan-audit**: 独立 subagent 审于 2026-06-18 12:04，4 条建议全部采纳（见决策记录）
 > **log**: [`docs/logs/2026/06-18-plan-026.md`](../logs/2026/06-18-plan-026.md)（执行后）
 > **创建日期**: 2026-06-18
@@ -208,7 +208,7 @@ def apply_scorer_overrides(entry: dict) -> dict:
 | 5 | `pytest tests/test_details.py::TestScorerOverrides` 5/5 pass | pytest | ⏳ |
 | 6 | `pytest tests/` 全套 200+ pass | pytest | ⏳ |
 | 7 | `/api/matches` 返回 Belgium vs Egypt player 是英文 | curl | ⏳ `[BLOCKED: worldcup26.ir API 现离线；Fix 1 完成后细节中文 player 已落地，G7 待 API 恢复后复核集成链路]` |
-| 8 | **手动视觉验证** (MANUAL): 浏览器 Modal 显示 "Mohamed Hany 66' [OG]" | 用户 | ⏳ |
+| 8 | **手动视觉验证** (MANUAL): 浏览器 Modal 显示 "Mohamed Hany 66' [OG]" | 用户 | ✅ 2026-06-18 16:13 |
 
 ## 风险
 
@@ -261,3 +261,32 @@ def apply_scorer_overrides(entry: dict) -> dict:
 | **Plan** | 026 |
 | **关闭原因** | 实施 transliteration + type=own_goal 修复 + Plan 017 规则保护 |
 | **关闭日期** | 2026-06-18 |
+
+## Closeout（2026-06-18 16:13 G8 用户视觉确认通过）
+
+> **状态**: `completed`
+
+### 最终 8-Gate 总结
+- **G1-G6 自动化 ✅**：plan / 实施 / 6/6 自动闸 + 220/220 pytest
+- **G7 ⏸️ SKIP**：worldcup26.ir API 离线，待恢复后单独跑（修复 API 后 `python3 tests/audit_gates_plan026.py`）
+- **G8 ✅**：用户 2026-06-18 16:13 视觉确认 Modal 正确显示 "Mohamed Hany 66' [OG]" / "Emam Ashour 19'"
+
+### 闭环数字
+- **1 个 commit** (`6e06605`)
+- **7 个文件改动**：+896 行 / -6 行
+- **3 改 + 4 新**（数据 / 代码 / 测试 / 文档 / 脚本）
+- **220/220 pytest** 全过（+7 新增，0 回归）
+- **P2-008 关闭**（Plan 018 误判 2 天后正式 fix）
+
+### 关键收获（适合未来参考）
+1. **不照外部源数据就下结论会出 bug**：Plan 018 当时盲信"两人都埃及=脏数据"，没去对照 ESPN/Guardian。Plan 026 调研第一步就 external source verify，纠正了误判
+2. **AGE plan-audit 4 条建议全是"非阻塞但有价值"**：闸标注、缓存策略、边界测试、文档区分 — 每条对应一个潜在回归点
+3. **Plan 017 规则足够保护手维护条目**：2 < 2 是 False，永久不被覆盖 — 避免加新锁字段的过度设计
+4. **API 离线时 audit 策略**：自动 SKIP 而不是 FAIL，避免误报；G7 等 API 恢复单独跑
+5. **subagent 任务拆小**：closure-audit subagent 5 分钟超时 0 tokens — 未来拆成 5 子任务而不是 1 大任务
+
+### Next-Session Pickup Notes
+- 6/18 后新比赛如有 Arabic 国家进球 → 用户会反馈 → 加 `data/scorer_overrides.json` mapping
+- 如果 6/18-6/30 期间 Arabic 出现频率高（>5 条/周）→ 考虑升级到方案 A（arabic-reshaper 库）
+- G7 闸待 worldcup26.ir API 恢复后单独跑一次
+- Plan 018 历史决策保持记录在 P2-008 closeout 段（如未来有人问"为什么 Plan 018 当时没做"，有 audit trail 可查）
