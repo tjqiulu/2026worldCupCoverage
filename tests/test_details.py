@@ -9,6 +9,7 @@ from src.data.details import (
     DETAILS_FILE,
     _is_incomplete,
     all_details,
+    apply_scorer_overrides,
     compute_standings_from_details,
     enrich_match,
     enrich_matches,
@@ -513,3 +514,164 @@ class TestComputeStandingsFromDetails:
         assert result[1] == {"team_id": "33", "mp": 1, "w": 1, "d": 0, "l": 0, "gf": 3, "ga": 1, "gd": 2, "pts": 3}
         assert result[2] == {"team_id": "34", "mp": 1, "w": 0, "d": 0, "l": 1, "gf": 1, "ga": 3, "gd": -2, "pts": 0}
         assert result[3] == {"team_id": "35", "mp": 1, "w": 0, "d": 0, "l": 1, "gf": 1, "ga": 4, "gd": -3, "pts": 0}
+
+
+# === Plan 026: Arabic -> English scorer name overrides ===
+
+class TestScorerOverrides:
+    """Unit tests for apply_scorer_overrides() and _load_overrides().
+
+    Plan 026 fix: defends against the Belgium vs Egypt 阿语 display bug
+    by maintaining a manual mapping table that runs after API parse.
+    """
+
+    def test_arabic_player_transliterated(self):
+        """A goalscorer with Arabic player name gets replaced by English."""
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 1},
+            "goalscorers": [
+                {"player": "محمد هانی", "minute": 66, "type": None, "team": "home"},
+            ],
+        }
+        out = apply_scorer_overrides(entry)
+        assert out["goalscorers"][0]["player"] == "Mohamed Hany"
+        assert out["goalscorers"][0]["minute"] == 66
+        assert out["goalscorers"][0]["type"] is None
+        assert out["goalscorers"][0]["team"] == "home"
+        # Original entry not mutated
+        assert entry["goalscorers"][0]["player"] == "محمد هانی"
+
+    def test_english_player_unchanged(self):
+        """A non-Arabic player is passed through untouched."""
+        entry = {
+            "status": "final",
+            "score": {"home": 2, "away": 1},
+            "goalscorers": [
+                {"player": "K. Mbappé", "minute": 66, "type": "goal", "team": "home"},
+                {"player": "B. Barcola", "minute": 82, "type": "goal", "team": "home"},
+            ],
+        }
+        out = apply_scorer_overrides(entry)
+        assert out is entry  # no change, returns same object
+        assert out["goalscorers"][0]["player"] == "K. Mbappé"
+        assert out["goalscorers"][1]["player"] == "B. Barcola"
+
+    def test_unknown_arabic_passthrough(self):
+        """Arabic player not in the override map is passed through untouched.
+
+        We use a real Arabic name that is NOT in our map (e.g. a future
+        Saudi Arabian goalscorer we haven't added yet) to make sure the
+        code does not silently drop unknown Arabic.
+        """
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                {"player": "سالم الدوسري", "minute": 30, "type": "goal", "team": "home"},
+            ],
+        }
+        out = apply_scorer_overrides(entry)
+        # Not in map -> unchanged
+        assert out["goalscorers"][0]["player"] == "سالم الدوسري"
+
+    def test_empty_overrides_file(self, tmp_path, monkeypatch):
+        """If scorer_overrides.json is missing/empty, apply is a no-op."""
+        monkeypatch.setattr("src.data.details._PROJECT_ROOT", tmp_path)
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                {"player": "محمد هانی", "minute": 66, "type": None, "team": "home"},
+            ],
+        }
+        out = apply_scorer_overrides(entry)
+        # File missing -> no mappings -> entry returned unchanged
+        assert out is entry
+        assert out["goalscorers"][0]["player"] == "محمد هانی"
+
+    def test_apply_after_api_parse(self, monkeypatch):
+        """Simulate API returning Arabic: post-_parse_scorer_strings the
+        entry has Arabic in `player`; apply_scorer_overrides converts it
+        to English so UI never sees Arabic."""
+        # Mock the API parse path
+        monkeypatch.setattr(
+            "src.data.worldcup_api._fetch_endpoint",
+            lambda *a, **kw: {
+                "games": [
+                    {
+                        "home_team_name_en": "Belgium",
+                        "away_team_name_en": "Egypt",
+                        "home_scorers": '{"محمد هانی 66\'"}',
+                        "away_scorers": '{"امام آشور 19\'"}',
+                        "home_score": "1",
+                        "away_score": "1",
+                        "finished": "TRUE",
+                    }
+                ]
+            },
+        )
+        from src.data.worldcup_api import game_to_details_entry
+        api_entry = game_to_details_entry(
+            {
+                "home_team_name_en": "Belgium",
+                "away_team_name_en": "Egypt",
+                "home_scorers": '{"محمد هانی 66\'"}',
+                "away_scorers": '{"امام آشور 19\'"}',
+                "home_score": "1",
+                "away_score": "1",
+                "finished": "TRUE",
+            }
+        )
+        # Pre-override: Arabic
+        assert api_entry["goalscorers"][0]["player"] == "محمد هانی"
+        assert api_entry["goalscorers"][1]["player"] == "امام آشور"
+        # Apply overrides
+        out = apply_scorer_overrides(api_entry)
+        assert out["goalscorers"][0]["player"] == "Mohamed Hany"
+        assert out["goalscorers"][1]["player"] == "Emam Ashour"
+
+    def test_overrides_json_malformed(self, tmp_path, monkeypatch, caplog):
+        """If scorer_overrides.json has invalid JSON, apply is a no-op
+        and a warning is logged. The app must not crash on bad input.
+
+        Audit fix (suggestion 3): defends against the file being
+        hand-edited into a broken state.
+        """
+        import logging
+        (tmp_path / "data").mkdir()
+        (tmp_path / "data" / "scorer_overrides.json").write_text(
+            "{ this is not valid json", encoding="utf-8"
+        )
+        monkeypatch.setattr("src.data.details._PROJECT_ROOT", tmp_path)
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                {"player": "محمد هانی", "minute": 66, "type": None, "team": "home"},
+            ],
+        }
+        with caplog.at_level(logging.WARNING, logger="src.data.details"):
+            out = apply_scorer_overrides(entry)
+        # Malformed file -> no mappings -> entry returned unchanged
+        assert out is entry
+        assert out["goalscorers"][0]["player"] == "محمد هانی"
+        # Warning was logged
+        assert any("scorer_overrides.json load failed" in r.message for r in caplog.records)
+
+    def test_arabic_with_latin_suffix(self):
+        """A player name that mixes Arabic and Latin (e.g. 'محمد Salah')
+        is NOT replaced, because the override is exact-match on the
+        Arabic name. Audit fix (suggestion 3)."""
+        entry = {
+            "status": "final",
+            "score": {"home": 1, "away": 0},
+            "goalscorers": [
+                # This is NOT in the map as the Arabic exact form is "محمد صلاح"
+                {"player": "محمد Salah", "minute": 30, "type": "goal", "team": "home"},
+            ],
+        }
+        out = apply_scorer_overrides(entry)
+        # Mixed Arabic+Latin not in map -> unchanged
+        assert out["goalscorers"][0]["player"] == "محمد Salah"
+

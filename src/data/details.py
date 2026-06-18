@@ -70,9 +70,15 @@ def get_details(match_id: str) -> dict[str, Any] | None:
 def enrich_match(m: dict[str, Any]) -> dict[str, Any]:
     """Add 'details' field to a match (None if not in details.json).
 
+    Plan 026: applies Arabic->English name overrides to details before
+    returning, so the UI never sees Arabic text. No-op if the entry has
+    no Arabic-named players (most cases).
+
     Mutates m in place; returns m.
     """
     details = get_details(m.get("match_id", ""))
+    if details is not None:
+        details = apply_scorer_overrides(details)
     m["details"] = details
     return m
 
@@ -82,6 +88,66 @@ def enrich_matches(matches: list[dict[str, Any]]) -> list[dict[str, Any]]:
     for m in matches:
         enrich_match(m)
     return matches
+
+
+# === Plan 026: Arabic -> English name overrides ===
+
+def _load_overrides() -> dict:
+    """Load scorer_overrides.json fresh from disk (no cache).
+
+    Plan 026 audit fix: must NOT use @lru_cache — Plan 016 修过的 bug
+    (`details.py:_load` 曾用 lru_cache 导致手维护修改不生效) 不能在
+    overrides 层重演。文件很小 (<2KB) + 读取频率低，无 lru_cache 必要。
+    """
+    path = _PROJECT_ROOT / "data" / "scorer_overrides.json"
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as e:
+        logging.warning(f"scorer_overrides.json load failed: {e}")
+        return {}
+
+
+def apply_scorer_overrides(entry: dict[str, Any]) -> dict[str, Any]:
+    """Apply Arabic -> English name overrides to a details entry.
+
+    Reads data/scorer_overrides.json, replaces any goalscorer.player
+    that matches an Arabic mapping with its English equivalent.
+    Idempotent (re-applying is a no-op since the Arabic string is gone).
+    Returns a new dict (does not mutate the input).
+    """
+    overrides = _load_overrides()
+    if not overrides:
+        return entry
+    mappings = overrides.get("mappings", [])
+    if not mappings:
+        return entry
+    new_goals = []
+    changed = False
+    for g in entry.get("goalscorers", []):
+        if not isinstance(g, dict):
+            new_goals.append(g)
+            continue
+        player = g.get("player", "")
+        for m in mappings:
+            if player == m.get("ar"):
+                new_g = dict(g)
+                new_g["player"] = m["en"]
+                if "_override_source" not in new_g:
+                    new_g["_override_source"] = (
+                        f"scorer_overrides.json ({m.get('team', '?')})"
+                    )
+                new_goals.append(new_g)
+                changed = True
+                break
+        else:
+            new_goals.append(g)
+    if not changed:
+        return entry
+    new_entry = dict(entry)
+    new_entry["goalscorers"] = new_goals
+    return new_entry
 
 
 # === Plan 012: Merge from worldcup26.ir API ===

@@ -394,18 +394,20 @@
     },
     "goalscorers": [
       {
-        "player": "محمد هانی",
+        "player": "Mohamed Hany",
         "minute": 66,
         "stoppage": null,
-        "type": null,
-        "team": "home"
+        "type": "own_goal",
+        "team": "home",
+        "_note": "OG (FIFA: own goal counts for opposing team). Source: ESPN report gameId/760426 — 'Egypt defender Mohamed Hany did that instead, scoring an own-goal' after Lukaku 66' sub. Plan 026."
       },
       {
-        "player": "امام آشور",
+        "player": "Emam Ashour",
         "minute": 19,
         "stoppage": null,
-        "type": null,
-        "team": "away"
+        "type": "goal",
+        "team": "away",
+        "_note": "Real name in Arabic: امام آشور. Plan 026 transliteration."
       }
     ]
   },

@@ -1,0 +1,13 @@
+{
+  "_comment": "Arabic -> English player name overrides. Applied after worldcup26.ir API parse, before display. Plan 026.",
+  "_source": "Wikipedia / FIFA player pages / ESPN rosters. Add new entries when new Arabic-named goalscorers appear in API and UI shows Arabic text.",
+  "mappings": [
+    {"ar": "محمد هانی",  "en": "Mohamed Hany",      "team": "Egypt", "_note": "Al Ahly defender. Own goal in Belgium vs Egypt 2026-06-15."},
+    {"ar": "امام آشور",  "en": "Emam Ashour",       "team": "Egypt", "_note": "Al Ahly midfielder. 19' opener Belgium vs Egypt 2026-06-15. Arabic 'إمام' has multiple Latin forms (Emam/Imam); Wikipedia/FIFA use Emam."},
+    {"ar": "محمد صلاح",  "en": "Mohamed Salah",     "team": "Egypt", "_note": "Liverpool forward. Captain. Most-capped active Egypt player."},
+    {"ar": "عمر مرموش",  "en": "Omar Marmoush",     "team": "Egypt", "_note": "Manchester City forward."},
+    {"ar": "محمود تريزيجيه", "en": "Mahmoud Trezeguet", "team": "Egypt", "_note": "Al Ahly winger. (Trézéguet is the common spelling.)"},
+    {"ar": "أحمد حجازي",  "en": "Ahmed Hegazi",      "team": "Egypt", "_note": "Defender."},
+    {"ar": "محمد النني",  "en": "Mohamed Elneny",    "team": "Egypt", "_note": "Arsenal/Pierre midfielder."}
+  ]
+}
