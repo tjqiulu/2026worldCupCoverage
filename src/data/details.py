@@ -24,6 +24,11 @@ import logging
 from pathlib import Path
 from typing import Any
 
+# Plan 028: shared fuzzy-lookup helper. Originally defined here in
+# Plan 027, moved to countries.py so lookup() can use it without a
+# circular import (details depends on countries, not the other way).
+from src.data.countries import norm_team_key as _norm_team_key  # noqa: E402
+
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DETAILS_FILE = _PROJECT_ROOT / "data" / "details.json"
 
@@ -449,25 +454,10 @@ def compute_standings_from_details(
 # iso2, plus a normalized fallback). compute_standings_from_details()
 # tries the literal name first, then _norm_team_key(name), so a single
 # resolver covers all known and future alias variants.
-
-
-def _norm_team_key(s: str) -> str:
-    """Normalize a team name for fuzzy lookup (Plan 027).
-
-    Covers minor variations between data sources:
-      - " & " → " and " (Bosnia & Herzegovina ↔ Bosnia and Herzegovina)
-      - lowercase
-      - collapse whitespace
-      - strip punctuation (keeps alnum + space)
-
-    Returns "" for empty/None input.
-    """
-    if not s:
-        return ""
-    s = s.replace("&", "and")
-    s = "".join(c for c in s if c.isalnum() or c.isspace())
-    s = " ".join(s.split()).lower()
-    return s
+#
+# Plan 028 note: _norm_team_key is now imported from countries.py
+# (see top of file) so lookup() can also use it for the same kind of
+# cross-source alias resolution. Single source of truth.
 
 
 def build_team_id_map(
