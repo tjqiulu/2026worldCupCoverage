@@ -275,3 +275,54 @@ def compute_best_3rd_race(
         "locked_bot4": locked_bot4,
         "pending": pending_race,
     }
+
+
+# === Plan 031: Full qualification pipeline (cache-able) ===
+
+def compute_full_qualification(
+    group_standings: dict[str, list[dict[str, Any]]],
+) -> dict[str, Any]:
+    """Compute complete qualification state for all 12 groups + best 3rd race.
+
+    Plan 031: Single function that does what /api/qualification endpoint
+    does. Used to pre-compute and cache the result to data/qualification_cache.json
+    so the frontend doesn't have to wait for real-time computation on first load.
+
+    Args:
+        group_standings: {letter: standings_list} (output of compute_standings_from_details)
+
+    Returns:
+        {
+            "groups": {letter: compute_per_group result},
+            "best_3rd_race": compute_best_3rd_race result,
+        }
+    """
+    groups = {}
+    for letter, standings in group_standings.items():
+        if not standings:
+            continue
+        groups[letter] = compute_per_group(letter, standings)
+
+    best_3rd_race = compute_best_3rd_race(groups)
+
+    return {
+        "groups": groups,
+        "best_3rd_race": best_3rd_race,
+    }
+
+
+def _build_group_standings(
+    group_letter: str,
+    details: dict[str, dict[str, Any]],
+    matches: list[dict[str, Any]],
+    team_name_to_id: dict[str, str],
+) -> list[dict[str, Any]] | None:
+    """Compute standings for a single group, wrapped helper.
+
+    Plan 031: thin wrapper around compute_standings_from_details() from details.py
+    for consistency. Returns None if no finals yet.
+    """
+    from .details import compute_standings_from_details
+    return compute_standings_from_details(
+        group_letter, details, matches, team_name_to_id
+    )

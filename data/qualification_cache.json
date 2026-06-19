@@ -1,0 +1,1491 @@
+{
+  "groups": {
+    "A": {
+      "group": "A",
+      "standings": [
+        {
+          "mp": 2,
+          "w": 2,
+          "d": 0,
+          "l": 0,
+          "gf": 3,
+          "ga": 0,
+          "pts": 6,
+          "gd": 3,
+          "team_id": "1"
+        },
+        {
+          "mp": 2,
+          "w": 1,
+          "d": 0,
+          "l": 1,
+          "gf": 2,
+          "ga": 2,
+          "pts": 3,
+          "gd": 0,
+          "team_id": "3"
+        },
+        {
+          "mp": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gf": 2,
+          "ga": 3,
+          "pts": 1,
+          "gd": -1,
+          "team_id": "4"
+        },
+        {
+          "mp": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gf": 1,
+          "ga": 3,
+          "pts": 1,
+          "gd": -2,
+          "team_id": "2"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [
+        {
+          "team_id": "1",
+          "name": "Mexico",
+          "name_zh": "墨西哥",
+          "code_iso": "mx",
+          "reason": "当前 6 分 > 其他队最佳 4 分"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "3",
+          "name": "South Korea",
+          "name_zh": "韩国",
+          "code_iso": "kr",
+          "max_pts": 6,
+          "min_pts": 3
+        },
+        {
+          "team_id": "4",
+          "name": "Czech Republic",
+          "name_zh": "捷克",
+          "code_iso": "cz",
+          "max_pts": 4,
+          "min_pts": 1
+        },
+        {
+          "team_id": "2",
+          "name": "South Africa",
+          "name_zh": "南非",
+          "code_iso": "za",
+          "max_pts": 4,
+          "min_pts": 1
+        }
+      ],
+      "third_place": {
+        "team_id": "4",
+        "name": "Czech Republic",
+        "name_zh": "捷克",
+        "code_iso": "cz",
+        "mp": 2,
+        "w": 0,
+        "d": 1,
+        "l": 1,
+        "gf": 2,
+        "ga": 3,
+        "pts": 1,
+        "gd": -1
+      }
+    },
+    "B": {
+      "group": "B",
+      "standings": [
+        {
+          "mp": 2,
+          "w": 1,
+          "d": 1,
+          "l": 0,
+          "gf": 7,
+          "ga": 1,
+          "pts": 4,
+          "gd": 6,
+          "team_id": "5"
+        },
+        {
+          "mp": 2,
+          "w": 1,
+          "d": 1,
+          "l": 0,
+          "gf": 5,
+          "ga": 2,
+          "pts": 4,
+          "gd": 3,
+          "team_id": "8"
+        },
+        {
+          "mp": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gf": 2,
+          "ga": 5,
+          "pts": 1,
+          "gd": -3,
+          "team_id": "6"
+        },
+        {
+          "mp": 2,
+          "w": 0,
+          "d": 1,
+          "l": 1,
+          "gf": 1,
+          "ga": 7,
+          "pts": 1,
+          "gd": -6,
+          "team_id": "7"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "5",
+          "name": "Canada",
+          "name_zh": "加拿大",
+          "code_iso": "ca",
+          "max_pts": 7,
+          "min_pts": 4
+        },
+        {
+          "team_id": "8",
+          "name": "Switzerland",
+          "name_zh": "瑞士",
+          "code_iso": "ch",
+          "max_pts": 7,
+          "min_pts": 4
+        },
+        {
+          "team_id": "6",
+          "name": "Bosnia and Herzegovina",
+          "name_zh": "波黑",
+          "code_iso": "ba",
+          "max_pts": 4,
+          "min_pts": 1
+        },
+        {
+          "team_id": "7",
+          "name": "Qatar",
+          "name_zh": "卡塔尔",
+          "code_iso": "qa",
+          "max_pts": 4,
+          "min_pts": 1
+        }
+      ],
+      "third_place": {
+        "team_id": "6",
+        "name": "Bosnia and Herzegovina",
+        "name_zh": "波黑",
+        "code_iso": "ba",
+        "mp": 2,
+        "w": 0,
+        "d": 1,
+        "l": 1,
+        "gf": 2,
+        "ga": 5,
+        "pts": 1,
+        "gd": -3
+      }
+    },
+    "C": {
+      "group": "C",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 1,
+          "ga": 0,
+          "pts": 3,
+          "gd": 1,
+          "team_id": "12"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "9"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "10"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 0,
+          "ga": 1,
+          "pts": 0,
+          "gd": -1,
+          "team_id": "11"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "12",
+          "name": "Scotland",
+          "name_zh": "苏格兰",
+          "code_iso": "sco",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "9",
+          "name": "Brazil",
+          "name_zh": "巴西",
+          "code_iso": "br",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "10",
+          "name": "Morocco",
+          "name_zh": "摩洛哥",
+          "code_iso": "ma",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "11",
+          "name": "Haiti",
+          "name_zh": "海地",
+          "code_iso": "ht",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "10",
+        "name": "Morocco",
+        "name_zh": "摩洛哥",
+        "code_iso": "ma",
+        "mp": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "gf": 1,
+        "ga": 1,
+        "pts": 1,
+        "gd": 0
+      }
+    },
+    "D": {
+      "group": "D",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 4,
+          "ga": 1,
+          "pts": 3,
+          "gd": 3,
+          "team_id": "13"
+        },
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 2,
+          "ga": 0,
+          "pts": 3,
+          "gd": 2,
+          "team_id": "15"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 0,
+          "ga": 2,
+          "pts": 0,
+          "gd": -2,
+          "team_id": "16"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 4,
+          "pts": 0,
+          "gd": -3,
+          "team_id": "14"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "13",
+          "name": "United States",
+          "name_zh": "美国",
+          "code_iso": "us",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "15",
+          "name": "Australia",
+          "name_zh": "澳大利亚",
+          "code_iso": "au",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "16",
+          "name": "Turkey",
+          "name_zh": "土耳其",
+          "code_iso": "tr",
+          "max_pts": 6,
+          "min_pts": 0
+        },
+        {
+          "team_id": "14",
+          "name": "Paraguay",
+          "name_zh": "巴拉圭",
+          "code_iso": "py",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "16",
+        "name": "Turkey",
+        "name_zh": "土耳其",
+        "code_iso": "tr",
+        "mp": 1,
+        "w": 0,
+        "d": 0,
+        "l": 1,
+        "gf": 0,
+        "ga": 2,
+        "pts": 0,
+        "gd": -2
+      }
+    },
+    "E": {
+      "group": "E",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 7,
+          "ga": 1,
+          "pts": 3,
+          "gd": 6,
+          "team_id": "17"
+        },
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 1,
+          "ga": 0,
+          "pts": 3,
+          "gd": 1,
+          "team_id": "19"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 0,
+          "ga": 1,
+          "pts": 0,
+          "gd": -1,
+          "team_id": "20"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 7,
+          "pts": 0,
+          "gd": -6,
+          "team_id": "18"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "17",
+          "name": "Germany",
+          "name_zh": "德国",
+          "code_iso": "de",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "19",
+          "name": "Ivory Coast",
+          "name_zh": "科特迪瓦",
+          "code_iso": "ci",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "20",
+          "name": "Ecuador",
+          "name_zh": "厄瓜多尔",
+          "code_iso": "ec",
+          "max_pts": 6,
+          "min_pts": 0
+        },
+        {
+          "team_id": "18",
+          "name": "Curaçao",
+          "name_zh": "库拉索",
+          "code_iso": "cw",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "20",
+        "name": "Ecuador",
+        "name_zh": "厄瓜多尔",
+        "code_iso": "ec",
+        "mp": 1,
+        "w": 0,
+        "d": 0,
+        "l": 1,
+        "gf": 0,
+        "ga": 1,
+        "pts": 0,
+        "gd": -1
+      }
+    },
+    "F": {
+      "group": "F",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 5,
+          "ga": 1,
+          "pts": 3,
+          "gd": 4,
+          "team_id": "23"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 2,
+          "ga": 2,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "21"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 2,
+          "ga": 2,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "22"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 5,
+          "pts": 0,
+          "gd": -4,
+          "team_id": "24"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "23",
+          "name": "Sweden",
+          "name_zh": "瑞典",
+          "code_iso": "se",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "21",
+          "name": "Netherlands",
+          "name_zh": "荷兰",
+          "code_iso": "nl",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "22",
+          "name": "Japan",
+          "name_zh": "日本",
+          "code_iso": "jp",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "24",
+          "name": "Tunisia",
+          "name_zh": "突尼斯",
+          "code_iso": "tn",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "22",
+        "name": "Japan",
+        "name_zh": "日本",
+        "code_iso": "jp",
+        "mp": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "gf": 2,
+        "ga": 2,
+        "pts": 1,
+        "gd": 0
+      }
+    },
+    "G": {
+      "group": "G",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 2,
+          "ga": 2,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "27"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 2,
+          "ga": 2,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "28"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "25"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "26"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "27",
+          "name": "Iran",
+          "name_zh": "伊朗",
+          "code_iso": "ir",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "28",
+          "name": "New Zealand",
+          "name_zh": "新西兰",
+          "code_iso": "nz",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "25",
+          "name": "Belgium",
+          "name_zh": "比利时",
+          "code_iso": "be",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "26",
+          "name": "Egypt",
+          "name_zh": "埃及",
+          "code_iso": "eg",
+          "max_pts": 7,
+          "min_pts": 1
+        }
+      ],
+      "third_place": {
+        "team_id": "25",
+        "name": "Belgium",
+        "name_zh": "比利时",
+        "code_iso": "be",
+        "mp": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "gf": 1,
+        "ga": 1,
+        "pts": 1,
+        "gd": 0
+      }
+    },
+    "H": {
+      "group": "H",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "31"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "32"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "29"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "30"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "31",
+          "name": "Saudi Arabia",
+          "name_zh": "沙特",
+          "code_iso": "sa",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "32",
+          "name": "Uruguay",
+          "name_zh": "乌拉圭",
+          "code_iso": "uy",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "29",
+          "name": "Spain",
+          "name_zh": "西班牙",
+          "code_iso": "es",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "30",
+          "name": "Cape Verde",
+          "name_zh": "佛得角",
+          "code_iso": "cv",
+          "max_pts": 7,
+          "min_pts": 1
+        }
+      ],
+      "third_place": {
+        "team_id": "29",
+        "name": "Spain",
+        "name_zh": "西班牙",
+        "code_iso": "es",
+        "mp": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "gf": 0,
+        "ga": 0,
+        "pts": 1,
+        "gd": 0
+      }
+    },
+    "I": {
+      "group": "I",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 4,
+          "ga": 1,
+          "pts": 3,
+          "gd": 3,
+          "team_id": "36"
+        },
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 3,
+          "ga": 1,
+          "pts": 3,
+          "gd": 2,
+          "team_id": "33"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 3,
+          "pts": 0,
+          "gd": -2,
+          "team_id": "34"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 4,
+          "pts": 0,
+          "gd": -3,
+          "team_id": "35"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "36",
+          "name": "Norway",
+          "name_zh": "挪威",
+          "code_iso": "no",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "33",
+          "name": "France",
+          "name_zh": "法国",
+          "code_iso": "fr",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "34",
+          "name": "Senegal",
+          "name_zh": "塞内加尔",
+          "code_iso": "sn",
+          "max_pts": 6,
+          "min_pts": 0
+        },
+        {
+          "team_id": "35",
+          "name": "Iraq",
+          "name_zh": "伊拉克",
+          "code_iso": "iq",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "34",
+        "name": "Senegal",
+        "name_zh": "塞内加尔",
+        "code_iso": "sn",
+        "mp": 1,
+        "w": 0,
+        "d": 0,
+        "l": 1,
+        "gf": 1,
+        "ga": 3,
+        "pts": 0,
+        "gd": -2
+      }
+    },
+    "J": {
+      "group": "J",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 3,
+          "ga": 0,
+          "pts": 3,
+          "gd": 3,
+          "team_id": "37"
+        },
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 3,
+          "ga": 1,
+          "pts": 3,
+          "gd": 2,
+          "team_id": "39"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 3,
+          "pts": 0,
+          "gd": -2,
+          "team_id": "40"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 0,
+          "ga": 3,
+          "pts": 0,
+          "gd": -3,
+          "team_id": "38"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "37",
+          "name": "Argentina",
+          "name_zh": "阿根廷",
+          "code_iso": "ar",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "39",
+          "name": "Austria",
+          "name_zh": "奥地利",
+          "code_iso": "at",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "40",
+          "name": "Jordan",
+          "name_zh": "约旦",
+          "code_iso": "jo",
+          "max_pts": 6,
+          "min_pts": 0
+        },
+        {
+          "team_id": "38",
+          "name": "Algeria",
+          "name_zh": "阿尔及利亚",
+          "code_iso": "dz",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "40",
+        "name": "Jordan",
+        "name_zh": "约旦",
+        "code_iso": "jo",
+        "mp": 1,
+        "w": 0,
+        "d": 0,
+        "l": 1,
+        "gf": 1,
+        "ga": 3,
+        "pts": 0,
+        "gd": -2
+      }
+    },
+    "K": {
+      "group": "K",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 3,
+          "ga": 1,
+          "pts": 3,
+          "gd": 2,
+          "team_id": "44"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "41"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 1,
+          "l": 0,
+          "gf": 1,
+          "ga": 1,
+          "pts": 1,
+          "gd": 0,
+          "team_id": "42"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 1,
+          "ga": 3,
+          "pts": 0,
+          "gd": -2,
+          "team_id": "43"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "44",
+          "name": "Colombia",
+          "name_zh": "哥伦比亚",
+          "code_iso": "co",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "41",
+          "name": "Portugal",
+          "name_zh": "葡萄牙",
+          "code_iso": "pt",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "42",
+          "name": "Democratic Republic of the Congo",
+          "name_zh": "民主刚果",
+          "code_iso": "cd",
+          "max_pts": 7,
+          "min_pts": 1
+        },
+        {
+          "team_id": "43",
+          "name": "Uzbekistan",
+          "name_zh": "乌兹别克斯坦",
+          "code_iso": "uz",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "42",
+        "name": "Democratic Republic of the Congo",
+        "name_zh": "民主刚果",
+        "code_iso": "cd",
+        "mp": 1,
+        "w": 0,
+        "d": 1,
+        "l": 0,
+        "gf": 1,
+        "ga": 1,
+        "pts": 1,
+        "gd": 0
+      }
+    },
+    "L": {
+      "group": "L",
+      "standings": [
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 4,
+          "ga": 2,
+          "pts": 3,
+          "gd": 2,
+          "team_id": "45"
+        },
+        {
+          "mp": 1,
+          "w": 1,
+          "d": 0,
+          "l": 0,
+          "gf": 1,
+          "ga": 0,
+          "pts": 3,
+          "gd": 1,
+          "team_id": "47"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 0,
+          "ga": 1,
+          "pts": 0,
+          "gd": -1,
+          "team_id": "48"
+        },
+        {
+          "mp": 1,
+          "w": 0,
+          "d": 0,
+          "l": 1,
+          "gf": 2,
+          "ga": 4,
+          "pts": 0,
+          "gd": -2,
+          "team_id": "46"
+        }
+      ],
+      "all_finals_played": false,
+      "locked_top2": [],
+      "eliminated": [],
+      "pending": [
+        {
+          "team_id": "45",
+          "name": "England",
+          "name_zh": "英格兰",
+          "code_iso": "eng",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "47",
+          "name": "Ghana",
+          "name_zh": "加纳",
+          "code_iso": "gh",
+          "max_pts": 9,
+          "min_pts": 3
+        },
+        {
+          "team_id": "48",
+          "name": "Panama",
+          "name_zh": "巴拿马",
+          "code_iso": "pa",
+          "max_pts": 6,
+          "min_pts": 0
+        },
+        {
+          "team_id": "46",
+          "name": "Croatia",
+          "name_zh": "克罗地亚",
+          "code_iso": "hr",
+          "max_pts": 6,
+          "min_pts": 0
+        }
+      ],
+      "third_place": {
+        "team_id": "48",
+        "name": "Panama",
+        "name_zh": "巴拿马",
+        "code_iso": "pa",
+        "mp": 1,
+        "w": 0,
+        "d": 0,
+        "l": 1,
+        "gf": 0,
+        "ga": 1,
+        "pts": 0,
+        "gd": -1
+      }
+    }
+  },
+  "best_3rd_race": {
+    "rankings": [
+      {
+        "team_id": "22",
+        "name": "Japan",
+        "name_zh": "日本",
+        "code_iso": "jp",
+        "group": "F",
+        "pts": 1,
+        "gd": 0,
+        "gf": 2,
+        "ga": 2,
+        "w": 0,
+        "d": 1,
+        "mp": 1,
+        "max_pts": 7,
+        "min_pts": 1
+      },
+      {
+        "team_id": "10",
+        "name": "Morocco",
+        "name_zh": "摩洛哥",
+        "code_iso": "ma",
+        "group": "C",
+        "pts": 1,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 0,
+        "d": 1,
+        "mp": 1,
+        "max_pts": 7,
+        "min_pts": 1
+      },
+      {
+        "team_id": "25",
+        "name": "Belgium",
+        "name_zh": "比利时",
+        "code_iso": "be",
+        "group": "G",
+        "pts": 1,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 0,
+        "d": 1,
+        "mp": 1,
+        "max_pts": 7,
+        "min_pts": 1
+      },
+      {
+        "team_id": "42",
+        "name": "Democratic Republic of the Congo",
+        "name_zh": "民主刚果",
+        "code_iso": "cd",
+        "group": "K",
+        "pts": 1,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 0,
+        "d": 1,
+        "mp": 1,
+        "max_pts": 7,
+        "min_pts": 1
+      },
+      {
+        "team_id": "29",
+        "name": "Spain",
+        "name_zh": "西班牙",
+        "code_iso": "es",
+        "group": "H",
+        "pts": 1,
+        "gd": 0,
+        "gf": 0,
+        "ga": 0,
+        "w": 0,
+        "d": 1,
+        "mp": 1,
+        "max_pts": 7,
+        "min_pts": 1
+      },
+      {
+        "team_id": "4",
+        "name": "Czech Republic",
+        "name_zh": "捷克",
+        "code_iso": "cz",
+        "group": "A",
+        "pts": 1,
+        "gd": -1,
+        "gf": 2,
+        "ga": 3,
+        "w": 0,
+        "d": 1,
+        "mp": 2,
+        "max_pts": 4,
+        "min_pts": 1
+      },
+      {
+        "team_id": "6",
+        "name": "Bosnia and Herzegovina",
+        "name_zh": "波黑",
+        "code_iso": "ba",
+        "group": "B",
+        "pts": 1,
+        "gd": -3,
+        "gf": 2,
+        "ga": 5,
+        "w": 0,
+        "d": 1,
+        "mp": 2,
+        "max_pts": 4,
+        "min_pts": 1
+      },
+      {
+        "team_id": "20",
+        "name": "Ecuador",
+        "name_zh": "厄瓜多尔",
+        "code_iso": "ec",
+        "group": "E",
+        "pts": 0,
+        "gd": -1,
+        "gf": 0,
+        "ga": 1,
+        "w": 0,
+        "d": 0,
+        "mp": 1,
+        "max_pts": 6,
+        "min_pts": 0
+      },
+      {
+        "team_id": "48",
+        "name": "Panama",
+        "name_zh": "巴拿马",
+        "code_iso": "pa",
+        "group": "L",
+        "pts": 0,
+        "gd": -1,
+        "gf": 0,
+        "ga": 1,
+        "w": 0,
+        "d": 0,
+        "mp": 1,
+        "max_pts": 6,
+        "min_pts": 0
+      },
+      {
+        "team_id": "34",
+        "name": "Senegal",
+        "name_zh": "塞内加尔",
+        "code_iso": "sn",
+        "group": "I",
+        "pts": 0,
+        "gd": -2,
+        "gf": 1,
+        "ga": 3,
+        "w": 0,
+        "d": 0,
+        "mp": 1,
+        "max_pts": 6,
+        "min_pts": 0
+      },
+      {
+        "team_id": "40",
+        "name": "Jordan",
+        "name_zh": "约旦",
+        "code_iso": "jo",
+        "group": "J",
+        "pts": 0,
+        "gd": -2,
+        "gf": 1,
+        "ga": 3,
+        "w": 0,
+        "d": 0,
+        "mp": 1,
+        "max_pts": 6,
+        "min_pts": 0
+      },
+      {
+        "team_id": "16",
+        "name": "Turkey",
+        "name_zh": "土耳其",
+        "code_iso": "tr",
+        "group": "D",
+        "pts": 0,
+        "gd": -2,
+        "gf": 0,
+        "ga": 2,
+        "w": 0,
+        "d": 0,
+        "mp": 1,
+        "max_pts": 6,
+        "min_pts": 0
+      }
+    ],
+    "critical_line": {
+      "team_id": "20",
+      "group": "E",
+      "pts": 0,
+      "gd": -1,
+      "gf": 0,
+      "ga": 1,
+      "w": 0,
+      "d": 0,
+      "mp": 1,
+      "max_pts": 6,
+      "min_pts": 0
+    },
+    "locked_top8": [],
+    "locked_bot4": [],
+    "pending": [
+      {
+        "team_id": "22",
+        "name": "Japan",
+        "name_zh": "日本",
+        "code_iso": "jp"
+      },
+      {
+        "team_id": "10",
+        "name": "Morocco",
+        "name_zh": "摩洛哥",
+        "code_iso": "ma"
+      },
+      {
+        "team_id": "25",
+        "name": "Belgium",
+        "name_zh": "比利时",
+        "code_iso": "be"
+      },
+      {
+        "team_id": "42",
+        "name": "Democratic Republic of the Congo",
+        "name_zh": "民主刚果",
+        "code_iso": "cd"
+      },
+      {
+        "team_id": "29",
+        "name": "Spain",
+        "name_zh": "西班牙",
+        "code_iso": "es"
+      },
+      {
+        "team_id": "4",
+        "name": "Czech Republic",
+        "name_zh": "捷克",
+        "code_iso": "cz"
+      },
+      {
+        "team_id": "6",
+        "name": "Bosnia and Herzegovina",
+        "name_zh": "波黑",
+        "code_iso": "ba"
+      },
+      {
+        "team_id": "20",
+        "name": "Ecuador",
+        "name_zh": "厄瓜多尔",
+        "code_iso": "ec"
+      },
+      {
+        "team_id": "48",
+        "name": "Panama",
+        "name_zh": "巴拿马",
+        "code_iso": "pa"
+      },
+      {
+        "team_id": "34",
+        "name": "Senegal",
+        "name_zh": "塞内加尔",
+        "code_iso": "sn"
+      },
+      {
+        "team_id": "40",
+        "name": "Jordan",
+        "name_zh": "约旦",
+        "code_iso": "jo"
+      },
+      {
+        "team_id": "16",
+        "name": "Turkey",
+        "name_zh": "土耳其",
+        "code_iso": "tr"
+      }
+    ]
+  },
+  "generated_at": "2026-06-19T14:04:19.972062+00:00",
+  "version": 1
+}

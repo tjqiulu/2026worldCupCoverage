@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -31,6 +32,7 @@ from src.data.details import (
 )
 from src.data.qualification import (  # noqa: E402
     compute_best_3rd_race,
+    compute_full_qualification,
     compute_per_group,
 )
 from src.data.ics_fetcher import fetch_ics  # noqa: E402
@@ -185,11 +187,20 @@ def create_app() -> Flask:
                 # API failure is non-fatal — keep existing details
                 print(f"Warning: worldcup26.ir API failed: {api_err}")
 
+            # Plan 031: refresh qualification cache after matches update
+            qualification_refreshed = False
+            try:
+                _compute_and_cache_qualification()
+                qualification_refreshed = True
+            except Exception as qual_err:
+                print(f"Warning: qualification cache refresh failed: {qual_err}")
+
             age = last_fetch_age_seconds()
             return jsonify({
                 "status": "ok",
                 "count": len(matches),
                 "scores_updated": scores_updated,
+                "qualification_refreshed": qualification_refreshed,
                 "last_refresh_seconds_ago": round(age) if age is not None else None,
             })
         except Exception as e:
@@ -201,96 +212,6 @@ def create_app() -> Flask:
         enrich_matches(matches)
         enrich_details_matches(matches)
         return jsonify({"status": "ok", "matches_loaded": len(matches)})
-
-    @app.route("/api/qualification")
-    def api_qualification() -> Any:
-        """Plan 029: Per-group qualification + best 3rd race.
-
-        Returns per-group locked_top2/eliminated/pending and cross-group
-        8 best 3rd race ranking. Used by the bracket view to render
-        real team names where mathematically guaranteed.
-        """
-        from src.data.countries import lookup as lookup_country
-        matches = load_matches()
-        enrich_matches(matches)
-        enrich_details_matches(matches)
-        all_details = load_details()
-        teams = get_teams_by_id()
-        name_to_id = build_team_id_map(teams, countries=all_countries())
-
-        # Per-group analysis
-        groups = {}
-        team_name_cache: dict[str, dict] = {}
-        for letter in "ABCDEFGHIJKL":
-            group_matches = [
-                m for m in matches
-                if (m.get("group") or "").strip().upper() == letter
-            ]
-            if not group_matches:
-                continue
-            standings = compute_standings_from_details(
-                letter, all_details, matches, name_to_id
-            )
-            if not standings:
-                continue
-            groups[letter] = compute_per_group(letter, standings)
-
-            # Cache team names for frontend
-            for t in standings:
-                if t["team_id"] not in team_name_cache:
-                    api_team = teams.get(t["team_id"], {})
-                    meta = lookup_country(api_team.get("name_en", ""))
-                    team_name_cache[t["team_id"]] = {
-                        "name": api_team.get("name_en", t["team_id"]),
-                        "name_zh": (meta or {}).get("name_zh", ""),
-                        "code_iso": (api_team.get("iso2") or "").lower()
-                                   or (meta or {}).get("code_iso", ""),
-                    }
-
-        # Best 3rd race
-        best_3rd = compute_best_3rd_race(groups)
-
-        # Enrich with names
-        def _team_info(tid: str) -> dict:
-            d = team_name_cache.get(tid, {})
-            return {
-                "team_id": tid,
-                "name": d.get("name", tid),
-                "name_zh": d.get("name_zh", ""),
-                "code_iso": d.get("code_iso", ""),
-            }
-
-        for g in groups.values():
-            for lst_key in ("locked_top2", "eliminated"):
-                g[lst_key] = [
-                    {**_team_info(t["team_id"]), "reason": t.get("reason", "")}
-                    for t in g[lst_key]
-                ]
-            g["pending"] = [
-                {**_team_info(t["team_id"]), "max_pts": t.get("max_pts"), "min_pts": t.get("min_pts")}
-                for t in g["pending"]
-            ]
-            if g.get("third_place"):
-                tid = g["third_place"]["team_id"]
-                g["third_place"] = {**_team_info(tid), **(g["third_place"] or {})}
-
-        best_3rd["rankings"] = [
-            {**_team_info(r["team_id"]), **r}
-            for r in best_3rd["rankings"]
-        ]
-        for lst_key in ("locked_top8", "locked_bot4"):
-            best_3rd[lst_key] = [
-                {**_team_info(t["team_id"]), "reason": t.get("reason", "")}
-                for t in best_3rd[lst_key]
-            ]
-        best_3rd["pending"] = [
-            _team_info(tid) for tid in best_3rd["pending"]
-        ]
-
-        return jsonify({
-            "groups": groups,
-            "best_3rd_race": best_3rd,
-        })
 
     @app.route("/api/teams")
     def api_teams() -> Any:
@@ -312,7 +233,133 @@ def create_app() -> Flask:
             }
         return jsonify(enriched)
 
+    # Plan 031: register qualification route via add_url_rule (handler is module-level)
+    app.add_url_rule("/api/qualification", "api_qualification", _api_qualification_handler)
+
     return app
+
+# Module-level helper functions for /api/qualification.
+# Defined at module level (not inside create_app) so /api/refresh can
+
+# === Plan 031: Module-level qualification helpers ===
+
+QUALIFICATION_CACHE_FILE = DATA_DIR / "qualification_cache.json"
+QUALIFICATION_CACHE_VERSION = 1
+
+
+def _compute_and_cache_qualification() -> dict[str, Any]:
+    """Compute qualification state and persist to JSON cache.
+
+    Plan 031: writes data/qualification_cache.json so the frontend can
+    fetch instantly without waiting for real-time computation on every
+    page load. The /api/qualification route reads this cache first.
+    """
+    from src.data.countries import lookup as lookup_country
+    matches = load_matches()
+    enrich_matches(matches)
+    enrich_details_matches(matches)
+    all_details = load_details()
+    teams = get_teams_by_id()
+    name_to_id = build_team_id_map(teams, countries=all_countries())
+
+    group_standings: dict[str, list] = {}
+    team_name_cache: dict[str, dict] = {}
+    for letter in "ABCDEFGHIJKL":
+        standings = compute_standings_from_details(
+            letter, all_details, matches, name_to_id
+        )
+        if standings:
+            group_standings[letter] = standings
+            for t in standings:
+                if t["team_id"] not in team_name_cache:
+                    api_team = teams.get(t["team_id"], {})
+                    meta = lookup_country(api_team.get("name_en", ""))
+                    team_name_cache[t["team_id"]] = {
+                        "name": api_team.get("name_en", t["team_id"]),
+                        "name_zh": (meta or {}).get("name_zh", ""),
+                        "code_iso": (api_team.get("iso2") or "").lower()
+                                   or (meta or {}).get("code_iso", ""),
+                    }
+
+    result = compute_full_qualification(group_standings)
+
+    def _team_info(tid: str) -> dict:
+        d = team_name_cache.get(tid, {})
+        return {
+            "team_id": tid,
+            "name": d.get("name", tid),
+            "name_zh": d.get("name_zh", ""),
+            "code_iso": d.get("code_iso", ""),
+        }
+
+    for g in result["groups"].values():
+        for lst_key in ("locked_top2", "eliminated"):
+            g[lst_key] = [
+                {**_team_info(t["team_id"]), "reason": t.get("reason", "")}
+                for t in g[lst_key]
+            ]
+        g["pending"] = [
+            {**_team_info(t["team_id"]), "max_pts": t.get("max_pts"), "min_pts": t.get("min_pts")}
+            for t in g["pending"]
+        ]
+        if g.get("third_place"):
+            tid = g["third_place"]["team_id"]
+            g["third_place"] = {**_team_info(tid), **(g["third_place"] or {})}
+
+    best_3rd = result["best_3rd_race"]
+    best_3rd["rankings"] = [
+        {**_team_info(r["team_id"]), **r}
+        for r in best_3rd["rankings"]
+    ]
+    for lst_key in ("locked_top8", "locked_bot4"):
+        best_3rd[lst_key] = [
+            {**_team_info(t["team_id"]), "reason": t.get("reason", "")}
+            for t in best_3rd[lst_key]
+        ]
+    best_3rd["pending"] = [
+        _team_info(tid) for tid in best_3rd["pending"]
+    ]
+
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    cache_payload = {
+        **result,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "version": QUALIFICATION_CACHE_VERSION,
+    }
+    QUALIFICATION_CACHE_FILE.write_text(
+        json.dumps(cache_payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    return result
+
+
+def _api_qualification_handler() -> Any:
+    """Plan 029 + Plan 031: per-group qualification + best 3rd race.
+
+    Reads from data/qualification_cache.json when available (fast path),
+    otherwise computes on demand and caches.
+    """
+    # Fast path — read JSON cache
+    if QUALIFICATION_CACHE_FILE.exists():
+        try:
+            cache = json.loads(QUALIFICATION_CACHE_FILE.read_text(encoding="utf-8"))
+            if cache.get("version") == QUALIFICATION_CACHE_VERSION:
+                return jsonify({
+                    "groups": cache.get("groups", {}),
+                    "best_3rd_race": cache.get("best_3rd_race", {}),
+                    "cached": True,
+                    "generated_at": cache.get("generated_at"),
+                })
+        except (json.JSONDecodeError, OSError) as e:
+            print(f"Warning: qualification cache read failed: {e}")
+
+    # Slow path: compute + write cache
+    result = _compute_and_cache_qualification()
+    return jsonify({
+        **result,
+        "cached": False,
+    })
 
 
 if __name__ == "__main__":
