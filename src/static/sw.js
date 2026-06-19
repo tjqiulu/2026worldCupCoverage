@@ -1,7 +1,7 @@
 // 2026 World Cup Coverage - Service Worker
-// Plan 032: network-first for ALL same-origin requests (no stale code).
+// Plan 032/034: network-first for ALL same-origin requests (no stale code).
 // /api/* still bypasses cache entirely. CDN stale-while-revalidate.
-const CACHE_VERSION = 'wc2026-v7';
+const CACHE_VERSION = 'wc2026-v8';
 const CACHE_NAME = `${CACHE_VERSION}-shell`;
 const SHELL_URLS = [
     '/',

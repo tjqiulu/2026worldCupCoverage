@@ -484,8 +484,8 @@ footer a:hover {
 
 .bracket-mirror-wrapper {
     position: relative;
-    min-width: 950px;
-
+    min-width: 0;
+    width: 100%;
 }
 
 .bracket-lines {
@@ -518,8 +518,8 @@ footer a:hover {
 
 .bracket-labels-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(110px, 1fr));
-    gap: 0 10px;
+    grid-template-columns: repeat(9, minmax(100px, 1fr));
+    gap: 0 8px;
     padding: 0 0 8px;
     min-width: 0;
 }
@@ -538,9 +538,9 @@ footer a:hover {
 
 .bracket-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(110px, 1fr));
-    grid-template-rows: repeat(8, 100px);
-    gap: 6px 10px;
+    grid-template-columns: repeat(9, minmax(100px, 1fr));
+    grid-template-rows: repeat(8, 120px);
+    gap: 12px 8px;
     min-width: 0;
     padding: 8px 0;
     position: relative;
@@ -551,14 +551,15 @@ footer a:hover {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 8px 10px;
+    padding: 6px 8px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 13px;
+    font-size: 12px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     align-self: center;
-    min-height: 88px;
+    min-height: 0;
+    max-height: 110px;
     overflow: hidden;
     transition: box-shadow 0.15s, transform 0.15s;
 }
@@ -603,8 +604,8 @@ footer a:hover {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 8px;
-    font-size: 12px;
+    margin-bottom: 4px;
+    font-size: 11px;
     color: #555;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
@@ -622,17 +623,17 @@ footer a:hover {
 .bracket-card .bc-rows {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     flex: 1;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .bracket-card .bc-team-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     min-width: 0;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
     color: #222;
 }
@@ -677,10 +678,10 @@ footer a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 11px;
+    font-size: 10px;
     color: #888;
     border-top: 1px solid #f0f0f0;
-    padding-top: 6px;
+    padding-top: 4px;
     min-height: 0;
 }
 

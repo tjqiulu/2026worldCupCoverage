@@ -80,6 +80,64 @@ class TestMainJsInitOrder:
 
 
 # ============================================================
+# CSS audit: lock down bracket card dimensions to prevent overlap
+# ============================================================
+
+class TestBracketCssDimensions:
+    """Plan 034: Lock down bracket card dimensions to prevent overlap.
+
+    The grid row height must be >= max card height. Without explicit
+    constraints, font rendering can overflow rows causing visual overlap.
+    These tests prevent regression.
+    """
+
+    def test_bracket_mirror_grid_row_height_defined(self):
+        css = (PROJECT_ROOT / "src" / "static" / "css" / "main.css").read_text()
+        m = re.search(r"\.bracket-mirror\s*\{[^}]*grid-template-rows:\s*repeat\(8,\s*(\d+)px\)", css)
+        assert m, "bracket-mirror grid-template-rows not found"
+        row_height = int(m.group(1))
+        # Row height must be >= 110px to prevent overlap
+        assert row_height >= 110, \
+            f"grid row height {row_height}px is too small, will cause card overlap"
+
+    def test_bracket_mirror_min_width_is_zero(self):
+        """Plan 033: min-width must be 0 to avoid horizontal scroll on small viewports."""
+        css = (PROJECT_ROOT / "src" / "static" / "css" / "main.css").read_text()
+        # Check ALL bracket-related selectors
+        for selector in [".bracket-mirror", ".bracket-mirror-wrapper",
+                         ".bracket-labels-mirror", ".bracket-labels-mirror .label"]:
+            m = re.search(
+                re.escape(selector) + r"\s*\{[^}]*min-width:\s*(\d+|0)\s*px",
+                css
+            )
+            if m:
+                min_w = int(m.group(1))
+                assert min_w <= 0, \
+                    f"{selector} min-width {min_w}px will force horizontal scroll"
+
+    def test_bracket_wrapper_overflow_x(self):
+        """bracket-wrapper must have overflow-x for horizontal scrolling if needed."""
+        css = (PROJECT_ROOT / "src" / "static" / "css" / "main.css").read_text()
+        m = re.search(r"\.bracket-wrapper\s*\{[^}]*overflow-x:\s*(\w+)", css)
+        assert m, "bracket-wrapper overflow-x not found"
+        # We allow overflow-x: auto OR hidden
+        assert m.group(1) in ("auto", "hidden", "scroll")
+
+    def test_bracket_card_max_height_defined(self):
+        """Card max-height must be <= grid row height."""
+        css = (PROJECT_ROOT / "src" / "static" / "css" / "main.css").read_text()
+        # Get row height
+        m_row = re.search(r"\.bracket-mirror\s*\{[^}]*grid-template-rows:\s*repeat\(8,\s*(\d+)px\)", css)
+        row_h = int(m_row.group(1))
+        # Get card max-height
+        m_card = re.search(r"\.bracket-card\s*\{[^}]*max-height:\s*(\d+)px", css)
+        if m_card:
+            card_h = int(m_card.group(1))
+            assert card_h <= row_h, \
+                f"card max-height {card_h}px > row height {row_h}px"
+
+
+# ============================================================
 # End-to-end: API behavior that init depends on
 # ============================================================
 
