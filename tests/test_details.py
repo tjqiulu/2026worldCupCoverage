@@ -8,8 +8,10 @@ import pytest
 from src.data.details import (
     DETAILS_FILE,
     _is_incomplete,
+    _norm_team_key,
     all_details,
     apply_scorer_overrides,
+    build_team_id_map,
     compute_standings_from_details,
     enrich_match,
     enrich_matches,
@@ -674,4 +676,288 @@ class TestScorerOverrides:
         out = apply_scorer_overrides(entry)
         # Mixed Arabic+Latin not in map -> unchanged
         assert out["goalscorers"][0]["player"] == "محمد Salah"
+
+
+# === Plan 027: Team-name alias resolver ===
+# worldcup26.ir API and baires ICS use slightly different strings for the
+# same team. Without normalization, compute_standings_from_details
+# silently drops any match whose team names don't match exactly.
+
+class TestNormTeamKey:
+    """Unit tests for _norm_team_key (Plan 027 helper)."""
+
+    def test_ampersand_to_and(self):
+        assert _norm_team_key("Bosnia & Herzegovina") == "bosnia and herzegovina"
+
+    def test_lowercases(self):
+        assert _norm_team_key("USA") == "usa"
+        assert _norm_team_key("United States") == "united states"
+
+    def test_collapses_whitespace(self):
+        assert _norm_team_key("  multiple   spaces  ") == "multiple spaces"
+
+    def test_strips_punctuation(self):
+        # Strips ASCII punctuation but preserves Unicode letters (so
+        # "Côte d'Ivoire" still matches "Cote dIvoire" once lowercased,
+        # and "Curaçao" stays "curaçao" — they collapse on whitespace
+        # + lowercase only).
+        assert _norm_team_key("Côte d'Ivoire") == "côte divoire"
+        assert _norm_team_key("Curaçao") == "curaçao"
+        # ASCII punctuation IS stripped:
+        assert _norm_team_key("U.S.A.") == "usa"
+        assert _norm_team_key("Korea Republic") == "korea republic"
+
+    def test_empty_input(self):
+        assert _norm_team_key("") == ""
+        assert _norm_team_key(None) == ""  # type: ignore[arg-type]
+
+
+class TestBuildTeamIdMap:
+    """Unit tests for build_team_id_map (Plan 027).
+
+    Covers the bug where baires ICS uses 'Bosnia & Herzegovina' /
+    'USA' / 'DR Congo' but worldcup26.ir API uses 'Bosnia and
+    Herzegovina' / 'United States' / 'Democratic Republic of the
+    Congo'. The resolver must let compute_standings_from_details()
+    resolve the ICS strings to the same team_id as the API strings.
+    """
+
+    def _sample_teams(self):
+        """Minimal 5-team subset to exercise the resolver."""
+        return {
+            "5":  {"id": "5",  "name_en": "Canada",
+                   "fifa_code": "CAN", "iso2": "CA"},
+            "6":  {"id": "6",  "name_en": "Bosnia and Herzegovina",
+                   "fifa_code": "BIH", "iso2": "BA"},
+            "7":  {"id": "7",  "name_en": "Qatar",
+                   "fifa_code": "QAT", "iso2": "QA"},
+            "8":  {"id": "8",  "name_en": "Switzerland",
+                   "fifa_code": "SUI", "iso2": "CH"},
+            "13": {"id": "13", "name_en": "United States",
+                   "fifa_code": "USA", "iso2": "US"},
+        }
+
+    def test_basic_name_en_match(self):
+        m = build_team_id_map(self._sample_teams())
+        assert m["Canada"] == "5"
+        assert m["Qatar"] == "7"
+        assert m["Switzerland"] == "8"
+
+    def test_fifa_code_fallback(self):
+        """ICS uses 'USA' (fifa_code) instead of 'United States' (name_en).
+        Map must accept both keys."""
+        m = build_team_id_map(self._sample_teams())
+        assert m["USA"] == "13"
+        assert m["United States"] == "13"
+
+    def test_iso2_fallback(self):
+        m = build_team_id_map(self._sample_teams())
+        assert m["US"] == "13"
+
+    def test_ampersand_normalized_match(self):
+        """The bug case: ICS says 'Bosnia & Herzegovina' but API says
+        'Bosnia and Herzegovina'. The normalized form of the ICS name
+        (after & → and) must match the API's name_en."""
+        m = build_team_id_map(self._sample_teams())
+        # API's "Bosnia and Herzegovina" is in map literally (via name_en)
+        assert m["Bosnia and Herzegovina"] == "6"
+        # The normalized key for "Bosnia & Herzegovina" must also resolve
+        # (compute_standings_from_details calls _norm_team_key on the
+        # ICS home.name string before looking up the map).
+        assert m[_norm_team_key("Bosnia & Herzegovina")] == "6"
+
+    def test_priority_name_en_over_iso2(self):
+        """name_en takes precedence over fifa_code and iso2. If two teams
+        somehow collide on a key, first-inserted wins."""
+        teams = {
+            "1": {"id": "1", "name_en": "AAA",
+                  "fifa_code": "X", "iso2": "X"},
+            "2": {"id": "2", "name_en": "BBB",
+                  "fifa_code": "Y", "iso2": "Y"},
+        }
+        m = build_team_id_map(teams)
+        # name_en "AAA" inserted before any other key
+        assert m["X"] == "1"  # from team 1's fifa_code/iso2
+        assert m["AAA"] == "1"
+        assert m["BBB"] == "2"
+
+    def test_empty_team_dict_returns_empty_map(self):
+        assert build_team_id_map({}) == {}
+
+    def test_team_dict_missing_optional_fields(self):
+        """If a team dict is missing name_en/fifa_code/iso2, we just
+        skip those keys; the resolver must not crash."""
+        teams = {
+            "1": {"id": "1"},  # all optional fields missing
+            "2": {"id": "2", "name_en": "Brazil"},
+        }
+        m = build_team_id_map(teams)
+        # Empty team: only id "1" exists but has no keys → not in map
+        assert "1" not in m
+        assert m["Brazil"] == "2"
+
+    def test_countries_reverse_lookup_abbreviation(self):
+        """countries.json (keyed by ICS-style names) bridges abbreviations
+        that _norm_team_key cannot derive from the API name. E.g. ICS
+        'DR Congo' ↔ API 'Democratic Republic of the Congo' cannot be
+        derived by character normalization — needs the countries.json
+        code_fifa bridge."""
+        # Sample countries.json-style entry
+        countries = {
+            "DR Congo": {"code_iso": "cd", "code_fifa": "COD"},
+            "USA": {"code_iso": "us", "code_fifa": "USA"},
+        }
+        # Sample API teams
+        teams = {
+            "42": {"id": "42", "name_en": "Democratic Republic of the Congo",
+                   "fifa_code": "COD", "iso2": "CD"},
+            "13": {"id": "13", "name_en": "United States",
+                   "fifa_code": "USA", "iso2": "US"},
+        }
+        m = build_team_id_map(teams, countries=countries)
+        # ICS "DR Congo" → 42 via code_fifa bridge
+        assert m["DR Congo"] == "42"
+        # ICS "USA" → 13 via code_fifa (this is also covered by pass 2,
+        # but pass 5 is a redundant safety net)
+        assert m["USA"] == "13"
+
+    def test_countries_reverse_lookup_does_not_override(self):
+        """If a key is already in the map from an earlier pass, countries
+        pass does NOT overwrite it (priority: API > countries)."""
+        countries = {"Fake Name": {"code_iso": "ca", "code_fifa": "CAN"}}
+        teams = {
+            "5": {"id": "5", "name_en": "Canada",
+                  "fifa_code": "CAN", "iso2": "CA"},
+        }
+        m = build_team_id_map(teams, countries=countries)
+        # "Canada" from pass 1 wins; "Fake Name" from countries is a NEW key
+        assert m["Canada"] == "5"
+        assert m["Fake Name"] == "5"  # also added (but lower priority)
+
+    def test_countries_none_disables_pass5(self):
+        """If countries=None (default), the resolver still works for
+        &-style and direct name matches — just not abbreviations."""
+        m = build_team_id_map(self._sample_teams())  # no countries
+        # Bosnia & Herzegovina still resolves via pass 4 normalize
+        assert m[_norm_team_key("Bosnia & Herzegovina")] == "6"
+        # But abbreviation case (not tested here) would need countries
+
+    def test_real_data_bosnia_bug_resolved(self):
+        """End-to-end: real B-group situation. With the resolver, all
+        4 final matches resolve, and standings has 4 teams."""
+        from src.data.ics_parser import parse_ics
+        from src.data.ics_fetcher import fetch_ics
+        from src.data.countries import enrich_matches as enrich_countries
+        from src.data.details import enrich_matches as enrich_details, load_details
+        from src.data.worldcup_api import get_teams_by_id
+
+        matches = parse_ics(fetch_ics(force=False))
+        enrich_countries(matches)
+        enrich_details(matches)
+        b_matches = [m for m in matches if (m.get("group") or "").upper() == "B"]
+        # Sanity: 6 group matches, 4 are final in details
+        finals = [m for m in b_matches
+                  if (m.get("details") or {}).get("status") == "final"]
+        assert len(finals) == 4
+
+        # Without resolver (old name_to_id): B group standings = 3 teams
+        teams = get_teams_by_id()
+        old_name_to_id = {}
+        for tid, t in teams.items():
+            for k in (t.get("name_en"), t.get("fifa_code")):
+                if k:
+                    old_name_to_id[str(k)] = str(tid)
+        old = compute_standings_from_details(
+            "B", load_details(), b_matches, old_name_to_id,
+        ) or []
+        # Old behavior: only 3 teams (Bosnia dropped)
+        assert len(old) == 3
+        old_ids = {t["team_id"] for t in old}
+        assert "6" not in old_ids  # Bosnia's team_id, missing
+
+        # With resolver: B group standings = 4 teams
+        new_name_to_id = build_team_id_map(teams)
+        new = compute_standings_from_details(
+            "B", load_details(), b_matches, new_name_to_id,
+        ) or []
+        assert len(new) == 4
+        new_ids = {t["team_id"] for t in new}
+        assert "6" in new_ids  # Bosnia's team_id, now present
+
+        # Sanity check: Canada still 1W (vs Qatar 6-0), still 1D (vs Bosnia 1-1)
+        canada = next(t for t in new if t["team_id"] == "5")
+        assert canada["mp"] == 2
+        assert canada["w"] == 1
+        assert canada["d"] == 1
+        assert canada["gf"] == 7  # 6 (vs Qatar) + 1 (vs Bosnia)
+        assert canada["ga"] == 1
+        assert canada["pts"] == 4
+
+        # Switzerland: 1W (vs Bosnia 4-1), 0D 1L (vs Qatar 1-1 → that was Qatar 1-1 Switzerland)
+        # Wait — re-check: 6/13 Qatar 1-1 Switzerland (home=Qatar, away=Switzerland)
+        # So Switzerland drew away → 1D. 6/19 Switzerland 4-1 Bosnia (home=Switzerland)
+        # → 1W. Total: 1W 1D 0L.
+        switzerland = next(t for t in new if t["team_id"] == "8")
+        assert switzerland["mp"] == 2
+        assert switzerland["w"] == 1
+        assert switzerland["d"] == 1
+        assert switzerland["gf"] == 5  # 1 (vs Qatar) + 4 (vs Bosnia)
+        assert switzerland["ga"] == 2  # 1 (vs Qatar) + 1 (vs Bosnia)
+        assert switzerland["pts"] == 4  # 3 + 1
+        # (Note: canada and switzerland tie on 4 PTS; sort by GD: canada +6, switzerland +3)
+        # So canada should be ranked higher.
+        new_sorted_ids = [t["team_id"] for t in new]
+        assert new_sorted_ids.index("5") < new_sorted_ids.index("8")
+
+        # Bosnia: 1D (vs Canada 1-1) 1L (vs Switzerland 1-4) → 0W 1D 1L GF=2 GA=5
+        bosnia = next(t for t in new if t["team_id"] == "6")
+        assert bosnia["mp"] == 2
+        assert bosnia["w"] == 0
+        assert bosnia["d"] == 1
+        assert bosnia["l"] == 1
+        assert bosnia["gf"] == 2
+        assert bosnia["ga"] == 5
+        assert bosnia["pts"] == 1
+
+    def test_real_data_k_group_dr_congo_bug_resolved(self):
+        """Real K-group situation: 'DR Congo' (ICS) cannot be derived
+        from 'Democratic Republic of the Congo' (API) by character
+        normalization alone — needs countries.json reverse lookup."""
+        from src.data.ics_parser import parse_ics
+        from src.data.ics_fetcher import fetch_ics
+        from src.data.countries import enrich_matches as enrich_countries
+        from src.data.countries import all_countries
+        from src.data.details import enrich_matches as enrich_details, load_details
+        from src.data.worldcup_api import get_teams_by_id
+
+        matches = parse_ics(fetch_ics(force=False))
+        enrich_countries(matches)
+        enrich_details(matches)
+        k_matches = [m for m in matches if (m.get("group") or "").upper() == "K"]
+        finals = [m for m in k_matches
+                  if (m.get("details") or {}).get("status") == "final"]
+        assert len(finals) == 2
+
+        teams = get_teams_by_id()
+        # Without countries: only 2 teams (DR Congo dropped, so 6/17
+        # Portugal 1-1 DR Congo match is silently skipped)
+        no_countries = build_team_id_map(teams)
+        old = compute_standings_from_details(
+            "K", load_details(), k_matches, no_countries,
+        ) or []
+        # Note: this depends on whether other K-group names resolve.
+        # Old behavior: Portugal also might drop if its name mapping
+        # is missing. The crucial assertion is the "with countries" case.
+
+        # With countries: 4 teams (DR Congo and Portugal both present)
+        with_countries = build_team_id_map(teams, countries=all_countries())
+        new = compute_standings_from_details(
+            "K", load_details(), k_matches, with_countries,
+        ) or []
+        assert len(new) == 4
+        new_ids = {t["team_id"] for t in new}
+        # DR Congo's team_id is 42
+        assert "42" in new_ids
+        # Portugal's team_id is 41
+        assert "41" in new_ids
 

@@ -390,8 +390,15 @@ def compute_standings_from_details(
             continue
         home_name = (m.get("home") or {}).get("name") or ""
         away_name = (m.get("away") or {}).get("name") or ""
-        home_id = team_name_to_id.get(home_name)
-        away_id = team_name_to_id.get(away_name)
+        # Plan 027: try direct match first, then normalized key.
+        # Covers "Bosnia & Herzegovina" (ICS) ↔ "Bosnia and Herzegovina" (API)
+        # and similar minor variations across data sources.
+        home_id = team_name_to_id.get(home_name) or team_name_to_id.get(
+            _norm_team_key(home_name)
+        )
+        away_id = team_name_to_id.get(away_name) or team_name_to_id.get(
+            _norm_team_key(away_name)
+        )
         if not home_id or not away_id:
             continue  # can't attribute stats without a team_id
 
@@ -428,3 +435,112 @@ def compute_standings_from_details(
     # Sort: pts desc, gd desc, gf desc (FIFA standard)
     result.sort(key=lambda t: (t["pts"], t["gd"], t["gf"]), reverse=True)
     return result
+
+
+# === Plan 027: Team name alias resolver ===
+# worldcup26.ir API and baires ICS use slightly different strings for the
+# same team (e.g. "Bosnia & Herzegovina" vs "Bosnia and Herzegovina",
+# "USA" vs "United States", "DR Congo" vs "Democratic Republic of the
+# Congo"). Without a normalization layer, compute_standings_from_details
+# silently drops any match that contains an aliased team, leaving the
+# standings table incomplete and stats wrong.
+#
+# Fix: build_team_id_map() emits a multi-key map (name_en, fifa_code,
+# iso2, plus a normalized fallback). compute_standings_from_details()
+# tries the literal name first, then _norm_team_key(name), so a single
+# resolver covers all known and future alias variants.
+
+
+def _norm_team_key(s: str) -> str:
+    """Normalize a team name for fuzzy lookup (Plan 027).
+
+    Covers minor variations between data sources:
+      - " & " → " and " (Bosnia & Herzegovina ↔ Bosnia and Herzegovina)
+      - lowercase
+      - collapse whitespace
+      - strip punctuation (keeps alnum + space)
+
+    Returns "" for empty/None input.
+    """
+    if not s:
+        return ""
+    s = s.replace("&", "and")
+    s = "".join(c for c in s if c.isalnum() or c.isspace())
+    s = " ".join(s.split()).lower()
+    return s
+
+
+def build_team_id_map(
+    teams: dict[str, dict[str, Any]],
+    countries: dict[str, dict[str, str]] | None = None,
+) -> dict[str, str]:
+    """Build a multi-key team_name -> team_id map for standings resolution.
+
+    Plan 027: worldcup26.ir API and baires ICS use slightly different
+    strings for the same team. This map covers the gap so
+    compute_standings_from_details() doesn't silently drop matches with
+    aliased team names.
+
+    Keys produced (in priority order — first wins on conflict):
+      1. API name_en  (e.g. "Bosnia and Herzegovina")
+      2. API fifa_code (e.g. "USA")
+      3. API iso2     (e.g. "US")
+      4. Normalized fallback (e.g. "bosnia and herzegovina") — only
+         added if the normalized form is not already a key in the map,
+         so the literal keys always take precedence.
+      5. countries.json reverse lookup (e.g. ICS "DR Congo" → code_fifa
+         "COD" → API team_id "42"). Covers abbreviations that
+         _norm_team_key cannot derive (e.g. "DR" ↔ "Democratic Republic").
+
+    Args:
+        teams: {team_id: team_dict} (typically get_teams_by_id()).
+        countries: optional {ics_name: {code_iso, code_fifa, ...}} from
+            countries.json. If provided, pass 5 is enabled. Pass
+            countries.all_countries() to enable. None disables pass 5.
+
+    Returns: {lookup_key: team_id}. ~150 entries for 48 teams. Trivial.
+    """
+    out: dict[str, str] = {}
+    for tid, t in teams.items():
+        if not tid:
+            continue
+        for k in (t.get("name_en"), t.get("fifa_code"), t.get("iso2")):
+            if k:
+                out.setdefault(str(k), str(tid))
+    # Pass 4: normalized fallback. Lets ICS-style names
+    # ("Bosnia & Herzegovina") resolve via _norm_team_key at lookup time.
+    norm_extra: dict[str, str] = {}
+    for k, tid in out.items():
+        nk = _norm_team_key(k)
+        if nk and nk not in out:
+            norm_extra.setdefault(nk, tid)
+    out.update(norm_extra)
+    # Pass 5: countries.json reverse lookup. countries.json is keyed by
+    # ICS-style names (e.g. "DR Congo", "USA", "Bosnia & Herzegovina")
+    # and contains code_fifa/code_iso. We bridge each to the API team
+    # that matches the same code. This covers abbreviations that
+    # _norm_team_key cannot derive.
+    if countries:
+        code_fifa_to_id: dict[str, str] = {}
+        code_iso_to_id: dict[str, str] = {}
+        for tid, t in teams.items():
+            if t.get("fifa_code"):
+                code_fifa_to_id[t["fifa_code"]] = str(tid)
+            iso = t.get("iso2")
+            if iso:
+                code_iso_to_id[iso.upper()] = str(tid)
+        for ics_name, meta in countries.items():
+            if not isinstance(meta, dict):
+                continue
+            if ics_name in out:
+                continue  # already covered by earlier pass
+            code_fifa = meta.get("code_fifa")
+            code_iso = (meta.get("code_iso") or "").upper()
+            tid = None
+            if code_fifa and code_fifa in code_fifa_to_id:
+                tid = code_fifa_to_id[code_fifa]
+            elif code_iso and code_iso in code_iso_to_id:
+                tid = code_iso_to_id[code_iso]
+            if tid:
+                out.setdefault(ics_name, tid)
+    return out

@@ -702,5 +702,162 @@
       }
     ]
   },
+  "fifa-wc-2026-961435d8626c@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 3
+    },
+    "goalscorers": [
+      {
+        "player": "Abas Bk Fiz Allh Af",
+        "minute": 60,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Dnil Mvnvz",
+        "minute": 40,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Lviiz Diaz",
+        "minute": 65,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Khamintvn Kampaz",
+        "minute": 90,
+        "stoppage": 9,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-28e5beab171a@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 4,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Jvhan Mnzambi",
+        "minute": 74,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Rvbn Vargas",
+        "minute": 84,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Jvhan Mnzambi",
+        "minute": 90,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Armin Mhmich",
+        "minute": 90,
+        "stoppage": 3,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-e8aa08edb6ad@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "‫mikhal Sadilk",
+        "minute": 6,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-7e2495985fc6@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Luis Romo",
+        "minute": 50,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-106797924277@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 6,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Kail Larin",
+        "minute": 16,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Jonathan David",
+        "minute": 29,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Jonathan David",
+        "minute": 45,
+        "stoppage": 3,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Nathan Saliba",
+        "minute": 64,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Mohamed Almnai",
+        "minute": 75,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Jonathan David",
+        "minute": 90,
+        "stoppage": 2,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

@@ -20,8 +20,9 @@ if str(_PROJECT_ROOT) not in sys.path:
 
 from flask import Flask, jsonify, render_template, request  # noqa: E402
 
-from src.data.countries import enrich_matches  # noqa: E402
+from src.data.countries import all_countries, enrich_matches  # noqa: E402
 from src.data.details import (
+    build_team_id_map,
     compute_standings_from_details,
     enrich_matches as enrich_details_matches,
     load_details,
@@ -95,11 +96,15 @@ def _local_or_api_standings(
         # Build {team_name_en: team_id} map from the teams endpoint.
         # The teams list is cached for 5 min in worldcup_api.
         teams = get_teams_by_id()
-        name_to_id: dict[str, str] = {}
-        for tid, t in teams.items():
-            for k in (t.get("name_en"), t.get("fifa_code")):
-                if k:
-                    name_to_id[str(k)] = str(tid)
+        # Plan 027: multi-key alias resolver. Without this, baires ICS
+        # team names like "Bosnia & Herzegovina" / "USA" / "DR Congo"
+        # fail to match worldcup26.ir's "Bosnia and Herzegovina" /
+        # "United States" / "Democratic Republic of the Congo", and
+        # compute_standings_from_details silently drops entire matches.
+        # countries.json (keyed by ICS-style names) bridges abbreviations
+        # like "DR" → "Democratic Republic" that _norm_team_key can't
+        # derive from the API name alone.
+        name_to_id = build_team_id_map(teams, countries=all_countries())
         local = compute_standings_from_details(
             group_letter, all_details, matches, name_to_id
         )
