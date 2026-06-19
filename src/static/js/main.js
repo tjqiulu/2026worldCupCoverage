@@ -718,6 +718,43 @@ function resolveTeamForMirror(side) {
     return { team: side, cls: '' };
 }
 
+function _bjtTime(m) {
+    /** Plan 032: return date (M/D) + time (HH:MM) in BJT. */
+    return {
+        date: beijingDateStr(m.date_utc),
+        time: beijingTimeStr(m.date_utc),
+    };
+}
+
+function _bjtMonthDay(m) {
+    /** Plan 032: short date "6/29" for non-R32 cards. */
+    const dt = _bjtTime(m);
+    return dt.date.substring(5).replace('-', '/');
+}
+
+function _renderBingTeamRow(team, align) {
+    /** Plan 032: single team row in Bing-style (flag | name, status on right). */
+    const isPlaceholder = !team || (!team.code_iso && team.name);
+    const flagHtml = team?.code_iso
+        ? `<span class="fi fi-${escapeHtml(team.code_iso)}"></span>`
+        : `<span class="bc-flag-placeholder">${team ? '?' : ''}</span>`;
+    const nameHtml = team?.name_zh
+        ? escapeHtml(team.name_zh)
+        : (team?.name ? escapeHtml(team.name) : '');
+    const enHtml = (team?.name_zh && team?.name && team.name_zh !== team.name)
+        ? `<span class="bc-team-en">${escapeHtml(team.name)}</span>`
+        : '';
+    const cls = [
+        'bc-team-row',
+        `bc-align-${align || 'home'}`,
+        isPlaceholder ? 'bc-row-placeholder' : '',
+    ].filter(c => c).join(' ');
+    return `<div class="${cls}">
+        ${flagHtml}
+        <span class="bc-team-name">${nameHtml}${enHtml}</span>
+    </div>`;
+}
+
 function renderMirrorCard(m, stage, col, row, span) {
     const time = beijingTimeStr(m.date_utc);
     const date = beijingDateStr(m.date_utc);
@@ -730,20 +767,27 @@ function renderMirrorCard(m, stage, col, row, span) {
         .filter(c => c).join(' ');
     const homeTitle = homeTeam?.name || '?';
     const awayTitle = awayTeam?.name || '?';
-    // Fallback to original match title if no placeholders
     const matchTitle = `${homeTitle} vs ${awayTitle} · ${date} ${time} · ${venue}`;
-    // For R32 use full date, for later rounds use shorter "7/04" format
-    const dateLabel = stage === 'r32' || stage === 'third' ? date : date.substring(5).replace('-', '/');
-    const colClass = `col-${col}`;
+    // Plan 032: R32/third use full date; later rounds use short M/D
+    const isR32 = stage === 'r32' || stage === 'third';
+    const dateLabel = isR32 ? date.substring(5).replace('-', '/') : date.substring(5).replace('-', '/');
+    const status = getEffectiveStatus(m);
+    const statusLabel = status === 'final' ? '已结束' : status === 'live' ? 'LIVE' : '未开赛';
     return `<div class="bracket-card ${cardCls}"
                 style="grid-column: ${col}; grid-row: ${row} / span ${span};"
                 data-id="${escapeHtml(m.match_id)}"
                 title="${escapeHtml(matchTitle)}">
-        <div class="bc-date">${escapeHtml(dateLabel)} ${escapeHtml(time)}</div>
-        <div class="bc-teams">
-            <div class="bc-team home">${renderTeamName(homeTeam, 'home')}</div>
-            <div class="bc-vs">vs</div>
-            <div class="bc-team away">${renderTeamName(awayTeam, 'away')}</div>
+        <div class="bc-head">
+            <span class="bc-date">${escapeHtml(dateLabel)}</span>
+            <span class="bc-time">${escapeHtml(time)}</span>
+        </div>
+        <div class="bc-rows">
+            ${_renderBingTeamRow(homeTeam, 'home')}
+            ${_renderBingTeamRow(awayTeam, 'away')}
+        </div>
+        <div class="bc-foot">
+            <span class="bc-status bc-status-${status}">${statusLabel}</span>
+            <span class="bc-venue">${escapeHtml(venue)}</span>
         </div>
     </div>`;
 }

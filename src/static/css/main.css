@@ -13,8 +13,28 @@ body {
     color: #222;
     line-height: 1.5;
     padding: 16px 20px 40px;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
+}
+
+/* Plan 032: custom scrollbar styling (Webkit + Firefox) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #c0c0c0 transparent;
+}
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
 }
 
 /* Header */
@@ -498,10 +518,10 @@ footer a:hover {
 
 .bracket-labels-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(120px, 1fr));
+    grid-template-columns: repeat(9, minmax(130px, 1fr));
     gap: 0 12px;
     padding: 0 0 8px;
-    min-width: 1200px;
+    min-width: 1100px;
 }
 
 .bracket-labels-mirror .label {
@@ -518,10 +538,10 @@ footer a:hover {
 
 .bracket-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(120px, 1fr));
-    grid-template-rows: repeat(8, 60px);
-    gap: 6px 12px;
-    min-width: 1200px;
+    grid-template-columns: repeat(9, minmax(130px, 1fr));
+    grid-template-rows: repeat(8, 110px);
+    gap: 8px 12px;
+    min-width: 1100px;
     padding: 8px 0;
     position: relative;
 }
@@ -530,23 +550,23 @@ footer a:hover {
     position: relative;
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    padding: 8px 12px;
+    border-radius: 8px;
+    padding: 10px 14px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     font-size: 14px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     align-self: center;
-    min-height: 56px;
+    min-height: 96px;
     overflow: hidden;
+    transition: box-shadow 0.15s, transform 0.15s;
 }
 
 .bracket-card:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
-    transform: translateY(-1px);
-    transition: box-shadow 0.15s, transform 0.15s;
-    z-index: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    z-index: 2;
 }
 
 /* Subtle horizontal connecting lines between columns */
@@ -578,71 +598,142 @@ footer a:hover {
     display: none;
 }
 
-.bracket-card .bc-date {
-    color: #666;
-    font-size: 11px;
-    margin-bottom: 3px;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-weight: 600;
-}
-}
-
-.bracket-card .bc-teams {
+/* Plan 032: Bing-style bracket card layout */
+.bracket-card .bc-head {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 4px;
-    font-weight: 700;
-    color: #222;
-    font-size: 15px;
+    align-items: baseline;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #555;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
 }
 
-.bracket-card .bc-team {
+.bracket-card .bc-date {
+    color: #333;
+    font-weight: 600;
+}
+
+.bracket-card .bc-time {
+    color: #888;
+}
+
+.bracket-card .bc-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    margin-bottom: 8px;
+}
+
+.bracket-card .bc-team-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #222;
+}
+
+.bracket-card .bc-team-row .fi {
+    width: 1.3em;
+    height: 1em;
+    flex-shrink: 0;
+}
+
+.bracket-card .bc-flag-placeholder {
+    width: 1.3em;
+    height: 1em;
+    border: 1px dashed #ccc;
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+    color: transparent;
+}
+
+.bracket-card .bc-team-name {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    min-width: 0;
 }
 
-.bracket-card .bc-team.home {
-    text-align: right;
-}
-
-.bracket-card .bc-vs {
+.bracket-card .bc-team-en {
     color: #999;
+    font-weight: 400;
+    font-size: 12px;
+    margin-left: 6px;
+}
+
+.bracket-card .bc-row-placeholder .bc-team-name {
+    color: #888;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.bracket-card .bc-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 11px;
-    padding: 0 4px;
-    flex-shrink: 0;
+    color: #888;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 6px;
+    min-height: 0;
+}
+
+.bracket-card .bc-status {
     font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    color: #666;
+}
+
+.bracket-card .bc-status-final {
+    background: #d4edda;
+    color: #155724;
+}
+
+.bracket-card .bc-status-live {
+    background: #f8d7da;
+    color: #721c24;
 }
 
 .bracket-card .bc-venue {
-    display: none;  /* too narrow in mirror layout */
+    color: #aaa;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 50%;
 }
 
 .bracket-card.final {
-    background: #FEF3C7;
-    border-color: #F1C40F;
+    background: #FFFBEB;
+    border-color: #F59E0B;
     border-width: 2px;
-    font-weight: 700;
-}
-
-.bracket-card.final .bc-teams {
-    font-size: 13px;
-}
-
-.bracket-card.final .bc-date {
-    color: #B45309;
-    font-weight: 600;
 }
 
 .bracket-card.third {
-    background-color: #e8e8e8; /* only color, NOT shorthand (clobbers flag-icons bg-image) */
-    border-color: #bbb;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+.bracket-card.qualified-locked {
+    border-color: #16A34A;
+    border-width: 2px;
+    background: #F0FDF4;
+}
+
+.bracket-card.qualified-locked .bc-team-row {
+    font-weight: 700;
+    color: #14532D;
+}
+
+.bracket-card.qualified-locked .bc-head {
+    color: #15803D;
 }
 
 .bracket-single-col {

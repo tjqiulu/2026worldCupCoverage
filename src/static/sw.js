@@ -1,6 +1,7 @@
 // 2026 World Cup Coverage - Service Worker
-// Cache shell for offline use; /api/* always network-first
-const CACHE_VERSION = 'wc2026-v6';
+// Plan 032: network-first for ALL same-origin requests (no stale code).
+// /api/* still bypasses cache entirely. CDN stale-while-revalidate.
+const CACHE_VERSION = 'wc2026-v7';
 const CACHE_NAME = `${CACHE_VERSION}-shell`;
 const SHELL_URLS = [
     '/',
@@ -71,14 +72,13 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Same-origin (HTML, CSS, JS, manifest, icons): cache-first
+    // Same-origin (HTML, CSS, JS, manifest, icons): network-first (Plan 032)
+    // Falls back to cache only when network fails. This prevents stale
+    // main.js / main.css from being served after a code change.
     if (url.origin === self.location.origin) {
         event.respondWith(
-            caches.match(event.request).then((cached) => {
-                if (cached) {
-                    return cached;
-                }
-                return fetch(event.request).then((response) => {
+            fetch(event.request)
+                .then((response) => {
                     if (response && response.ok) {
                         const clone = response.clone();
                         caches.open(CACHE_NAME).then((cache) => {
@@ -86,8 +86,8 @@ self.addEventListener('fetch', (event) => {
                         });
                     }
                     return response;
-                });
-            })
+                })
+                .catch(() => caches.match(event.request))
         );
         return;
     }
