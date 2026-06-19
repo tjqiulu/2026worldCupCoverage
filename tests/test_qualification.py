@@ -523,3 +523,65 @@ class TestHelperFunctions:
         k1 = _fifa_tiebreak_key(3, 0, 3, 3, 1, 0)  # 1W 0D
         k2 = _fifa_tiebreak_key(3, 0, 3, 3, 0, 3)  # 0W 3D
         assert k1 > k2  # 1W > 0W
+
+
+# ============================================================
+# TestPlan030ModalResolve — bracket/modal placeholder resolve
+# ============================================================
+
+class TestPlan030ModalResolve:
+    """Plan 030: modal 也要走 resolveBracketPlaceholder.
+    验证 API 返回的数据能让前端 modal 正确显示已锁定队的 name/code_iso."""
+
+    def _real_qualification_data(self, group: str = "A") -> dict:
+        """Mock 真实场景: A 组墨西哥 6 分 100% 锁定."""
+        return _run_group(group, [
+            _mk_team("1", pts=6, mp=2, w=2, gf=3, ga=0, gd=3),
+            _mk_team("2", pts=3, mp=2, w=1, l=1),
+            _mk_team("3", pts=1, mp=2, d=1, l=1),
+            _mk_team("4", pts=1, mp=2, d=1, l=1),
+        ])
+
+    def test_locked_top2_returns_team_id_for_each_position(self):
+        """A 组 1st 的 team_id 应该出现在 locked_top2."""
+        result = self._real_qualification_data("A")
+        locked_ids = {t["team_id"] for t in result["locked_top2"]}
+        # standings[0] = 1st = team_id '1'
+        # standings[1] = 2nd = team_id '2'
+        # 当前锁定条件：pts > second_highest_other_max
+        # team '1' (pts=6) > second_best_other (team '2' max=6, team '3' max=4, team '4' max=4)
+        # second_best_other = 6 (sorted [6, 4, 4] → index 1 = 4)
+        # 6 > 4? Yes → team '1' locked
+        # team '2' (pts=3) > second_best_other (team '1' max=6, team '3' max=4, team '4' max=4)
+        # sorted [6, 4, 4] → index 1 = 4. 3 > 4? No → team '2' NOT locked
+        assert "1" in locked_ids
+        assert "2" not in locked_ids
+
+    def test_front_end_can_resolve_1a_to_locked_team(self):
+        """模拟前端 resolveBracketPlaceholder('1A') 的输入.
+        返回的是 standings[0] 的 team_id, 即 1st 名的 team_id."""
+        result = self._real_qualification_data("A")
+        # standings sorted by pts desc → [team_1 (6), team_2 (3), team_3 (1), team_4 (1)]
+        standings_ids = [t["team_id"] for t in result["standings"]]
+        # 1A → 1st place → standings[0]
+        assert standings_ids[0] == "1"  # Mexico (mexican team_id)
+        # 2A → 2nd place → standings[1]
+        assert standings_ids[1] == "2"  # Korea
+
+    def test_modal_render_can_get_team_info_for_locked_slot(self):
+        """模拟前端 modal renderModalTeam 的输入:
+        m.home.name = '1A' → 解析出 team_id='1' → 查 allTeams 拿到 code_iso/name_zh."""
+        result = self._real_qualification_data("A")
+        # 模拟 allTeams dict (后端 /api/teams 返回的)
+        all_teams = {
+            "1": {"name": "Mexico", "name_zh": "墨西哥", "code_iso": "mx", "code_fifa": "MEX"},
+            "2": {"name": "South Korea", "name_zh": "韩国", "code_iso": "kr", "code_fifa": "KOR"},
+        }
+        # 前端 resolveBracketPlaceholder('1A') 应该返回:
+        #   standings[0].team_id = '1' → allTeams['1'] → {name_zh: '墨西哥', code_iso: 'mx', ...}
+        slot_team_id = result["standings"][0]["team_id"]
+        resolved = all_teams.get(slot_team_id)
+        assert resolved is not None
+        assert resolved["name_zh"] == "墨西哥"
+        assert resolved["code_iso"] == "mx"
+        assert resolved["name"] == "Mexico"

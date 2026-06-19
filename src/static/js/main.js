@@ -797,14 +797,25 @@ function describePlaceholder(name) {
 
 function renderModalTeam(team) {
     if (!team) return '';
+    // Plan 030: if side has a real flag, render normally
     if (team.code_iso) {
         return `<span class="fi fi-${escapeHtml(team.code_iso)}"></span>
                 <div class="team-name-zh">${escapeHtml(team.name_zh || team.name)}</div>
                 <div class="team-name-en">${escapeHtml(team.name)}</div>`;
     }
+    // Placeholder (e.g. "1A", "W73")
     return `<div class="placeholder-flag" title="${escapeHtml(describePlaceholder(team.name))}">?</div>
             <div class="team-name-zh placeholder-name">${escapeHtml(team.name)}</div>
             <div class="team-name-en">${escapeHtml(describePlaceholder(team.name))}</div>`;
+}
+
+// Plan 030: resolve placeholder (1A/2B/3X/W##) to a real team when locked.
+// Returns {code_iso, name, name_zh} if a real team can be shown, else null.
+function _resolveTeamForModal(side) {
+    if (!side || !side.name) return null;
+    if (side.code_iso) return side;  // already real
+    // Try FIFA bracket placeholder resolve (1A, 2B, 3X)
+    return resolveBracketPlaceholder(side.name);
 }
 
 function getStageFullLabel(match) {
@@ -833,8 +844,11 @@ function showMatchModal(matchId) {
     if (!match) return;
     document.getElementById('modal-stage').textContent = getStageFullLabel(match);
     document.getElementById('modal-date').textContent = formatModalDate(match.date_utc);
-    document.getElementById('modal-home').innerHTML = renderModalTeam(match.home);
-    document.getElementById('modal-away').innerHTML = renderModalTeam(match.away);
+    // Plan 030: resolve placeholder (1A / 2B / 3X / W##) to real team if locked
+    const homeResolved = _resolveTeamForModal(match.home) || match.home;
+    const awayResolved = _resolveTeamForModal(match.away) || match.away;
+    document.getElementById('modal-home').innerHTML = renderModalTeam(homeResolved);
+    document.getElementById('modal-away').innerHTML = renderModalTeam(awayResolved);
 
     // Plan 010: score + goalscorers section
     const scoreSection = document.getElementById('modal-score-section');

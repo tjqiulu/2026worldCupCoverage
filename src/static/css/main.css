@@ -498,10 +498,10 @@ footer a:hover {
 
 .bracket-labels-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(90px, 1fr));
-    gap: 0 8px;
+    grid-template-columns: repeat(9, minmax(110px, 1fr));
+    gap: 0 10px;
     padding: 0 0 8px;
-    min-width: 950px;
+    min-width: 1050px;
 }
 
 .bracket-labels-mirror .label {
@@ -518,10 +518,10 @@ footer a:hover {
 
 .bracket-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(90px, 1fr));
+    grid-template-columns: repeat(9, minmax(110px, 1fr));
     grid-template-rows: repeat(8, 60px);
-    gap: 6px 8px;
-    min-width: 950px;
+    gap: 6px 10px;
+    min-width: 1050px;
     padding: 8px 0;
     position: relative;
 }
@@ -531,14 +531,14 @@ footer a:hover {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
-    padding: 5px 8px;
+    padding: 6px 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    font-size: 11px;
+    font-size: 12px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     align-self: center;
-    min-height: 44px;
+    min-height: 48px;
     overflow: hidden;
 }
 
@@ -580,7 +580,7 @@ footer a:hover {
 
 .bracket-card .bc-date {
     color: #999;
-    font-size: 9px;
+    font-size: 10px;
     margin-bottom: 2px;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
@@ -595,7 +595,7 @@ footer a:hover {
     gap: 4px;
     font-weight: 600;
     color: #222;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .bracket-card .bc-team {
@@ -612,8 +612,8 @@ footer a:hover {
 
 .bracket-card .bc-vs {
     color: #ccc;
-    font-size: 9px;
-    padding: 0 2px;
+    font-size: 10px;
+    padding: 0 3px;
     flex-shrink: 0;
 }
 
