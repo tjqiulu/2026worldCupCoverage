@@ -518,10 +518,10 @@ footer a:hover {
 
 .bracket-labels-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(130px, 1fr));
-    gap: 0 12px;
+    grid-template-columns: repeat(9, minmax(110px, 1fr));
+    gap: 0 10px;
     padding: 0 0 8px;
-    min-width: 1100px;
+    min-width: 0;
 }
 
 .bracket-labels-mirror .label {
@@ -538,10 +538,10 @@ footer a:hover {
 
 .bracket-mirror {
     display: grid;
-    grid-template-columns: repeat(9, minmax(130px, 1fr));
-    grid-template-rows: repeat(8, 110px);
-    gap: 8px 12px;
-    min-width: 1100px;
+    grid-template-columns: repeat(9, minmax(110px, 1fr));
+    grid-template-rows: repeat(8, 100px);
+    gap: 6px 10px;
+    min-width: 0;
     padding: 8px 0;
     position: relative;
 }
@@ -551,14 +551,14 @@ footer a:hover {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 8px 10px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    font-size: 14px;
+    font-size: 13px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
     align-self: center;
-    min-height: 96px;
+    min-height: 88px;
     overflow: hidden;
     transition: box-shadow 0.15s, transform 0.15s;
 }

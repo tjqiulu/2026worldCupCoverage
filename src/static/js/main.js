@@ -65,7 +65,15 @@ async function loadMatches() {
             // Plan 015: load teams BEFORE first render so modal can show
             // team names + flags in standings. Failure is non-fatal.
             await loadTeams();
-            loadQualification();  // Plan 029: bracket qualification state
+            // Plan 033: await qualification BEFORE first bracket render.
+            // This avoids the race where bracket renders with allQualification=null
+            // and shows placeholders even when cache is available.
+            // Failure is non-fatal — bracket still renders placeholders.
+            try {
+                await loadQualification();
+            } catch (qualErr) {
+                console.warn('Qualification load failed (non-fatal):', qualErr);
+            }
             // Plan 016: widget mode takes over rendering
             if (_isWidgetMode()) {
                 initWidgetMode();
