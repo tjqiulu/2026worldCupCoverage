@@ -112,3 +112,4 @@
 - 2026-06-16: 新增 P2-008（worldcup26.ir 阿拉伯文进球者名字）
 - 2026-06-19: Plan 027 完成（team-name alias resolver，修复 B/D/K 积分榜）
 - 2026-06-19: Plan 028 完成（countries.json lookup 3-pass fallback，修复波黑/美国/刚果中文名）
+- 2026-06-19: Plan 029 完成（bracket qualification + 完整 FIFA 8 best 3rd race 算法）

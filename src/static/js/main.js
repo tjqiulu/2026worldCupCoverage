@@ -47,6 +47,7 @@ const cacheInfo = document.getElementById('cache-info');
 
 let allMatches = [];
 let allTeams = {};  // Plan 015: {team_id: {name, name_zh, code_iso, ...}}
+let allQualification = null;  // Plan 029: {groups, best_3rd_race}
 
 async function loadMatches() {
     const showLoading = () => {
@@ -64,6 +65,7 @@ async function loadMatches() {
             // Plan 015: load teams BEFORE first render so modal can show
             // team names + flags in standings. Failure is non-fatal.
             await loadTeams();
+            loadQualification();  // Plan 029: bracket qualification state
             // Plan 016: widget mode takes over rendering
             if (_isWidgetMode()) {
                 initWidgetMode();
@@ -105,6 +107,60 @@ async function loadTeams() {
     } catch (e) {
         console.warn('Failed to load teams:', e);
     }
+}
+
+// === Plan 029: Qualification state (bracket -> R32 placeholder resolve) ===
+
+async function loadQualification() {
+    try {
+        const resp = await fetch('/api/qualification');
+        if (resp.ok) {
+            allQualification = await resp.json();
+        }
+    } catch (e) {
+        console.warn('Failed to load qualification:', e);
+    }
+}
+
+function resolveBracketPlaceholder(name) {
+    /**
+     * Resolve FIFA bracket placeholder (e.g. "1A", "2B", "3A/B/C/D/F")
+     * to a real team if already mathematically locked.
+     *
+     * Returns: {team_id, name, name_zh, code_iso} or null if unresolved.
+     */
+    if (!name || !allQualification) return null;
+    const m = name.match(/^([123])([A-L])/);
+    if (!m) return null;
+    const position = parseInt(m[1]);  // 1=champion, 2=runner-up, 3=third
+    const groupLetter = m[2];
+    const group = allQualification.groups?.[groupLetter];
+    if (!group) return null;
+
+    // For position 1 or 2: check if the team is locked
+    if (position === 1 || position === 2) {
+        const locked = group.locked_top2 || [];
+        if (locked.length === 0) return null;
+        // standings are sorted, so index 0 = 1st place, index 1 = 2nd
+        const standings = group.standings || [];
+        const idx = position - 1;  // 0-indexed
+        if (idx < standings.length) {
+            const slotTeamId = standings[idx].team_id;
+            // Check if this team is in the locked_top2 list
+            const isLocked = locked.some(t => String(t.team_id) === String(slotTeamId));
+            if (!isLocked) return null;
+            // Look up team display info from allTeams
+            const teamInfo = allTeams[slotTeamId];
+            if (!teamInfo) return null;
+            return {
+                team_id: slotTeamId,
+                name: teamInfo.name || '?',
+                name_zh: teamInfo.name_zh || teamInfo.name,
+                code_iso: teamInfo.code_iso || '',
+            };
+        }
+    }
+    return null;
 }
 
 function renderMatches(matches) {
@@ -641,24 +697,53 @@ function computeBracketOrder(r32, r16) {
     return order;
 }
 
+function resolveTeamForMirror(side) {
+    /** Plan 029: resolve placeholder to real team if a slot is locked.
+     * Returns {name, name_zh, code_iso} from the original side or from
+     * qualification data, plus a CSS class string for the card. */
+    if (!side || !side.name) return { team: null, cls: '' };
+    if (side.code_iso) return { team: side, cls: '' };  // already real
+
+    const resolved = resolveBracketPlaceholder(side.name);
+    if (resolved) {
+        return {
+            team: {
+                name: resolved.name,
+                name_zh: resolved.name_zh,
+                code_iso: resolved.code_iso,
+            },
+            cls: 'qualified-locked',
+        };
+    }
+    return { team: side, cls: '' };
+}
+
 function renderMirrorCard(m, stage, col, row, span) {
     const time = beijingTimeStr(m.date_utc);
     const date = beijingDateStr(m.date_utc);
     const venue = m.venue?.name || '';
-    const homeTitle = m.home?.name || '?';
-    const awayTitle = m.away?.name || '?';
+    const homeRes = resolveTeamForMirror(m.home);
+    const awayRes = resolveTeamForMirror(m.away);
+    const homeTeam = homeRes.team;
+    const awayTeam = awayRes.team;
+    const cardCls = [stage, `col-${col}`, homeRes.cls, awayRes.cls]
+        .filter(c => c).join(' ');
+    const homeTitle = homeTeam?.name || '?';
+    const awayTitle = awayTeam?.name || '?';
+    // Fallback to original match title if no placeholders
+    const matchTitle = `${homeTitle} vs ${awayTitle} · ${date} ${time} · ${venue}`;
     // For R32 use full date, for later rounds use shorter "7/04" format
     const dateLabel = stage === 'r32' || stage === 'third' ? date : date.substring(5).replace('-', '/');
     const colClass = `col-${col}`;
-    return `<div class="bracket-card ${stage} ${colClass}"
+    return `<div class="bracket-card ${cardCls}"
                 style="grid-column: ${col}; grid-row: ${row} / span ${span};"
                 data-id="${escapeHtml(m.match_id)}"
-                title="${escapeHtml(homeTitle + ' vs ' + awayTitle + ' · ' + date + ' ' + time + ' · ' + venue)}">
+                title="${escapeHtml(matchTitle)}">
         <div class="bc-date">${escapeHtml(dateLabel)} ${escapeHtml(time)}</div>
         <div class="bc-teams">
-            <div class="bc-team home">${renderTeamName(m.home, 'home')}</div>
+            <div class="bc-team home">${renderTeamName(homeTeam, 'home')}</div>
             <div class="bc-vs">vs</div>
-            <div class="bc-team away">${renderTeamName(m.away, 'away')}</div>
+            <div class="bc-team away">${renderTeamName(awayTeam, 'away')}</div>
         </div>
     </div>`;
 }

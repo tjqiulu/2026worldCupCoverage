@@ -720,6 +720,19 @@ footer a:hover {
     display: none;  /* bracket is narrow, hide EN for space */
 }
 
+/* Plan 029: qualification state on bracket cards */
+.bracket-card.qualified-locked {
+    border-color: #2d7a3e;
+    border-width: 2px;
+}
+.bracket-card.qualified-locked .bc-team {
+    font-weight: 600;
+}
+.bracket-card.qualified-locked .bc-date {
+    background: #2d7a3e;
+    color: #fff;
+}
+
 /* === Plan 010: Match details (score + goalscorers) === */
 
 .match-card {
