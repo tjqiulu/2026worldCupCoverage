@@ -325,12 +325,18 @@ function renderMatchCard(m) {
     const scoreOrVs = (status === 'final' || status === 'live') && m.details && m.details.score
         ? renderScoreDisplay(m.details.score, status)
         : '<div class="match-vs">vs</div>';
-    return `<div class="match-card" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
+    // Plan 035: resolve placeholder sides (1A/2B/3A/B/C...) to real teams if
+    // a slot is locked in qualification data, so the Matches tab stays in
+    // sync with the Bracket tab. Same helper used by renderBracket.
+    const homeR = resolveTeamForMirror(m.home);
+    const awayR = resolveTeamForMirror(m.away);
+    const lockedCls = (homeR.cls || awayR.cls) ? ' qualified-locked' : '';
+    return `<div class="match-card${lockedCls}" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
         <div class="match-time">${escapeHtml(time)}</div>
         ${statusBadge}
-        <div class="match-team home">${renderTeamName(m.home, 'home')}</div>
+        <div class="match-team home">${renderTeamName(homeR.team, 'home')}</div>
         ${scoreOrVs}
-        <div class="match-team away">${renderTeamName(m.away, 'away')}</div>
+        <div class="match-team away">${renderTeamName(awayR.team, 'away')}</div>
         <div class="match-meta">${escapeHtml(stageLabel)} · ${escapeHtml(venue)}</div>
     </div>`;
 }

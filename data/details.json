@@ -859,5 +859,74 @@
       }
     ]
   },
+  "fifa-wc-2026-8ff270051ebe@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Kamrvn Bargs",
+        "minute": 11,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Alex Freeman",
+        "minute": 43,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-f93686d79d46@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Asmaail Saibari",
+        "minute": 2,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-35b03107e97b@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Matheus Cunha",
+        "minute": 23,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Matheus Cunha",
+        "minute": 36,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Vinícius Júnior",
+        "minute": 45,
+        "stoppage": 3,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

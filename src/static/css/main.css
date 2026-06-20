@@ -149,6 +149,20 @@ button:disabled {
     margin-bottom: 8px;
     gap: 16px;
     transition: box-shadow 0.15s, transform 0.15s;
+    border: 2px solid transparent;
+}
+
+/* Plan 035: mirror Bracket tab styling when one or both sides are
+ * resolved from a locked qualification slot. */
+.match-card.qualified-locked {
+    border-color: #16A34A;
+    background: #F0FDF4;
+}
+
+.match-card.qualified-locked .match-team .zh,
+.match-card.qualified-locked .match-team .en {
+    color: #14532D;
+    font-weight: 600;
 }
 
 .match-card:hover {

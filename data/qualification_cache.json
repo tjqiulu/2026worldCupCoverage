@@ -204,69 +204,69 @@
       "group": "C",
       "standings": [
         {
-          "mp": 1,
+          "mp": 2,
           "w": 1,
-          "d": 0,
-          "l": 0,
-          "gf": 1,
-          "ga": 0,
-          "pts": 3,
-          "gd": 1,
-          "team_id": "12"
-        },
-        {
-          "mp": 1,
-          "w": 0,
           "d": 1,
           "l": 0,
-          "gf": 1,
+          "gf": 4,
           "ga": 1,
-          "pts": 1,
-          "gd": 0,
+          "pts": 4,
+          "gd": 3,
           "team_id": "9"
         },
         {
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 1,
           "l": 0,
-          "gf": 1,
+          "gf": 2,
           "ga": 1,
-          "pts": 1,
-          "gd": 0,
+          "pts": 4,
+          "gd": 1,
           "team_id": "10"
         },
         {
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 0,
           "l": 1,
-          "gf": 0,
+          "gf": 1,
           "ga": 1,
+          "pts": 3,
+          "gd": 0,
+          "team_id": "12"
+        },
+        {
+          "mp": 2,
+          "w": 0,
+          "d": 0,
+          "l": 2,
+          "gf": 0,
+          "ga": 4,
           "pts": 0,
-          "gd": -1,
+          "gd": -4,
           "team_id": "11"
         }
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "eliminated": [
         {
-          "team_id": "12",
-          "name": "Scotland",
-          "name_zh": "苏格兰",
-          "code_iso": "sco",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "team_id": "11",
+          "name": "Haiti",
+          "name_zh": "海地",
+          "code_iso": "ht",
+          "reason": "最佳 3 分 < 其他队保底 4 分"
+        }
+      ],
+      "pending": [
         {
           "team_id": "9",
           "name": "Brazil",
           "name_zh": "巴西",
           "code_iso": "br",
           "max_pts": 7,
-          "min_pts": 1
+          "min_pts": 4
         },
         {
           "team_id": "10",
@@ -274,29 +274,29 @@
           "name_zh": "摩洛哥",
           "code_iso": "ma",
           "max_pts": 7,
-          "min_pts": 1
+          "min_pts": 4
         },
         {
-          "team_id": "11",
-          "name": "Haiti",
-          "name_zh": "海地",
-          "code_iso": "ht",
+          "team_id": "12",
+          "name": "Scotland",
+          "name_zh": "苏格兰",
+          "code_iso": "sco",
           "max_pts": 6,
-          "min_pts": 0
+          "min_pts": 3
         }
       ],
       "third_place": {
-        "team_id": "10",
-        "name": "Morocco",
-        "name_zh": "摩洛哥",
-        "code_iso": "ma",
-        "mp": 1,
-        "w": 0,
-        "d": 1,
-        "l": 0,
+        "team_id": "12",
+        "name": "Scotland",
+        "name_zh": "苏格兰",
+        "code_iso": "sco",
+        "mp": 2,
+        "w": 1,
+        "d": 0,
+        "l": 1,
         "gf": 1,
         "ga": 1,
-        "pts": 1,
+        "pts": 3,
         "gd": 0
       }
     },
@@ -304,25 +304,25 @@
       "group": "D",
       "standings": [
         {
-          "mp": 1,
-          "w": 1,
+          "mp": 2,
+          "w": 2,
           "d": 0,
           "l": 0,
-          "gf": 4,
+          "gf": 6,
           "ga": 1,
-          "pts": 3,
-          "gd": 3,
+          "pts": 6,
+          "gd": 5,
           "team_id": "13"
         },
         {
-          "mp": 1,
+          "mp": 2,
           "w": 1,
           "d": 0,
-          "l": 0,
+          "l": 1,
           "gf": 2,
-          "ga": 0,
+          "ga": 2,
           "pts": 3,
-          "gd": 2,
+          "gd": 0,
           "team_id": "15"
         },
         {
@@ -358,14 +358,14 @@
           "name_zh": "美国",
           "code_iso": "us",
           "max_pts": 9,
-          "min_pts": 3
+          "min_pts": 6
         },
         {
           "team_id": "15",
           "name": "Australia",
           "name_zh": "澳大利亚",
           "code_iso": "au",
-          "max_pts": 9,
+          "max_pts": 6,
           "min_pts": 3
         },
         {
@@ -1204,6 +1204,22 @@
   "best_3rd_race": {
     "rankings": [
       {
+        "team_id": "12",
+        "name": "Scotland",
+        "name_zh": "苏格兰",
+        "code_iso": "sco",
+        "group": "C",
+        "pts": 3,
+        "gd": 0,
+        "gf": 1,
+        "ga": 1,
+        "w": 1,
+        "d": 0,
+        "mp": 2,
+        "max_pts": 6,
+        "min_pts": 3
+      },
+      {
         "team_id": "22",
         "name": "Japan",
         "name_zh": "日本",
@@ -1213,22 +1229,6 @@
         "gd": 0,
         "gf": 2,
         "ga": 2,
-        "w": 0,
-        "d": 1,
-        "mp": 1,
-        "max_pts": 7,
-        "min_pts": 1
-      },
-      {
-        "team_id": "10",
-        "name": "Morocco",
-        "name_zh": "摩洛哥",
-        "code_iso": "ma",
-        "group": "C",
-        "pts": 1,
-        "gd": 0,
-        "gf": 1,
-        "ga": 1,
         "w": 0,
         "d": 1,
         "mp": 1,
@@ -1413,16 +1413,16 @@
     "locked_bot4": [],
     "pending": [
       {
+        "team_id": "12",
+        "name": "Scotland",
+        "name_zh": "苏格兰",
+        "code_iso": "sco"
+      },
+      {
         "team_id": "22",
         "name": "Japan",
         "name_zh": "日本",
         "code_iso": "jp"
-      },
-      {
-        "team_id": "10",
-        "name": "Morocco",
-        "name_zh": "摩洛哥",
-        "code_iso": "ma"
       },
       {
         "team_id": "25",
@@ -1486,6 +1486,6 @@
       }
     ]
   },
-  "generated_at": "2026-06-19T14:37:13.335997+00:00",
+  "generated_at": "2026-06-20T02:45:34.449751+00:00",
   "version": 1
 }
