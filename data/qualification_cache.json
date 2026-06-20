@@ -58,16 +58,17 @@
           "reason": "当前 6 分 > 其他队最佳 4 分"
         }
       ],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "3",
           "name": "South Korea",
           "name_zh": "韩国",
           "code_iso": "kr",
-          "max_pts": 6,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "4",
           "name": "Czech Republic",
@@ -150,24 +151,24 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "5",
           "name": "Canada",
           "name_zh": "加拿大",
           "code_iso": "ca",
-          "max_pts": 7,
-          "min_pts": 4
+          "reason": "当前 4 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
         },
         {
           "team_id": "8",
           "name": "Switzerland",
           "name_zh": "瑞士",
           "code_iso": "ch",
-          "max_pts": 7,
-          "min_pts": 4
-        },
+          "reason": "当前 4 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "6",
           "name": "Bosnia and Herzegovina",
@@ -250,6 +251,22 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
+      "favored_top2": [
+        {
+          "team_id": "9",
+          "name": "Brazil",
+          "name_zh": "巴西",
+          "code_iso": "br",
+          "reason": "当前 4 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+        },
+        {
+          "team_id": "10",
+          "name": "Morocco",
+          "name_zh": "摩洛哥",
+          "code_iso": "ma",
+          "reason": "当前 4 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
       "eliminated": [
         {
           "team_id": "11",
@@ -260,22 +277,6 @@
         }
       ],
       "pending": [
-        {
-          "team_id": "9",
-          "name": "Brazil",
-          "name_zh": "巴西",
-          "code_iso": "br",
-          "max_pts": 7,
-          "min_pts": 4
-        },
-        {
-          "team_id": "10",
-          "name": "Morocco",
-          "name_zh": "摩洛哥",
-          "code_iso": "ma",
-          "max_pts": 7,
-          "min_pts": 4
-        },
         {
           "team_id": "12",
           "name": "Scotland",
@@ -326,40 +327,41 @@
           "team_id": "15"
         },
         {
-          "mp": 1,
-          "w": 0,
+          "mp": 2,
+          "w": 1,
           "d": 0,
           "l": 1,
-          "gf": 0,
-          "ga": 2,
-          "pts": 0,
+          "gf": 2,
+          "ga": 4,
+          "pts": 3,
           "gd": -2,
-          "team_id": "16"
+          "team_id": "14"
         },
         {
-          "mp": 1,
+          "mp": 2,
           "w": 0,
           "d": 0,
-          "l": 1,
-          "gf": 1,
-          "ga": 4,
+          "l": 2,
+          "gf": 0,
+          "ga": 3,
           "pts": 0,
           "gd": -3,
-          "team_id": "14"
+          "team_id": "16"
         }
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "13",
           "name": "United States",
           "name_zh": "美国",
           "code_iso": "us",
-          "max_pts": 9,
-          "min_pts": 6
-        },
+          "reason": "当前 6 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "15",
           "name": "Australia",
@@ -369,34 +371,34 @@
           "min_pts": 3
         },
         {
-          "team_id": "16",
-          "name": "Turkey",
-          "name_zh": "土耳其",
-          "code_iso": "tr",
-          "max_pts": 6,
-          "min_pts": 0
-        },
-        {
           "team_id": "14",
           "name": "Paraguay",
           "name_zh": "巴拉圭",
           "code_iso": "py",
           "max_pts": 6,
+          "min_pts": 3
+        },
+        {
+          "team_id": "16",
+          "name": "Turkey",
+          "name_zh": "土耳其",
+          "code_iso": "tr",
+          "max_pts": 3,
           "min_pts": 0
         }
       ],
       "third_place": {
-        "team_id": "16",
-        "name": "Turkey",
-        "name_zh": "土耳其",
-        "code_iso": "tr",
-        "mp": 1,
-        "w": 0,
+        "team_id": "14",
+        "name": "Paraguay",
+        "name_zh": "巴拉圭",
+        "code_iso": "py",
+        "mp": 2,
+        "w": 1,
         "d": 0,
         "l": 1,
-        "gf": 0,
-        "ga": 2,
-        "pts": 0,
+        "gf": 2,
+        "ga": 4,
+        "pts": 3,
         "gd": -2
       }
     },
@@ -450,24 +452,24 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "17",
           "name": "Germany",
           "name_zh": "德国",
           "code_iso": "de",
-          "max_pts": 9,
-          "min_pts": 3
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
         },
         {
           "team_id": "19",
           "name": "Ivory Coast",
           "name_zh": "科特迪瓦",
           "code_iso": "ci",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "20",
           "name": "Ecuador",
@@ -550,16 +552,17 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "23",
           "name": "Sweden",
           "name_zh": "瑞典",
           "code_iso": "se",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "21",
           "name": "Netherlands",
@@ -650,6 +653,7 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
+      "favored_top2": [],
       "eliminated": [],
       "pending": [
         {
@@ -750,6 +754,7 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
+      "favored_top2": [],
       "eliminated": [],
       "pending": [
         {
@@ -850,24 +855,24 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "36",
           "name": "Norway",
           "name_zh": "挪威",
           "code_iso": "no",
-          "max_pts": 9,
-          "min_pts": 3
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
         },
         {
           "team_id": "33",
           "name": "France",
           "name_zh": "法国",
           "code_iso": "fr",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "34",
           "name": "Senegal",
@@ -950,24 +955,24 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "37",
           "name": "Argentina",
           "name_zh": "阿根廷",
           "code_iso": "ar",
-          "max_pts": 9,
-          "min_pts": 3
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
         },
         {
           "team_id": "39",
           "name": "Austria",
           "name_zh": "奥地利",
           "code_iso": "at",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "40",
           "name": "Jordan",
@@ -1050,16 +1055,17 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "44",
           "name": "Colombia",
           "name_zh": "哥伦比亚",
           "code_iso": "co",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "41",
           "name": "Portugal",
@@ -1150,24 +1156,24 @@
       ],
       "all_finals_played": false,
       "locked_top2": [],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [
         {
           "team_id": "45",
           "name": "England",
           "name_zh": "英格兰",
           "code_iso": "eng",
-          "max_pts": 9,
-          "min_pts": 3
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
         },
         {
           "team_id": "47",
           "name": "Ghana",
           "name_zh": "加纳",
           "code_iso": "gh",
-          "max_pts": 9,
-          "min_pts": 3
-        },
+          "reason": "当前 3 分 > 其他队保底第 2 高 0 分，严格数学未锁但实际几乎锁定"
+        }
+      ],
+      "eliminated": [],
+      "pending": [
         {
           "team_id": "48",
           "name": "Panama",
@@ -1213,6 +1219,22 @@
         "gd": 0,
         "gf": 1,
         "ga": 1,
+        "w": 1,
+        "d": 0,
+        "mp": 2,
+        "max_pts": 6,
+        "min_pts": 3
+      },
+      {
+        "team_id": "14",
+        "name": "Paraguay",
+        "name_zh": "巴拉圭",
+        "code_iso": "py",
+        "group": "D",
+        "pts": 3,
+        "gd": -2,
+        "gf": 2,
+        "ga": 4,
         "w": 1,
         "d": 0,
         "mp": 2,
@@ -1378,36 +1400,20 @@
         "mp": 1,
         "max_pts": 6,
         "min_pts": 0
-      },
-      {
-        "team_id": "16",
-        "name": "Turkey",
-        "name_zh": "土耳其",
-        "code_iso": "tr",
-        "group": "D",
-        "pts": 0,
-        "gd": -2,
-        "gf": 0,
-        "ga": 2,
-        "w": 0,
-        "d": 0,
-        "mp": 1,
-        "max_pts": 6,
-        "min_pts": 0
       }
     ],
     "critical_line": {
-      "team_id": "20",
-      "group": "E",
-      "pts": 0,
-      "gd": -1,
-      "gf": 0,
-      "ga": 1,
+      "team_id": "6",
+      "group": "B",
+      "pts": 1,
+      "gd": -3,
+      "gf": 2,
+      "ga": 5,
       "w": 0,
-      "d": 0,
-      "mp": 1,
-      "max_pts": 6,
-      "min_pts": 0
+      "d": 1,
+      "mp": 2,
+      "max_pts": 4,
+      "min_pts": 1
     },
     "locked_top8": [],
     "locked_bot4": [],
@@ -1417,6 +1423,12 @@
         "name": "Scotland",
         "name_zh": "苏格兰",
         "code_iso": "sco"
+      },
+      {
+        "team_id": "14",
+        "name": "Paraguay",
+        "name_zh": "巴拉圭",
+        "code_iso": "py"
       },
       {
         "team_id": "22",
@@ -1477,15 +1489,9 @@
         "name": "Jordan",
         "name_zh": "约旦",
         "code_iso": "jo"
-      },
-      {
-        "team_id": "16",
-        "name": "Turkey",
-        "name_zh": "土耳其",
-        "code_iso": "tr"
       }
     ]
   },
-  "generated_at": "2026-06-20T02:45:34.449751+00:00",
+  "generated_at": "2026-06-20T05:27:51.915765+00:00",
   "version": 1
 }

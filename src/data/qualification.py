@@ -69,10 +69,20 @@ def compute_per_group(
             "standings": [...],  # 原有 standings（按 FIFA 排好序）
             "all_finals_played": bool,
             "locked_top2": [{team_id, reason}],   # 100% 锁定前 2
+            "favored_top2": [{team_id, reason}],  # Plan 036: 几乎确定前 2，但严格数学上还可能被 1 队追上
             "eliminated": [{team_id, reason}],    # 100% 出局
             "pending": [{team_id, max_pts, min_pts}],  # 待定
             "third_place": dict | None,   # 当前第 3 名的信息（用于 best 3rd race）
         }
+
+    Plan 036 — favored_top2 rule:
+        current_pts > second_highest_other_MIN_pts
+        i.e. the team's current pts strictly exceeds the CURRENT pts of
+        the 2nd-best other team. Means at most 1 other team can match
+        this team's pts without any other team winning — in practice
+        this team is "very likely top 2" but the strict locked_top2 rule
+        (current > 2nd-best other BEST) won't fire because others could
+        also reach the same pts if they win their last match.
     """
     all_played = all(t["mp"] == 3 for t in standings)
 
@@ -90,6 +100,7 @@ def compute_per_group(
         }
 
     locked_top2 = []
+    favored_top2 = []  # Plan 036
     eliminated = []
     pending = []
 
@@ -133,11 +144,29 @@ def compute_per_group(
                 "reason": f"最佳 {pts_best} 分 < 其他队保底 {second_min_other} 分",
             })
         else:
-            pending.append({
-                "team_id": tid,
-                "max_pts": pts_best,
-                "min_pts": pts_current,
-            })
+            # Plan 036: favored_top2 — not strictly locked, but very likely.
+            # We're already in the else branch (not locked, not eliminated).
+            # Add to favored if current_pts strictly exceeds the CURRENT
+            # pts of the 2nd-best other team, meaning at most 1 other team
+            # can match without any other team winning. Skip when group is
+            # fully played (locked_top2 already covers it).
+            if (
+                not all_played
+                and pts_current > second_min_other
+            ):
+                favored_top2.append({
+                    "team_id": tid,
+                    "reason": (
+                        f"当前 {pts_current} 分 > 其他队保底第 2 高 "
+                        f"{second_min_other} 分，严格数学未锁但实际几乎锁定"
+                    ),
+                })
+            else:
+                pending.append({
+                    "team_id": tid,
+                    "max_pts": pts_best,
+                    "min_pts": pts_current,
+                })
 
     # 第 3 名信息（当前 standings 第 3 位 = index 2）
     third_place = standings[2] if len(standings) >= 3 else None
@@ -147,6 +176,7 @@ def compute_per_group(
         "standings": standings,
         "all_finals_played": all_played,
         "locked_top2": locked_top2,
+        "favored_top2": favored_top2,
         "eliminated": eliminated,
         "pending": pending,
         "third_place": (standings[2] if len(standings) >= 3 else None),

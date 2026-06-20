@@ -293,7 +293,7 @@ def _compute_and_cache_qualification() -> dict[str, Any]:
         }
 
     for g in result["groups"].values():
-        for lst_key in ("locked_top2", "eliminated"):
+        for lst_key in ("locked_top2", "favored_top2", "eliminated"):
             g[lst_key] = [
                 {**_team_info(t["team_id"]), "reason": t.get("reason", "")}
                 for t in g[lst_key]

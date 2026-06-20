@@ -165,6 +165,20 @@ button:disabled {
     font-weight: 600;
 }
 
+/* Plan 036: favored (soft state) — amber border, lighter than locked
+ * green. Visual cue that the team is very likely but not strictly
+ * mathematically locked yet. */
+.match-card.qualified-favored {
+    border-color: #D97706;
+    background: #FFFBEB;
+}
+
+.match-card.qualified-favored .match-team .zh,
+.match-card.qualified-favored .match-team .en {
+    color: #78350F;
+    font-weight: 600;
+}
+
 .match-card:hover {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     transform: translateY(-1px);
@@ -839,6 +853,20 @@ footer a:hover {
 }
 .bracket-card.qualified-locked .bc-date {
     background: #2d7a3e;
+    color: #fff;
+}
+
+/* Plan 036: favored (soft state) — amber accent */
+.bracket-card.qualified-favored {
+    border-color: #D97706;
+    border-width: 2px;
+    border-style: dashed;
+}
+.bracket-card.qualified-favored .bc-team {
+    font-weight: 600;
+}
+.bracket-card.qualified-favored .bc-date {
+    background: #D97706;
     color: #fff;
 }
 

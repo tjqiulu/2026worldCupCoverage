@@ -928,5 +928,21 @@
       }
     ]
   },
+  "fifa-wc-2026-dfb31b509dd6@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Matías Galarza",
+        "minute": 2,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

@@ -133,9 +133,15 @@ async function loadQualification() {
 function resolveBracketPlaceholder(name) {
     /**
      * Resolve FIFA bracket placeholder (e.g. "1A", "2B", "3A/B/C/D/F")
-     * to a real team if already mathematically locked.
+     * to a real team if mathematically locked or favored.
      *
-     * Returns: {team_id, name, name_zh, code_iso} or null if unresolved.
+     * Plan 029: locked only.
+     * Plan 036: also resolve for favored (current_pts strictly exceeds
+     *           2nd-highest other team's current pts) — visual indicator
+     *           only, not mathematically certain.
+     *
+     * Returns: {team_id, name, name_zh, code_iso, state: 'locked'|'favored'}
+     *          or null if unresolved.
      */
     if (!name || !allQualification) return null;
     const m = name.match(/^([123])([A-L])/);
@@ -145,19 +151,18 @@ function resolveBracketPlaceholder(name) {
     const group = allQualification.groups?.[groupLetter];
     if (!group) return null;
 
-    // For position 1 or 2: check if the team is locked
+    // For position 1 or 2: check if the team is locked or favored
     if (position === 1 || position === 2) {
-        const locked = group.locked_top2 || [];
-        if (locked.length === 0) return null;
         // standings are sorted, so index 0 = 1st place, index 1 = 2nd
         const standings = group.standings || [];
         const idx = position - 1;  // 0-indexed
-        if (idx < standings.length) {
-            const slotTeamId = standings[idx].team_id;
-            // Check if this team is in the locked_top2 list
-            const isLocked = locked.some(t => String(t.team_id) === String(slotTeamId));
-            if (!isLocked) return null;
-            // Look up team display info from allTeams
+        if (idx >= standings.length) return null;
+        const slotTeamId = standings[idx].team_id;
+
+        // Plan 029: check locked first (mutually exclusive with favored)
+        const locked = group.locked_top2 || [];
+        const isLocked = locked.some(t => String(t.team_id) === String(slotTeamId));
+        if (isLocked) {
             const teamInfo = allTeams[slotTeamId];
             if (!teamInfo) return null;
             return {
@@ -165,6 +170,22 @@ function resolveBracketPlaceholder(name) {
                 name: teamInfo.name || '?',
                 name_zh: teamInfo.name_zh || teamInfo.name,
                 code_iso: teamInfo.code_iso || '',
+                state: 'locked',
+            };
+        }
+
+        // Plan 036: check favored
+        const favored = group.favored_top2 || [];
+        const isFavored = favored.some(t => String(t.team_id) === String(slotTeamId));
+        if (isFavored) {
+            const teamInfo = allTeams[slotTeamId];
+            if (!teamInfo) return null;
+            return {
+                team_id: slotTeamId,
+                name: teamInfo.name || '?',
+                name_zh: teamInfo.name_zh || teamInfo.name,
+                code_iso: teamInfo.code_iso || '',
+                state: 'favored',
             };
         }
     }
@@ -328,10 +349,12 @@ function renderMatchCard(m) {
     // Plan 035: resolve placeholder sides (1A/2B/3A/B/C...) to real teams if
     // a slot is locked in qualification data, so the Matches tab stays in
     // sync with the Bracket tab. Same helper used by renderBracket.
+    // Plan 036: also apply qualified-favored class for soft state.
     const homeR = resolveTeamForMirror(m.home);
     const awayR = resolveTeamForMirror(m.away);
-    const lockedCls = (homeR.cls || awayR.cls) ? ' qualified-locked' : '';
-    return `<div class="match-card${lockedCls}" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
+    const resolvedCls = homeR.cls || awayR.cls;
+    const extraCls = resolvedCls ? ` ${resolvedCls}` : '';
+    return `<div class="match-card${extraCls}" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
         <div class="match-time">${escapeHtml(time)}</div>
         ${statusBadge}
         <div class="match-team home">${renderTeamName(homeR.team, 'home')}</div>
@@ -713,20 +736,24 @@ function computeBracketOrder(r32, r16) {
 
 function resolveTeamForMirror(side) {
     /** Plan 029: resolve placeholder to real team if a slot is locked.
-     * Returns {name, name_zh, code_iso} from the original side or from
-     * qualification data, plus a CSS class string for the card. */
+     *  Plan 036: also resolve for favored (so the soft state is visible).
+     * Returns {team, cls} where cls is 'qualified-locked' for locked and
+     * 'qualified-favored' for favored. */
     if (!side || !side.name) return { team: null, cls: '' };
     if (side.code_iso) return { team: side, cls: '' };  // already real
 
     const resolved = resolveBracketPlaceholder(side.name);
     if (resolved) {
+        const cls = resolved.state === 'favored'
+            ? 'qualified-favored'
+            : 'qualified-locked';
         return {
             team: {
                 name: resolved.name,
                 name_zh: resolved.name_zh,
                 code_iso: resolved.code_iso,
             },
-            cls: 'qualified-locked',
+            cls,
         };
     }
     return { team: side, cls: '' };

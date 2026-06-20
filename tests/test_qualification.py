@@ -150,6 +150,98 @@ class TestLockedTop2:
 
 
 # ============================================================
+# TestFavoredTop2  (Plan 036)
+# ============================================================
+
+class TestFavoredTop2:
+    """favored_top2 软状态：当前 pts 严格 > 其他队保底第 2 高 pts.
+    不严格数学锁定，但实际几乎确定前 2."""
+
+    def test_top_team_6pts_after_2_matches_is_favored(self):
+        """D 组 USA 现实场景：6 pts, mp=2, 其他 3 队 pts 分别 3/3/0.
+        USA 不严格 locked (others best=6 也可能), 但 favored (current 6 > others_min second=3)."""
+        result = _run_group("D", [
+            _mk_team("usa", pts=6, mp=2, w=2, gd=5),
+            _mk_team("aus", pts=3, mp=2, w=1, l=1, gd=0),
+            _mk_team("par", pts=3, mp=2, w=1, l=1, gd=-2),
+            _mk_team("tur", pts=0, mp=2, l=2, gd=-3),
+        ])
+        assert result["locked_top2"] == [], "USA 不应严格锁（others best 也是 6）"
+        fav_ids = [t["team_id"] for t in result["favored_top2"]]
+        assert "usa" in fav_ids, f"USA 应在 favored_top2: got {fav_ids}"
+
+    def test_favored_only_top_team_when_pts_strictly_above(self):
+        """只有 1 队 favored：USA 6, AUS/PAR 3, TUR 0.
+        AUS/PAR current=3 == others_min second (USA=6? no, USA=6 max so first)."""
+        result = _run_group("D", [
+            _mk_team("usa", pts=6, mp=2, w=2, gd=5),
+            _mk_team("aus", pts=3, mp=2, w=1, l=1, gd=0),
+            _mk_team("par", pts=3, mp=2, w=1, l=1, gd=-2),
+            _mk_team("tur", pts=0, mp=2, l=2, gd=-3),
+        ])
+        fav_ids = [t["team_id"] for t in result["favored_top2"]]
+        assert fav_ids == ["usa"], f"只有 USA 应在 favored, got {fav_ids}"
+
+    def test_favored_does_not_apply_when_already_locked(self):
+        """A 组 Mexico 6 pts 严格锁了 → 不应同时出现在 favored."""
+        result = _run_group("A", [
+            _mk_team("mex", pts=6, mp=2, w=2, gd=3),
+            _mk_team("sa", pts=3, mp=2, w=1, l=1, gd=0),
+            _mk_team("kr", pts=1, mp=2, d=1, l=1, gd=-1),
+            _mk_team("dk", pts=1, mp=2, d=1, l=1, gd=-2),
+        ])
+        locked_ids = [t["team_id"] for t in result["locked_top2"]]
+        fav_ids = [t["team_id"] for t in result["favored_top2"]]
+        assert "mex" in locked_ids
+        # Mexico 不能既锁又 favored
+        assert "mex" not in fav_ids, "已锁定的不能同时 favored"
+
+    def test_favored_does_not_apply_when_group_finished(self):
+        """3 场都踢完了，所有队都已确定，无 favored 概念."""
+        result = _run_group("Z", [
+            _mk_team("a", pts=9, mp=3, w=3, gd=5),
+            _mk_team("b", pts=6, mp=3, w=2, l=1, gd=2),
+            _mk_team("c", pts=3, mp=3, w=1, l=2, gd=-2),
+            _mk_team("d", pts=0, mp=3, l=3, gd=-5),
+        ])
+        assert result["favored_top2"] == []
+
+    def test_no_favored_when_all_tied_at_zero(self):
+        """所有队都 0 分 mp=1，没人 favored."""
+        result = _run_group("Z", [
+            _mk_team("a", pts=0, mp=1),
+            _mk_team("b", pts=0, mp=1),
+            _mk_team("c", pts=0, mp=1),
+            _mk_team("d", pts=0, mp=1),
+        ])
+        assert result["favored_top2"] == []
+
+    def test_favored_after_1_match_when_top_team_has_3pts(self):
+        """小组赛第 1 轮后：top 队 3 分, 其他 3 队 0/0/0.
+        top 队 current=3 > others_min second=0 → favored."""
+        result = _run_group("Z", [
+            _mk_team("a", pts=3, mp=1, w=1, gd=2),
+            _mk_team("b", pts=0, mp=1, l=1, gd=-2),
+            _mk_team("c", pts=0, mp=1),
+            _mk_team("d", pts=0, mp=1),
+        ])
+        fav_ids = [t["team_id"] for t in result["favored_top2"]]
+        assert "a" in fav_ids, f"a 应在 favored: got {fav_ids}"
+
+    def test_favored_reason_format(self):
+        """reason 字段应包含 '其他队保底第 2 高' 字样."""
+        result = _run_group("D", [
+            _mk_team("usa", pts=6, mp=2, w=2, gd=5),
+            _mk_team("aus", pts=3, mp=2, w=1, l=1, gd=0),
+            _mk_team("par", pts=3, mp=2, w=1, l=1, gd=-2),
+            _mk_team("tur", pts=0, mp=2, l=2, gd=-3),
+        ])
+        assert len(result["favored_top2"]) == 1
+        reason = result["favored_top2"][0]["reason"]
+        assert "6" in reason and "3" in reason, f"reason 应包含 6 和 3 分数字: {reason}"
+
+
+# ============================================================
 # TestEliminated
 # ============================================================
 
@@ -419,7 +511,7 @@ class TestComputePerGroup:
         ])
         assert sorted(result.keys()) == sorted([
             "group", "standings", "all_finals_played",
-            "locked_top2", "eliminated", "pending", "third_place",
+            "locked_top2", "favored_top2", "eliminated", "pending", "third_place",
         ])
         assert result["group"] == "Z"
         assert len(result["standings"]) == 4
@@ -433,8 +525,8 @@ class TestComputePerGroup:
         ])
         assert result["third_place"] is None
 
-    def test_locked_top2_eliminated_pending_mutually_exclusive(self):
-        """locked_top2, eliminated, pending 互斥：每队只在一个列表."""
+    def test_locked_top2_favored_eliminated_pending_mutually_exclusive(self):
+        """locked_top2, favored_top2, eliminated, pending 四选一互斥：每队只在一个列表."""
         result = _run_group("A", [
             _mk_team("a", pts=6, mp=2, w=2),
             _mk_team("b", pts=3, mp=2, w=1, l=1),
@@ -442,10 +534,14 @@ class TestComputePerGroup:
             _mk_team("d", pts=0, mp=2, l=2),
         ])
         all_ids = []
-        for t in result["locked_top2"] + result["eliminated"] + result["pending"]:
-            tid = t.get("team_id") or t["team_id"]
-            assert tid not in all_ids, f"{tid} appears twice!"
-            all_ids.append(tid)
+        for lst in (result["locked_top2"], result["favored_top2"],
+                    result["eliminated"], result["pending"]):
+            for t in lst:
+                tid = t.get("team_id") or t["team_id"]
+                assert tid not in all_ids, f"{tid} appears twice!"
+                all_ids.append(tid)
+        # 4 teams total
+        assert len(all_ids) == 4
 
 
 # ============================================================
