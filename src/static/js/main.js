@@ -428,8 +428,8 @@ function renderEnName(side) {
 function labelStage(stage) {
     const map = {
         'group': '小组赛',
-        'r32': '1/8 决赛',
-        'r16': '1/16 决赛',
+        'r32': '1/16 决赛',  // Plan 037 fix: R32 (32→16) is 1/16, not 1/8
+        'r16': '1/8 决赛',   // Plan 037 fix: R16 (16→8) is 1/8, not 1/16
         'qf': '1/4 决赛',
         'sf': '半决赛',
         'third': '季军战',
@@ -465,8 +465,8 @@ function scrollToToday() {
 // === Plan 003 (updated by Plan 005): Tabs + Mirror Bracket ===
 
 const STAGE_LABELS = {
-    r32: '1/8 决赛 · R32',
-    r16: '1/16 决赛 · R16',
+    r32: '1/16 决赛 · R32',  // Plan 037 fix
+    r16: '1/8 决赛 · R16',   // Plan 037 fix
     qf: '1/4 决赛 · QF',
     sf: '半决赛 · SF',
     final: '决赛 · Final',
@@ -850,8 +850,8 @@ document.querySelectorAll('.tab').forEach(btn => {
 
 const STAGE_LABELS_ZH = {
     group: '小组赛',
-    r32: '1/8 决赛 R32',
-    r16: '1/16 决赛 R16',
+    r32: '1/16 决赛 R32',  // Plan 037 fix
+    r16: '1/8 决赛 R16',   // Plan 037 fix
     qf: '1/4 决赛 QF',
     sf: '半决赛',
     third: '季军战',
