@@ -867,11 +867,12 @@
     },
     "goalscorers": [
       {
-        "player": "Kamrvn Bargs",
+        "player": "C. Burgess",
         "minute": 11,
         "stoppage": null,
-        "type": null,
-        "team": "home"
+        "type": "own_goal",
+        "team": "home",
+        "_note": "OG (FIFA: own goal counts for opposing team). Source: ESPN/FIFA reports on USA 2-0 Australia, 6/20 03:00 BJT. Burgess (Australia defender) deflected Balogun's cross into own net. Plan 038 manual fix — API/ICS source mislabeled as 'Kamrvn Bargs'."
       },
       {
         "player": "Alex Freeman",
