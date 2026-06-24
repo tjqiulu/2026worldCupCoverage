@@ -961,3 +961,29 @@ class TestBuildTeamIdMap:
         # Portugal's team_id is 41
         assert "41" in new_ids
 
+    def test_dr_congo_normalized_key_present_in_map(self):
+        """Regression: Pass 5 adds 'DR Congo' to the lookup map, but Pass 4
+        (which normalizes keys) runs BEFORE Pass 5, so 'dr congo' (the
+        normalized form of the ICS short name) was never added. Then
+        compute_standings_from_details() looks up 'dr congo' for a match
+        whose side is '🇨🇩 DR Congo' (matches.json form) and gets None,
+        silently dropping the match — Group K standings showed 3 teams
+        instead of 4 (DR Congo missing). User reported 2026-06-24.
+
+        Pass 6 (added in the fix) re-runs normalization after Pass 5 so
+        countries.json short names get their normalized form too.
+        """
+        from src.data.worldcup_api import get_teams_by_id
+        from src.data.countries import all_countries, norm_team_key
+        teams = get_teams_by_id()
+        countries = all_countries()
+        m = build_team_id_map(teams, countries=countries)
+        # Direct key (Pass 5) is present
+        assert m.get("DR Congo") == "42"
+        # Normalized form (Pass 6) is also present and maps to same id
+        assert m.get(norm_team_key("DR Congo")) == "42"
+        # The full ICS form (with flag emoji) resolves via the normalized
+        # fallback in compute_standings_from_details
+        assert m.get("🇨🇩 DR Congo") is None  # emoji breaks direct match
+        assert m.get(norm_team_key("🇨🇩 DR Congo")) == "42"
+

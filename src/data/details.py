@@ -533,4 +533,16 @@ def build_team_id_map(
                 tid = code_iso_to_id[code_iso]
             if tid:
                 out.setdefault(ics_name, tid)
+        # Pass 6: re-run normalized fallback so keys added in Pass 5
+        # (countries.json short names like "DR Congo") get their
+        # normalized form too. Without this, `compute_standings_from_details`
+        # looks up "dr congo" (the normalized form of "🇨🇩 DR Congo") and
+        # gets None, silently dropping the match from the standings —
+        # Group K was showing 3 teams instead of 4 (DR Congo missing).
+        norm_extra2: dict[str, str] = {}
+        for k, tid in out.items():
+            nk = _norm_team_key(k)
+            if nk and nk not in out:
+                norm_extra2.setdefault(nk, tid)
+        out.update(norm_extra2)
     return out
