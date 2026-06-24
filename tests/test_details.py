@@ -842,125 +842,6 @@ class TestBuildTeamIdMap:
         assert m[_norm_team_key("Bosnia & Herzegovina")] == "6"
         # But abbreviation case (not tested here) would need countries
 
-    def test_real_data_bosnia_bug_resolved(self):
-        """End-to-end: real B-group situation. With the resolver, all
-        4 final matches resolve, and standings has 4 teams."""
-        from src.data.ics_parser import parse_ics
-        from src.data.ics_fetcher import fetch_ics
-        from src.data.countries import enrich_matches as enrich_countries
-        from src.data.details import enrich_matches as enrich_details, load_details
-        from src.data.worldcup_api import get_teams_by_id
-
-        matches = parse_ics(fetch_ics(force=False))
-        enrich_countries(matches)
-        enrich_details(matches)
-        b_matches = [m for m in matches if (m.get("group") or "").upper() == "B"]
-        # Sanity: 6 group matches, 4 are final in details
-        finals = [m for m in b_matches
-                  if (m.get("details") or {}).get("status") == "final"]
-        assert len(finals) == 4
-
-        # Without resolver (old name_to_id): B group standings = 3 teams
-        teams = get_teams_by_id()
-        old_name_to_id = {}
-        for tid, t in teams.items():
-            for k in (t.get("name_en"), t.get("fifa_code")):
-                if k:
-                    old_name_to_id[str(k)] = str(tid)
-        old = compute_standings_from_details(
-            "B", load_details(), b_matches, old_name_to_id,
-        ) or []
-        # Old behavior: only 3 teams (Bosnia dropped)
-        assert len(old) == 3
-        old_ids = {t["team_id"] for t in old}
-        assert "6" not in old_ids  # Bosnia's team_id, missing
-
-        # With resolver: B group standings = 4 teams
-        new_name_to_id = build_team_id_map(teams)
-        new = compute_standings_from_details(
-            "B", load_details(), b_matches, new_name_to_id,
-        ) or []
-        assert len(new) == 4
-        new_ids = {t["team_id"] for t in new}
-        assert "6" in new_ids  # Bosnia's team_id, now present
-
-        # Sanity check: Canada still 1W (vs Qatar 6-0), still 1D (vs Bosnia 1-1)
-        canada = next(t for t in new if t["team_id"] == "5")
-        assert canada["mp"] == 2
-        assert canada["w"] == 1
-        assert canada["d"] == 1
-        assert canada["gf"] == 7  # 6 (vs Qatar) + 1 (vs Bosnia)
-        assert canada["ga"] == 1
-        assert canada["pts"] == 4
-
-        # Switzerland: 1W (vs Bosnia 4-1), 0D 1L (vs Qatar 1-1 → that was Qatar 1-1 Switzerland)
-        # Wait — re-check: 6/13 Qatar 1-1 Switzerland (home=Qatar, away=Switzerland)
-        # So Switzerland drew away → 1D. 6/19 Switzerland 4-1 Bosnia (home=Switzerland)
-        # → 1W. Total: 1W 1D 0L.
-        switzerland = next(t for t in new if t["team_id"] == "8")
-        assert switzerland["mp"] == 2
-        assert switzerland["w"] == 1
-        assert switzerland["d"] == 1
-        assert switzerland["gf"] == 5  # 1 (vs Qatar) + 4 (vs Bosnia)
-        assert switzerland["ga"] == 2  # 1 (vs Qatar) + 1 (vs Bosnia)
-        assert switzerland["pts"] == 4  # 3 + 1
-        # (Note: canada and switzerland tie on 4 PTS; sort by GD: canada +6, switzerland +3)
-        # So canada should be ranked higher.
-        new_sorted_ids = [t["team_id"] for t in new]
-        assert new_sorted_ids.index("5") < new_sorted_ids.index("8")
-
-        # Bosnia: 1D (vs Canada 1-1) 1L (vs Switzerland 1-4) → 0W 1D 1L GF=2 GA=5
-        bosnia = next(t for t in new if t["team_id"] == "6")
-        assert bosnia["mp"] == 2
-        assert bosnia["w"] == 0
-        assert bosnia["d"] == 1
-        assert bosnia["l"] == 1
-        assert bosnia["gf"] == 2
-        assert bosnia["ga"] == 5
-        assert bosnia["pts"] == 1
-
-    def test_real_data_k_group_dr_congo_bug_resolved(self):
-        """Real K-group situation: 'DR Congo' (ICS) cannot be derived
-        from 'Democratic Republic of the Congo' (API) by character
-        normalization alone — needs countries.json reverse lookup."""
-        from src.data.ics_parser import parse_ics
-        from src.data.ics_fetcher import fetch_ics
-        from src.data.countries import enrich_matches as enrich_countries
-        from src.data.countries import all_countries
-        from src.data.details import enrich_matches as enrich_details, load_details
-        from src.data.worldcup_api import get_teams_by_id
-
-        matches = parse_ics(fetch_ics(force=False))
-        enrich_countries(matches)
-        enrich_details(matches)
-        k_matches = [m for m in matches if (m.get("group") or "").upper() == "K"]
-        finals = [m for m in k_matches
-                  if (m.get("details") or {}).get("status") == "final"]
-        assert len(finals) == 2
-
-        teams = get_teams_by_id()
-        # Without countries: only 2 teams (DR Congo dropped, so 6/17
-        # Portugal 1-1 DR Congo match is silently skipped)
-        no_countries = build_team_id_map(teams)
-        old = compute_standings_from_details(
-            "K", load_details(), k_matches, no_countries,
-        ) or []
-        # Note: this depends on whether other K-group names resolve.
-        # Old behavior: Portugal also might drop if its name mapping
-        # is missing. The crucial assertion is the "with countries" case.
-
-        # With countries: 4 teams (DR Congo and Portugal both present)
-        with_countries = build_team_id_map(teams, countries=all_countries())
-        new = compute_standings_from_details(
-            "K", load_details(), k_matches, with_countries,
-        ) or []
-        assert len(new) == 4
-        new_ids = {t["team_id"] for t in new}
-        # DR Congo's team_id is 42
-        assert "42" in new_ids
-        # Portugal's team_id is 41
-        assert "41" in new_ids
-
     def test_dr_congo_normalized_key_present_in_map(self):
         """Regression: Pass 5 adds 'DR Congo' to the lookup map, but Pass 4
         (which normalizes keys) runs BEFORE Pass 5, so 'dr congo' (the
@@ -987,3 +868,123 @@ class TestBuildTeamIdMap:
         assert m.get("🇨🇩 DR Congo") is None  # emoji breaks direct match
         assert m.get(norm_team_key("🇨🇩 DR Congo")) == "42"
 
+
+
+class TestComputeStandingsSynthetic:
+    """AGE closure audit: end-to-end test for the bug fixed in d992bb0.
+
+    The bug: '🇨🇩 DR Congo' (matches.json) never appeared in K-group
+    standings because:
+      1. Pass 5 added 'DR Congo' to build_team_id_map()'s lookup keys
+         (from countries.json) but Pass 4 (which normalizes keys) had
+         already run, so the normalized form 'dr congo' was missing.
+      2. compute_standings_from_details() looks up
+         team_name_to_id.get(norm_team_key('🇨🇩 DR Congo')) == 'dr congo',
+         which returned None, silently dropping every match involving
+         DR Congo from the standings.
+
+    Previous regression tests (test_real_data_*_bug_resolved) hardcoded
+    `assert len(finals) == 2/4` and specific goal totals — they
+    regressed the moment real data changed, got deselected, and the
+    bug reappeared in production. This class uses SYNTHETIC data so the
+    assertions are data-independent and the closure gate is durable.
+    """
+
+    @staticmethod
+    def _k_group_synthetic():
+        """Build a self-contained K-group with all 4 matches final.
+
+        Teams, countries, details, matches — all in-memory. No disk, no
+        API. Reproduces the data shape that triggers the bug.
+        """
+        teams = {
+            "41": {"name_en": "Portugal",   "fifa_code": "POR", "iso2": "PT"},
+            "42": {"name_en": "Democratic Republic of the Congo",
+                   "fifa_code": "COD", "iso2": "CD"},
+            "43": {"name_en": "Uzbekistan", "fifa_code": "UZB", "iso2": "UZ"},
+            "44": {"name_en": "Colombia",   "fifa_code": "COL", "iso2": "CO"},
+        }
+        # countries.json: ICS-style short names (the source of "DR Congo")
+        countries = {
+            "Portugal":   {"name_zh": "\u5fb7\u54e5",   "code_iso": "gb", "code_fifa": "POR"},
+            "DR Congo":   {"name_zh": "\u6c11\u4e3b\u521a\u679c", "code_iso": "gb", "code_fifa": "COD"},
+            "Uzbekistan": {"name_zh": "\u4e4c\u5179",   "code_iso": "uz", "code_fifa": "UZB"},
+            "Colombia":   {"name_zh": "\u54e5\u4f26\u6bd4\u4e9a", "code_iso": "co", "code_fifa": "COL"},
+        }
+        # match_id -> details (all 4 K-group matches, all final)
+        all_details = {
+            "m1": {"status": "final", "score": {"home": 5, "away": 0},
+                   "goalscorers": []},  # POR 5-0 UZB
+            "m2": {"status": "final", "score": {"home": 1, "away": 1},
+                   "goalscorers": []},  # POR 1-1 COD
+            "m3": {"status": "final", "score": {"home": 1, "away": 0},
+                   "goalscorers": []},  # COL 1-0 COD
+            "m4": {"status": "final", "score": {"home": 1, "away": 3},
+                   "goalscorers": []},  # UZB 1-3 COL
+        }
+        # matches list with flag-emoji-prefixed names (the real-world form)
+        matches = [
+            {"match_id": "m1", "group": "K",
+             "home": {"name": "\ud83c\uddf5\ud83c\uddf9 Portugal"},
+             "away": {"name": "\ud83c\uddfa\ud83c\uddfb Uzbekistan"}},
+            {"match_id": "m2", "group": "K",
+             "home": {"name": "\ud83c\uddf5\ud83c\uddf9 Portugal"},
+             "away": {"name": "\ud83c\udde8\ud83c\udde9 DR Congo"}},
+            {"match_id": "m3", "group": "K",
+             "home": {"name": "\ud83c\udde8\ud83c\udde8 Colombia"},
+             "away": {"name": "\ud83c\udde8\ud83c\udde9 DR Congo"}},
+            {"match_id": "m4", "group": "K",
+             "home": {"name": "\ud83c\uddfa\ud83c\uddfb Uzbekistan"},
+             "away": {"name": "\ud83c\udde8\ud83c\udde8 Colombia"}},
+        ]
+        return teams, countries, all_details, matches
+
+    def test_k_group_standings_have_all_four_teams(self):
+        """Closure gate: when all 4 K-group matches are final, the
+        standings must contain all 4 teams — no silent drop."""
+        teams, countries, all_details, matches = self._k_group_synthetic()
+        name_to_id = build_team_id_map(teams, countries=countries)
+        standings = compute_standings_from_details(
+            "K", all_details, matches, name_to_id,
+        ) or []
+        team_ids = {t["team_id"] for t in standings}
+        assert team_ids == {"41", "42", "43", "44"}, (
+            f"Standings missing teams: {set(['41','42','43','44']) - team_ids}; "
+            f"this is the d992bb0 regression"
+        )
+
+    def test_dr_congo_appears_in_standings_with_correct_stats(self):
+        """Closure gate: DR Congo is a side in 2 matches, so its
+        standings row must reflect 2 MP."""
+        teams, countries, all_details, matches = self._k_group_synthetic()
+        name_to_id = build_team_id_map(teams, countries=countries)
+        standings = compute_standings_from_details(
+            "K", all_details, matches, name_to_id,
+        ) or []
+        cod = next(t for t in standings if t["team_id"] == "42")
+        # POR 1-1 COD (D), COL 1-0 COD (L) → 0W 1D 1L 1GF 2GA 1PTS
+        assert cod["mp"] == 2
+        assert cod["w"] == 0
+        assert cod["d"] == 1
+        assert cod["l"] == 1
+        assert cod["gf"] == 1
+        assert cod["ga"] == 2
+        assert cod["pts"] == 1
+
+    def test_without_countries_dr_congo_silently_drops(self):
+        """Demonstrates WHY countries.json (Pass 5+6) is necessary:
+        without it, the synthetic 4-team group becomes a 3-team group
+        because matches involving DR Congo can't be resolved. This is
+        the bug d992bb0 was designed to fix when countries.json is
+        present — not a license to drop countries.json."""
+        teams, countries, all_details, matches = self._k_group_synthetic()
+        name_to_id = build_team_id_map(teams)  # no countries
+        standings = compute_standings_from_details(
+            "K", all_details, matches, name_to_id,
+        ) or []
+        team_ids = {t["team_id"] for t in standings}
+        assert "42" not in team_ids, (
+            "Without countries.json, DR Congo should drop — but the "
+            "fix in d992bb0 means WITH countries.json, it must appear. "
+            "See test_k_group_standings_have_all_four_teams."
+        )
