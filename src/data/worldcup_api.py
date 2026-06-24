@@ -306,23 +306,35 @@ _TEAM_ALIASES = {
 def _normalize_team_name(name: str) -> str:
     """Normalize a team name so different sources can match.
 
-    - Strip whitespace
-    - Lowercase
-    - Apply known aliases (ICS -> API direction)
-    - Collapse punctuation (treat '&' as ' and ' etc.)
+    Order matters:
+      1. Pre-normalize: strip flag emojis and other non-word noise (but keep
+         letters/digits/&/spaces) so that '🇨🇩 DR Congo' and 'DR Congo'
+         alias-lookup the same key.
+      2. Apply known aliases (ICS <-> API direction). If the input is one
+         side of an alias pair, replace with the other side, then everything
+         collapses to the same final string.
+      3. Lowercase, replace '&' with ' and ', collapse non-alphanumerics.
+
+    Result: '🇨🇩 DR Congo' and 'Democratic Republic of the Congo' both end
+    up as 'democratic republic of the congo'; same for '🇺🇸 USA' /
+    'United States' and '🇧🇦 Bosnia & Herzegovina' / 'Bosnia and Herzegovina'.
     """
     if not name:
         return ""
     s = name.strip()
-    # Direct alias map (case-insensitive)
+    # Pre-normalize: strip emojis/punct but keep word chars, spaces, '&'
+    import re as _re
+    s = _re.sub(r"[^\w\s&]+", "", s, flags=_re.UNICODE)
+    s = _re.sub(r"\s+", " ", s).strip()
+    # Alias lookup (case-insensitive on keys)
+    s_lower = s.lower()
     for k, v in _TEAM_ALIASES.items():
-        if s.lower() == k.lower():
+        if s_lower == k.lower():
             s = v
             break
-    # Normalize: lowercase, replace punctuation
+    # Final normalization
     s = s.lower()
     s = s.replace("&", " and ")
-    import re as _re
     s = _re.sub(r"[^a-z0-9]+", " ", s)
     s = _re.sub(r"\s+", " ", s).strip()
     return s

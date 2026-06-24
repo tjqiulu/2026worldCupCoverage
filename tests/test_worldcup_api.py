@@ -345,6 +345,54 @@ class TestTeamNameNormalization:
         result = find_match_id(api_game, our_matches)
         assert result == "test-cgo-por"
 
+    def test_dr_congo_alias_with_flag_emoji(self):
+        """Regression: matches.json stores names with flag-emoji prefixes
+        (e.g. '🇨🇩 DR Congo'). The alias lookup must still fire after the
+        emoji is stripped, otherwise finished matches never get their score.
+        User reported this for Colombia vs DR Congo on 2026-06-24."""
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "Colombia",
+            "away_team_name_en": "Democratic Republic of the Congo",
+        }
+        our_matches = [{
+            "match_id": "test-col-cgo",
+            "home": {"name": "🇨🇴 Colombia"},  # real-world format
+            "away": {"name": "🇨🇩 DR Congo"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-col-cgo"
+
+    def test_usa_alias_with_flag_emoji(self):
+        """Regression: same as DR Congo but for USA ↔ United States."""
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "United States",
+            "away_team_name_en": "Paraguay",
+        }
+        our_matches = [{
+            "match_id": "test-usa-par",
+            "home": {"name": "🇺🇸 USA"},
+            "away": {"name": "🇵🇾 Paraguay"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-usa-par"
+
+    def test_bosnia_alias_with_flag_emoji(self):
+        """Regression: same for Bosnia & Herzegovina ↔ Bosnia and Herzegovina."""
+        from src.data.worldcup_api import find_match_id
+        api_game = {
+            "home_team_name_en": "Canada",
+            "away_team_name_en": "Bosnia and Herzegovina",
+        }
+        our_matches = [{
+            "match_id": "test-can-bih",
+            "home": {"name": "🇨🇦 Canada"},
+            "away": {"name": "🇧🇦 Bosnia & Herzegovina"},
+        }]
+        result = find_match_id(api_game, our_matches)
+        assert result == "test-can-bih"
+
     def test_exact_match_still_works(self):
         """The fallback shouldn't break exact matches."""
         from src.data.worldcup_api import find_match_id
