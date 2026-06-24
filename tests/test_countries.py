@@ -24,14 +24,51 @@ class TestLookup:
         assert info["code_fifa"] == "MEX"
 
     def test_england_uses_subnational_flag(self):
+        # England has no separate flag-icons entry (no ISO 3166-1 code),
+        # so the dashboard renders the UK flag (`gb`). Both home nations
+        # (England, Scotland) share this convention.
         info = lookup("England")
         assert info is not None
-        assert info["code_iso"] == "gb-eng"
+        assert info["code_iso"] == "gb"
 
     def test_scotland_uses_subnational_flag(self):
+        # See test_england_uses_subnational_flag — Scotland also uses the UK flag.
         info = lookup("Scotland")
         assert info is not None
-        assert info["code_iso"] == "gb-sct"
+        assert info["code_iso"] == "gb"
+
+
+class TestResolveCodeIso:
+    """Tests for src.app._resolve_code_iso — defensive validator for API iso2."""
+
+    def test_api_2letter_alpha_wins(self):
+        from src.app import _resolve_code_iso
+        # API gives a proper 2-letter code → use it, ignore meta
+        assert _resolve_code_iso("GH", {"code_iso": "gb"}) == "gh"
+        assert _resolve_code_iso("us", {"code_iso": "gb"}) == "us"
+
+    def test_api_3letter_falls_back_to_meta(self):
+        from src.app import _resolve_code_iso
+        # API gives a 3-letter FIFA code (e.g. ENG/SCO) → reject, use meta
+        assert _resolve_code_iso("ENG", {"code_iso": "gb"}) == "gb"
+        assert _resolve_code_iso("SCO", {"code_iso": "gb"}) == "gb"
+
+    def test_api_empty_falls_back_to_meta(self):
+        from src.app import _resolve_code_iso
+        assert _resolve_code_iso("", {"code_iso": "gb"}) == "gb"
+        assert _resolve_code_iso(None, {"code_iso": "gb"}) == "gb"
+
+    def test_api_with_digits_or_symbols_falls_back_to_meta(self):
+        from src.app import _resolve_code_iso
+        # Anything that isn't a clean 2-letter alpha falls back
+        assert _resolve_code_iso("GH1", {"code_iso": "gb"}) == "gb"
+        assert _resolve_code_iso("G", {"code_iso": "gb"}) == "gb"
+        assert _resolve_code_iso("G H", {"code_iso": "gb"}) == "gb"
+
+    def test_no_meta_returns_empty(self):
+        from src.app import _resolve_code_iso
+        assert _resolve_code_iso("ENG", None) == ""
+        assert _resolve_code_iso("", None) == ""
 
     def test_unknown_returns_none(self):
         assert lookup("Atlantis") is None

@@ -227,7 +227,7 @@ def create_app() -> Flask:
             enriched[tid] = {
                 "name": t.get("name_en") or tid,
                 "name_zh": (meta or {}).get("name_zh"),
-                "code_iso": (t.get("iso2") or "").lower() or (meta or {}).get("code_iso"),
+                "code_iso": _resolve_code_iso(t.get("iso2"), meta),
                 "code_fifa": t.get("fifa_code") or (meta or {}).get("code_fifa"),
                 "flag_url": t.get("flag"),
             }
@@ -245,6 +245,21 @@ def create_app() -> Flask:
 
 QUALIFICATION_CACHE_FILE = DATA_DIR / "qualification_cache.json"
 QUALIFICATION_CACHE_VERSION = 1
+
+
+def _resolve_code_iso(api_iso2: str | None, meta: dict | None) -> str:
+    """Resolve the code_iso flag-icons CSS suffix for a team.
+
+    worldcup26.ir's `iso2` field is sometimes wrong — for England/Scotland
+    it returns the 3-letter FIFA code ('ENG' / 'SCO') instead of a 2-letter
+    ISO 3166-1 code. flag-icons expects 2-letter codes (`fi-gb` etc.), so
+    we only trust the API value when it's a valid 2-letter alpha code.
+    Otherwise we fall back to our curated countries.json entry.
+    """
+    api = (api_iso2 or "").strip().lower()
+    if len(api) == 2 and api.isalpha():
+        return api
+    return (meta or {}).get("code_iso", "") or ""
 
 
 def _compute_and_cache_qualification() -> dict[str, Any]:
@@ -277,8 +292,7 @@ def _compute_and_cache_qualification() -> dict[str, Any]:
                     team_name_cache[t["team_id"]] = {
                         "name": api_team.get("name_en", t["team_id"]),
                         "name_zh": (meta or {}).get("name_zh", ""),
-                        "code_iso": (api_team.get("iso2") or "").lower()
-                                   or (meta or {}).get("code_iso", ""),
+                        "code_iso": _resolve_code_iso(api_team.get("iso2"), meta),
                     }
 
     result = compute_full_qualification(group_standings)
