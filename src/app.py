@@ -128,6 +128,18 @@ def create_app() -> Flask:
     """Flask app factory."""
     app = Flask(__name__)
 
+    # Plan 040: never let the browser cache /api/* responses. Without an
+    # explicit Cache-Control, browsers use heuristic caching and may serve
+    # a stale /api/matches after a 刷新 click (user reported 2026-06-24:
+    # modal showed fresh score but stale 3-team standings). The 60s
+    # widget auto-poll and the modal re-render are no help if the network
+    # response itself is stale. /api/* is dynamic — always revalidate.
+    @app.after_request
+    def _no_cache_api(response):
+        if request.path.startswith("/api/"):
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
     @app.route("/")
     def index() -> str:
         return render_template("index.html")

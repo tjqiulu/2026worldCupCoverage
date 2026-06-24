@@ -100,3 +100,26 @@ def test_api_matches_filter_by_date(client):
     data = resp.get_json()
     assert len(data) == 1
     assert data[0]["match_id"] == "a"
+
+
+class TestApiCacheHeaders:
+    """Plan 040: /api/* responses must never be browser-cached, otherwise
+    the user can see fresh data in one field (score) and stale data in
+    another (standings) after clicking 刷新. With no Cache-Control header
+    set explicitly, browsers use heuristic caching and may serve stale
+    /api/matches for a few seconds — long enough to confuse the user.
+    """
+
+    def test_api_matches_has_no_store_header(self, client):
+        resp = client.get("/api/matches")
+        assert resp.headers.get("Cache-Control") == "no-store"
+
+    def test_api_health_has_no_store_header(self, client):
+        resp = client.get("/api/health")
+        assert resp.headers.get("Cache-Control") == "no-store"
+
+    def test_index_html_not_no_store(self, client):
+        """The HTML shell is fine to cache — the SW handles it with
+        network-first. We only want to disable caching for /api/*."""
+        resp = client.get("/")
+        assert resp.headers.get("Cache-Control") != "no-store"
