@@ -126,8 +126,10 @@ class TestLockedTop2:
         assert "a" not in locked_ids
         assert "b" not in locked_ids
 
-    def test_all_finals_no_locked(self):
-        """如果 3 场都踢完了, locked_top2 应为空 (全部确定)."""
+    def test_all_finals_played_top2_locked_bot2_eliminated(self):
+        """组别 3 场全踢完: top 2 锁定晋级, bottom 2 锁定淘汰.
+        Plan 041 翻转: 原 test_all_finals_no_locked 把错误语义硬编码,
+        修正后 all_played 时应明确标 top 2 + bottom 2."""
         result = _run_group("X", [
             _mk_team("a", pts=7, mp=3, w=2, d=1),
             _mk_team("b", pts=6, mp=3, w=2, l=1),
@@ -135,7 +137,32 @@ class TestLockedTop2:
             _mk_team("d", pts=0, mp=3, l=3),
         ])
         assert result["all_finals_played"] is True
-        assert len(result["locked_top2"]) == 0  # 全踢完了，没"待锁定"
+        locked_ids = {t["team_id"] for t in result["locked_top2"]}
+        eliminated_ids = {t["team_id"] for t in result["eliminated"]}
+        assert locked_ids == {"a", "b"}, f"top 2 应锁: got {locked_ids}"
+        assert eliminated_ids == {"c", "d"}, f"bot 2 应淘汰: got {eliminated_ids}"
+        assert result["favored_top2"] == [], "all_played 不应有 favored"
+        assert result["pending"] == [], "all_played 不应有 pending"
+
+    def test_all_played_with_pts_tie_uses_gd_break(self):
+        """4pt 平局用 GD 决定排名 (FIFA tie-breaker).
+        Plan 041: 模拟 B 组 2026-06-25 场景: Switzerland 7pts / Canada 4pts(GD+5) /
+        Bosnia 4pts(GD-1) / Qatar 1pt. standings 排序应按 FIFA 优先级, top 2 = sui + can."""
+        result = _run_group("B", [
+            _mk_team("sui", pts=7, mp=3, w=2, d=1, gd=4),
+            _mk_team("can", pts=4, mp=3, w=1, d=1, l=1, gf=8, ga=3, gd=5),
+            _mk_team("bih", pts=4, mp=3, w=1, d=1, l=1, gf=5, ga=6, gd=-1),
+            _mk_team("qat", pts=1, mp=3, w=0, d=1, l=2, gf=2, ga=10, gd=-8),
+        ])
+        assert result["all_finals_played"] is True
+        locked_ids = [t["team_id"] for t in result["locked_top2"]]
+        # standings 已按 FIFA 排序: sui(7) > can(4,GD+5) > bih(4,GD-1) > qat(1)
+        assert locked_ids == ["sui", "can"], f"GD+5 优先: got {locked_ids}"
+        eliminated_ids = {t["team_id"] for t in result["eliminated"]}
+        assert eliminated_ids == {"bih", "qat"}
+        # 4 队都进 locked/eliminated, 无 pending/favored
+        assert result["pending"] == []
+        assert result["favored_top2"] == []
 
     def test_0_games_played_none_locked(self):
         """0 场没踢, 无人锁定."""
@@ -294,8 +321,8 @@ class TestEliminated:
         ])
         assert len(result["eliminated"]) == 0
 
-    def test_all_played_no_eliminated(self):
-        """3 场全踢完, eliminated 应为空."""
+    def test_all_played_bot2_in_eliminated(self):
+        """3 场全踢完, bottom 2 应进 eliminated. Plan 041 翻转."""
         result = _run_group("X", [
             _mk_team("a", pts=7, mp=3, w=2, d=1),
             _mk_team("b", pts=6, mp=3, w=2, l=1),
@@ -303,7 +330,8 @@ class TestEliminated:
             _mk_team("d", pts=0, mp=3, l=3),
         ])
         assert result["all_finals_played"] is True
-        assert len(result["eliminated"]) == 0
+        eliminated_ids = {t["team_id"] for t in result["eliminated"]}
+        assert eliminated_ids == {"c", "d"}, f"bot 2 应淘汰: got {eliminated_ids}"
 
 
 # ============================================================

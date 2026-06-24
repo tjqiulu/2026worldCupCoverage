@@ -168,6 +168,24 @@ def compute_per_group(
                     "min_pts": pts_current,
                 })
 
+    # Plan 041: 组别 3 场全踢完时, top 2 = 100% 锁定晋级, bottom 2 = 100% 出局.
+    # standings 已按 FIFA 优先级 (pts desc / gd desc / gf desc) 排好序, index = 最终排名.
+    # 主循环在 all_played 时会把所有队塞 pending (走 else 分支), 这里重置 pending 避免污染.
+    if all_played and len(standings) >= 4:
+        pending.clear()
+        for t in standings[:2]:
+            if not any(x["team_id"] == t["team_id"] for x in locked_top2):
+                locked_top2.append({
+                    "team_id": t["team_id"],
+                    "reason": "组别已全部结束，按当前积分榜确定晋级",
+                })
+        for t in standings[2:]:
+            if not any(x["team_id"] == t["team_id"] for x in eliminated):
+                eliminated.append({
+                    "team_id": t["team_id"],
+                    "reason": "组别已全部结束，按当前积分榜确定淘汰",
+                })
+
     # 第 3 名信息（当前 standings 第 3 位 = index 2）
     third_place = standings[2] if len(standings) >= 3 else None
 

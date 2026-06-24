@@ -9,11 +9,11 @@
 ## Active work 当前快照
 
 - **Active requirement**: `docs/requirements/2026-06-12-wc-coverage-app.md`（待 Plan 002 细化）
-- **Active plan**: [`029-bracket-qualified-teams.md`](../plans/029-bracket-qualified-teams.md)（2026-06-19 完成）
+- **Active plan**: [`041-qualification-all-played.md`](../plans/041-qualification-all-played.md)（2026-06-25 完成）
 - **Active backlog item**: `P0-004`（国旗 + 队名）→ Plan 003 候选
 - **AI autonomy**: plan-first（任何 `src/` 改动都要先有 plan）
 - **Current blocker**: none
-- **Documentation freshness**: **fresh**（2026-06-19 Plan 029 完成）
+- **Documentation freshness**: **fresh**（2026-06-25 Plan 041 完成）
 
 ## 用户已确认的关键决策（2026-06-12）
 
