@@ -48,6 +48,10 @@ const cacheInfo = document.getElementById('cache-info');
 let allMatches = [];
 let allTeams = {};  // Plan 015: {team_id: {name, name_zh, code_iso, ...}}
 let allQualification = null;  // Plan 029: {groups, best_3rd_race}
+// Track the currently-open modal so refresh / 60s auto-poll can re-render
+// it with fresh data (score, goalscorers) without forcing the user to
+// close and re-open the modal.
+let currentModalMatchId = null;
 
 async function loadMatches() {
     const showLoading = () => {
@@ -83,6 +87,14 @@ async function loadMatches() {
             }
             attachMatchCardClickHandlers();
             scrollToToday();
+            // If a modal is open, re-render it with the fresh data so
+            // clicking 刷新 (or a 60s widget poll) shows the new score
+            // without the user having to close and re-open the modal.
+            if (typeof currentModalMatchId !== 'undefined'
+                    && currentModalMatchId
+                    && !document.getElementById('match-modal').hidden) {
+                showMatchModal(currentModalMatchId);
+            }
             return;  // success
         } catch (e) {
             if (attempt < MAX_RETRIES) {
@@ -1004,6 +1016,7 @@ function showMatchModal(matchId) {
     }
 
     document.getElementById('match-modal').hidden = false;
+    currentModalMatchId = matchId;  // so refresh can re-render this modal
 }
 
 function renderModalScore(details, status) {
@@ -1199,6 +1212,7 @@ function formatCountdown(utcIso) {
 
 function closeMatchModal() {
     document.getElementById('match-modal').hidden = true;
+    currentModalMatchId = null;
 }
 
 function attachMatchCardClickHandlers() {
