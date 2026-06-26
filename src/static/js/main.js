@@ -495,8 +495,24 @@ function renderMatchCard(m) {
     // a slot is locked in qualification data, so the Matches tab stays in
     // sync with the Bracket tab. Same helper used by renderBracket.
     // Plan 036: also apply qualified-favored class for soft state.
-    const homeR = resolveTeamForMirror(m.home);
-    const awayR = resolveTeamForMirror(m.away);
+    // Plan 044: also use m.r32_resolved_opponent (FIFA matrix) for the
+    // 3X/Y/Z side of R32 1st-vs-3rd matches. Same fix as renderMirrorCard.
+    let homeSide = m.home, awaySide = m.away;
+    if (m.r32_resolved_opponent) {
+        const ro = m.r32_resolved_opponent;
+        const resolvedSide = {
+            name: ro.name || ro.name_zh,
+            name_zh: ro.name_zh || ro.name,
+            code_iso: ro.code_iso || '',
+        };
+        if (m.away && /^3[A-L]/.test(m.away.name || '')) {
+            awaySide = resolvedSide;
+        } else if (m.home && /^3[A-L]/.test(m.home.name || '')) {
+            homeSide = resolvedSide;
+        }
+    }
+    const homeR = resolveTeamForMirror(homeSide, m.r32_resolved_opponent);
+    const awayR = resolveTeamForMirror(awaySide, m.r32_resolved_opponent);
     const resolvedCls = homeR.cls || awayR.cls;
     const extraCls = resolvedCls ? ` ${resolvedCls}` : '';
     return `<div class="match-card${extraCls}" data-id="${escapeHtml(m.match_id)}" data-status="${status}">
@@ -1108,8 +1124,24 @@ function showMatchModal(matchId) {
     document.getElementById('modal-stage').textContent = getStageFullLabel(match);
     document.getElementById('modal-date').textContent = formatModalDate(match.date_utc);
     // Plan 030: resolve placeholder (1A / 2B / 3X / W##) to real team if locked
-    const homeResolved = _resolveTeamForModal(match.home) || match.home;
-    const awayResolved = _resolveTeamForModal(match.away) || match.away;
+    // Plan 044: also use m.r32_resolved_opponent (FIFA matrix) for R32
+    // 1X-vs-3Y matches, same as renderMatchCard / renderMirrorCard.
+    let homeSide = match.home, awaySide = match.away;
+    if (match.r32_resolved_opponent) {
+        const ro = match.r32_resolved_opponent;
+        const resolvedSide = {
+            name: ro.name || ro.name_zh,
+            name_zh: ro.name_zh || ro.name,
+            code_iso: ro.code_iso || '',
+        };
+        if (match.away && /^3[A-L]/.test(match.away.name || '')) {
+            awaySide = resolvedSide;
+        } else if (match.home && /^3[A-L]/.test(match.home.name || '')) {
+            homeSide = resolvedSide;
+        }
+    }
+    const homeResolved = _resolveTeamForModal(homeSide) || homeSide;
+    const awayResolved = _resolveTeamForModal(awaySide) || awaySide;
     document.getElementById('modal-home').innerHTML = renderModalTeam(homeResolved);
     document.getElementById('modal-away').innerHTML = renderModalTeam(awayResolved);
 
