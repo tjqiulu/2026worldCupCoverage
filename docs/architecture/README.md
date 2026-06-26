@@ -110,13 +110,22 @@
 
 ## 部署形态
 
+详细 Quick Start 见 [README.md](../../README.md)。本地 daemon 启动：
+
 ```bash
-# 启动脚本（src/start.sh，待 Plan 002）
-source .venv/bin/activate
-python src/app.py &
-sleep 1
-xdg-open "http://127.0.0.1:8765"  # 或 chromium-browser --kiosk
+python3 -m pip install -r requirements.txt
+bin/serve.sh                      # 后台 daemon，日志 /tmp/wc_server.log
+xdg-open http://127.0.0.1:8766    # 或打开浏览器手动访问
 ```
+
+桌面 kiosk 模式（一键启动 + 全屏浏览器）：
+
+```bash
+bin/launch.py                     # 自动检测 chromium/chrome/firefox
+# 等价于 bin/start.sh
+```
+
+云端 Render 部署见 [deployment/render.md](../deployment/render.md)，Cloudflare quick tunnel 见 [maintenance/tunnel.md](../maintenance/tunnel.md)（如存在）或 `bin/tunnel.sh --help`。
 
 ## 后续演进
 

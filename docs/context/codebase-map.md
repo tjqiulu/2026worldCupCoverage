@@ -2,118 +2,118 @@
 
 > 每个文件/模块干嘛的。AI 进入项目时第一查这里。
 
-## 当前状态（2026-06-12 Plan 002 完成）
+## 当前状态（2026-06-26，Plan 043 同步）
 
-**~440 行代码**（不含测试）。104 场比赛实时解析。
+- **代码量**: ~5800 LOC（src + 静态资源 + 启动器，不含测试/文档/data）
+- **测试**: 443 个 pytest（tests/ 下 ~11600 行）
+- **计划**: 42 个已完成 plan（[plans/README.md](../plans/README.md)）
+- **运行形态**: 本地 daemon（`bin/serve.sh`，port 8766）+ Render 云（gunicorn）
 
-### 已实现文件
-- `src/app.py`（~80 行）— Flask 4 端点
-- `src/data/ics_fetcher.py`（~50 行）— ICS 拉取 + 1h 缓存
-- `src/data/ics_parser.py`（~120 行）— ICS → matches.json
-- `src/templates/index.html`（~25 行）
-- `src/static/css/main.css`（~150 行）
-- `src/static/js/main.js`（~120 行）
-- `scripts/fetch_initial_data.py`（~50 行）
-
-### 测试
-- `tests/test_ics_parser.py`（~195 行，27 用例）
-- `tests/test_app.py`（~100 行，5 用例）
-
-### 重要配置
-- **端口**: 8766（8765 被本机其他服务占）
-- **ICS 源**: `https://cdn.jsdelivr.net/gh/baires/fifa-cal-2026@master/calendars/en.ics`
-- **缓存**: `data/.cache/wc2026.ics`（1h TTL）
-
-## 计划中的目录
+## 项目结构
 
 ```
 2026worldCupCoverage/
-├── AGENTS.md                  # AI 操作契约
-├── README.md                  # 人类视角
-├── requirements.txt           # Python deps (待 Plan 002)
+├── README.md                  # 人类视角（Quick Start 在这里）
+├── AGENTS.md                  # AI 操作契约（宪法）
+├── LICENSE                    # MIT
+├── pyproject.toml             # 包元数据
+├── requirements.txt           # 生产 deps（Render 用）
+├── render.yaml                # Render Blueprint
 ├── .gitignore
-├── docs/                      # 文档（已建）
-├── src/                       # 应用代码（空，待 Plan 002+）
-│   ├── app.py                 # Flask 入口
-│   ├── data/
-│   │   ├── ics_parser.py      # ICS → JSON
-│   │   ├── ics_fetcher.py     # 从 baires 拉 ICS
-│   │   └── details_loader.py  # 加载手写 details.json
+│
+├── bin/                       # 启动 + 部署脚本（6 个）
+│   ├── serve.sh               # 后端 daemon start/stop/status/restart
+│   ├── launch.py              # 桌面 kiosk 模式（自动开浏览器全屏）
+│   ├── start.sh               # launch.py 的 shell 包装
+│   ├── open.sh                # 普通窗口打开
+│   ├── tunnel.sh              # Cloudflare quick tunnel
+│   └── tunnel-url.sh          # 打印 tunnel 公网 URL
+│
+├── src/                       # 应用代码
+│   ├── __init__.py
+│   ├── app.py                 # Flask 入口（10 路由，~280 行）
+│   ├── data/                  # 数据层（6 模块，~1900 行）
+│   │   ├── __init__.py
+│   │   ├── ics_fetcher.py     # baires ICS 拉取 + 缓存
+│   │   ├── ics_parser.py      # ICS → matches.json（兼容 post-match 比分格式）
+│   │   ├── countries.py       # 国家元数据（48 队，中英 + ISO）
+│   │   ├── details.py         # 比赛详情 / 进球 / 比分加载
+│   │   ├── worldcup_api.py    # worldcup26.ir API 客户端（5min cache）
+│   │   └── qualification.py   # 积分榜 + Best 3rd race 算法
 │   ├── templates/
-│   │   └── index.html         # 主页
+│   │   └── index.html         # 单页（100 行）
 │   └── static/
-│       ├── css/main.css
-│       └── js/main.js
-├── data/                      # 派生/手写数据
-│   ├── matches.json           # ICS 解析后（生成）
-│   ├── details.json           # 手写进球/场馆
-│   └── i18n/
-│       ├── zh.json
-│       └── en.json
-├── tests/                     # pytest
-│   ├── test_ics_parser.py
-│   ├── test_app.py
-│   └── fixtures/
-└── scripts/                   # 一次性脚本
-    └── fetch_initial_data.py  # 首次拉数据
+│       ├── css/main.css       # 1723 行（含 5 套主题）
+│       ├── js/main.js         # 1438 行（前端所有逻辑）
+│       ├── img/icon.svg
+│       ├── manifest.json      # PWA manifest
+│       └── sw.js              # Service Worker（app-shell 缓存）
+│
+├── data/                      # 派生数据（git tracked，可重生成）
+│   ├── matches.json           # 104 场比赛
+│   ├── details.json           # 进球 / 比分（手维护 + API 合并）
+│   ├── qualification_cache.json  # 积分榜 + Best 3rd race
+│   ├── countries.json         # 48 国元数据
+│   ├── scorer_overrides.json  # 进球人姓名手维护覆盖
+│   └── .cache/                # 临时 ICS 缓存（gitignore）
+│
+├── scripts/                   # 一次性脚本
+│   ├── fetch_initial_data.py  # 首次拉数据
+│   └── run_audit.sh           # plan-doc 一致性 audit
+│
+├── tests/                     # pytest 套件（443 个用例）
+│   ├── conftest.py            # fixtures
+│   ├── e2e/                   # Playwright 端到端（10 用例，部分 fixture 漂移）
+│   ├── fixtures/              # 测试 fixture
+│   ├── test_app.py            # Flask 路由（5）
+│   ├── test_ics_parser.py     # ICS parser（13）
+│   ├── test_ics_fetcher.py    # ICS fetcher
+│   ├── test_countries.py      # 国家元数据
+│   ├── test_details.py        # 详情加载（多）
+│   ├── test_bracket_pairings.py  # 32 强对阵计算
+│   ├── test_qualification.py  # 积分榜 / Best 3rd race（47）
+│   ├── test_third_place_top8.py  # Plan 042 面板渲染（4）
+│   ├── test_worldcup_api.py   # API 客户端
+│   ├── test_launch.py         # 桌面 launcher
+│   ├── test_frontend_init.py  # 前端 HTML/CSS 完整性
+│   ├── audit_gates.py         # plan 通用 audit gate
+│   └── audit_gates_planNNN.py # 各 plan 专项 audit
+│
+└── docs/                      # 全部文档
+    ├── index.md               # 文档入口
+    ├── plans/                 # 42 个 plan 文件
+    ├── logs/2026/             # 工作日志（06-12 起）
+    ├── context/               # 5 个项目快照
+    ├── requirements/          # F1-F16
+    ├── design/                # UI/UX
+    ├── architecture/          # 架构图
+    ├── deployment/            # Render / Tunnel
+    ├── maintenance/           # 运维手册
+    └── backlog/               # 待办
 ```
 
-## 入口
+## 关键文件入口
 
-- **Flask 启动**: `python src/app.py` → `http://127.0.0.1:8765`
-- **桌面模式**: 启动 Flask + `chromium-browser --kiosk http://127.0.0.1:8765`（或 firefox）
-- **测试**: `pytest tests/`
+| 想看 | 文件 |
+|------|------|
+| Flask 启动 | `src/app.py`（`create_app()`） |
+| 启动服务 | `bin/serve.sh` |
+| 前端入口 | `src/static/js/main.js`（`loadMatches()`） |
+| 前端 HTML | `src/templates/index.html` |
+| Best 3rd 算法 | `src/data/qualification.py::compute_best_3rd_race` |
+| 32 强对阵 | `src/data/bracket_pairings.py`（如存在） |
+| API 客户端 | `src/data/worldcup_api.py` |
+| 数据缓存 | `data/qualification_cache.json`（手维护：可手改，重启失效） |
+| 渲染入口 | `src/static/js/main.js::renderMatches / renderBracket` |
+| 面板渲染 | `src/static/js/main.js::renderThirdPlaceTop8`（Plan 042） |
+| 桌面 kiosk | `bin/launch.py` |
+| Render 部署 | `render.yaml` + `requirements.txt` |
+| Tunnel | `bin/tunnel.sh` + `bin/tunnel-url.sh` |
 
-## 模块职责（计划）
+## 重要约束
 
-### `src/app.py`
-- Flask app factory
-- 路由：`/`（主页）、`/api/matches`、`/api/match/<id>`、`/api/refresh`
-- 启动时加载 `data/matches.json` 和 `data/details.json`
-- 提供 `/api/refresh` 端点触发重新拉 ICS
-
-### `src/data/ics_parser.py`
-- 输入：baires ICS URL 或本地文件
-- 输出：list of `{match_id, date_utc, home, away, venue, stage}`
-- 用 `icalendar` 库解析
-- 处理 4 种语言版本（选 zh + en 双语需要时）
-
-### `src/data/ics_fetcher.py`
-- 拉 ICS 文件（带 ETag/Last-Modified 缓存）
-- 失败重试 + 离线降级到本地缓存
-- 写回 `data/matches.json`
-
-### `src/data/details_loader.py`
-- 加载 `data/details.json`（手写的进球/场馆详情）
-- 跟 `matches.json` 合并成最终展示数据
-
-### `src/templates/index.html`
-- 主视图：按日期分组
-- 当前日期高亮
-- 比赛卡片：🇧🇷 巴西 vs 🇦🇷 阿森纳 2-1
-- 详情弹窗（点卡片触发）
-- 语言切换器
-- 刷新按钮
-
-### `src/static/css/main.css`
-- 响应式（桌面优先，但能缩到手机）
-- 暗色 + 亮色模式（自动）
-- 国旗 4x3 比例
-
-### `src/static/js/main.js`
-- 拉 `/api/matches` + 渲染
-- 日期分组 + 高亮今天
-- 详情弹窗
-- 语言切换（i18n JSON）
-- 刷新按钮（call `/api/refresh`）
-
-## 大/脆文件（待 Plan 002+ 标记）
-
-目前无代码。第一个大文件会是 `src/app.py`（预计 < 200 行）。
-
-## 添加新文件时
-
-任何新文件必须：
-1. 在本文档"模块职责"段添加说明
-2. 如果是 src/ 文件，确认 `ai-autonomy-policy.md` 的自主权级别
-3. 写测试（如果是 logic）
+- **端口**: 8766（8765 被本机其他服务占，`src/app.py:65` 注释说明）
+- **Python**: 3.10+（pyproject `requires-python = ">=3.10"`）
+- **ICS 源**: `https://cdn.jsdelivr.net/gh/baires/fifa-cal-2026@master/calendars/en.ics`
+- **实时数据源**: `https://worldcup26.ir`（5 分钟内存缓存）
+- **data/ 是 derived**：理论上可重生成，**例外** `data/details.json`（人工维护）和 `data/scorer_overrides.json`（手维护覆盖）

@@ -5,7 +5,7 @@
 - **目录与 markdown**: `kebab-case`（例：`docs/plans/001-initial-skeleton.md`）
 - **Python 文件/模块**: `snake_case`（例：`src/data/ics_parser.py`）
 - **Python 类**: `PascalCase`（例：`MatchDetail`）
-- **Python 常量**: `UPPER_SNAKE_CASE`（例：`DEFAULT_PORT = 8765`）
+- **Python 常量**: `UPPER_SNAKE_CASE`（例：`DEFAULT_PORT = 8766`）
 - **JSON 字段**: `snake_case`（例：`kickoff_utc`）
 - **CSS 类**: `kebab-case`（例：`match-card`）
 - **JS 变量/函数**: `camelCase`（例：`renderMatches`）
