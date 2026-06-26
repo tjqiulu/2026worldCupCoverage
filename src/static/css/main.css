@@ -265,6 +265,193 @@ footer {
     font-size: 12px;
 }
 
+/* === Plan 042: Best 3rd-place race Top 8 panel === */
+.third-place-panel {
+    max-width: 1400px;
+    margin: 32px auto 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.third-place-header {
+    padding: 16px 20px 12px;
+    border-bottom: 2px solid #1D3557;
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.third-place-header h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1D3557;
+    margin-bottom: 4px;
+}
+
+.third-place-header h2 .emoji {
+    font-size: 22px;
+}
+
+.third-place-header h2 .subtitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.third-place-meta {
+    font-size: 12px;
+    color: #888;
+}
+
+.third-place-body {
+    overflow-x: auto;
+}
+
+.third-place-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.third-place-table th,
+.third-place-table td {
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.third-place-table th {
+    background: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+}
+
+.third-place-table .col-team {
+    text-align: left;
+    min-width: 160px;
+}
+
+.third-place-table .col-team-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.third-place-table .col-team-cell .fi {
+    font-size: 18px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.third-place-table .col-team-cell .team-en {
+    font-size: 11px;
+    font-weight: 400;
+    color: #6b7280;
+    margin-left: 4px;
+}
+
+.third-place-table .col-rank {
+    width: 50px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: #1D3557;
+}
+
+.third-place-table .col-group {
+    width: 56px;
+}
+
+.third-place-table .col-num {
+    width: 48px;
+    font-variant-numeric: tabular-nums;
+}
+
+.third-place-table .col-gd {
+    font-variant-numeric: tabular-nums;
+}
+
+.third-place-table .col-pts {
+    font-variant-numeric: tabular-nums;
+    color: #1D3557;
+    font-weight: 700;
+}
+
+.third-place-table .col-status {
+    width: 100px;
+}
+
+/* Plan 042: Top 8 rows — green, advance state */
+.third-place-table tr.row-advance {
+    background: #f0fdf4;
+}
+
+.third-place-table tr.row-advance:hover {
+    background: #dcfce7;
+}
+
+.third-place-table .status-advance {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #16A34A;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+/* Plan 042: bottom 4 rows — gray, eliminated state */
+.third-place-table tr.row-eliminate {
+    background: #f9fafb;
+    color: #6b7280;
+}
+
+.third-place-table tr.row-eliminate:hover {
+    background: #f3f4f6;
+}
+
+.third-place-table tr.row-eliminate .col-rank {
+    color: #9ca3af;
+}
+
+.third-place-table tr.row-eliminate .col-pts {
+    color: #6b7280;
+}
+
+.third-place-table .status-eliminate {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #e5e7eb;
+    color: #4b5563;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+/* Plan 042: divider between top 8 and bottom 4 */
+.third-place-table tr.row-divider td {
+    padding: 4px;
+    background: linear-gradient(90deg, #f0fdf4 0%, #f9fafb 100%);
+    border-bottom: 2px dashed #d1d5db;
+}
+
+.third-place-table .empty-row td {
+    padding: 24px;
+    text-align: center;
+    color: #9ca3af;
+}
+
 footer a {
     color: #1D3557;
     text-decoration: none;

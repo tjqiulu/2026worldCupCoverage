@@ -78,6 +78,14 @@ async function loadMatches() {
             } catch (qualErr) {
                 console.warn('Qualification load failed (non-fatal):', qualErr);
             }
+            // Plan 042: render Best 3rd race Top 8 panel.
+            // Reads from allQualification (just loaded above) and allTeams
+            // (loaded above). Failure is non-fatal — panel shows empty state.
+            try {
+                renderThirdPlaceTop8();
+            } catch (panelErr) {
+                console.warn('Third-place panel render failed (non-fatal):', panelErr);
+            }
             // Plan 016: widget mode takes over rendering
             if (_isWidgetMode()) {
                 initWidgetMode();
@@ -140,6 +148,131 @@ async function loadQualification() {
     } catch (e) {
         console.warn('Failed to load qualification:', e);
     }
+}
+
+// === Plan 042: Best 3rd-place race Top 8 panel ===
+// Renders the 12 third-placed teams (top 8 advance, bottom 4 eliminated).
+// Reads from allQualification.best_3rd_race.rankings (already sorted by
+// FIFA order: pts DESC, GD DESC, GF DESC). Re-renders on every loadMatches()
+// call, so the existing 刷新 button triggers it for free.
+
+function _flagForTeam(teamId) {
+    if (!teamId) return '';
+    const t = (typeof allTeams !== 'undefined' && allTeams && allTeams[teamId]) || null;
+    if (t && t.code_iso) {
+        return `<span class="fi fi-${escapeHtml(t.code_iso)}" aria-hidden="true"></span>`;
+    }
+    return '';
+}
+
+function _nameForTeam(teamId) {
+    if (!teamId) return { zh: '?', en: '' };
+    const t = (typeof allTeams !== 'undefined' && allTeams && allTeams[teamId]) || null;
+    if (t) {
+        return {
+            zh: t.name_zh || t.name || teamId,
+            en: (t.name_zh && t.name && t.name_zh !== t.name) ? t.name : '',
+        };
+    }
+    return { zh: teamId, en: '' };
+}
+
+function _gdCell(v) {
+    const n = _numOrZero(v);
+    if (n > 0) return `+${n}`;
+    return String(n);
+}
+
+function _formatUtcStamp(iso) {
+    if (!iso) return '—';
+    try {
+        // Convert to Beijing (UTC+8) for display parity with the rest of the UI.
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return '—';
+        const bj = new Date(d.getTime() + BEIJING_OFFSET_MS);
+        const pad = (n) => String(n).padStart(2, '0');
+        return `${bj.getUTCFullYear()}-${pad(bj.getUTCMonth() + 1)}-${pad(bj.getUTCDate())} `
+             + `${pad(bj.getUTCHours())}:${pad(bj.getUTCMinutes())} (北京时间)`;
+    } catch {
+        return '—';
+    }
+}
+
+function renderThirdPlaceTop8() {
+    const body = document.getElementById('third-place-body');
+    const updated = document.getElementById('third-place-updated');
+    if (!body) return;
+
+    // Update timestamp from cache (best_3rd_race payload itself doesn't carry
+    // generated_at, but the parent object does — read it for parity).
+    if (updated && allQualification && allQualification.generated_at) {
+        updated.textContent = _formatUtcStamp(allQualification.generated_at);
+    } else if (updated) {
+        updated.textContent = '—';
+    }
+
+    const race = allQualification && allQualification.best_3rd_race;
+    const rankings = race && Array.isArray(race.rankings) ? race.rankings : null;
+    if (!rankings || !rankings.length) {
+        body.innerHTML = '<p class="empty">暂无第 3 名数据 · 数据更新后再次刷新</p>';
+        return;
+    }
+
+    // Insert a visual divider between rank 8 and rank 9.
+    const top8 = rankings.slice(0, 8);
+    const bot4 = rankings.slice(8, 12);
+    const topRows = top8.map((t, i) => rowsForRanking(t, i + 1, true)).join('');
+    const divider = '<tr class="row-divider"><td colspan="12"></td></tr>';
+    const botRows = bot4.map((t, i) => rowsForRanking(t, i + 9, false)).join('');
+
+    body.innerHTML = `<table class="third-place-table">
+        <thead>
+            <tr>
+                <th class="col-rank">#</th>
+                <th class="col-group">组</th>
+                <th class="col-team">球队</th>
+                <th class="col-num">场 MP</th>
+                <th class="col-num">胜 W</th>
+                <th class="col-num">平 D</th>
+                <th class="col-num">负 L</th>
+                <th class="col-num">进 GF</th>
+                <th class="col-num">失 GA</th>
+                <th class="col-num col-gd">净 GD</th>
+                <th class="col-num col-pts">分 Pts</th>
+                <th class="col-status">状态</th>
+            </tr>
+        </thead>
+        <tbody>${topRows}${divider}${botRows}</tbody>
+    </table>`;
+}
+
+function rowsForRanking(t, rank, advance) {
+    const flag = _flagForTeam(t.team_id);
+    const name = _nameForTeam(t.team_id);
+    const enHtml = name.en ? `<span class="team-en">${escapeHtml(name.en)}</span>` : '';
+    const rowCls = advance ? 'row-advance' : 'row-eliminate';
+    const statusHtml = advance
+        ? '<span class="status-advance">✅ 晋级</span>'
+        : '<span class="status-eliminate">❌ 淘汰</span>';
+    return `<tr class="${rowCls}">
+        <td class="col-rank">${rank}</td>
+        <td class="col-group">${escapeHtml(t.group || '')}</td>
+        <td class="col-team">
+            <span class="col-team-cell">
+                ${flag}
+                <span>${escapeHtml(name.zh)}${enHtml}</span>
+            </span>
+        </td>
+        <td class="col-num">${_numOrZero(t.mp)}</td>
+        <td class="col-num">${_numOrZero(t.w)}</td>
+        <td class="col-num">${_numOrZero(t.d)}</td>
+        <td class="col-num">${_numOrZero(t.l)}</td>
+        <td class="col-num">${_numOrZero(t.gf)}</td>
+        <td class="col-num">${_numOrZero(t.ga)}</td>
+        <td class="col-num col-gd">${_gdCell(t.gd)}</td>
+        <td class="col-num col-pts">${_numOrZero(t.pts)}</td>
+        <td class="col-status">${statusHtml}</td>
+    </tr>`;
 }
 
 function resolveBracketPlaceholder(name) {
