@@ -280,7 +280,7 @@ def compute_best_3rd_race(
         eighth_min = eighth_line["min_pts"]
         eighth_max = eighth_line["max_pts"]
 
-        if min_pts > eighth_max + 3:  # 安全 margin +3 to account for GD/swings
+        if min_pts > eighth_max:  # Plan 044: removed `+ 3` — was over-conservative
             # 如果第 8 名最佳 < 此队最差，则 100% 在 top 8（除非第 8 名后面还有 4+ 队反超）
             # 保守版：检查第 8 名前面的队
             count_better = sum(
@@ -290,7 +290,7 @@ def compute_best_3rd_race(
                 > _fifa_tiebreak_key(min_pts, tp["gd"], tp["gf"],
                                      tp["ga"], tp["w"], tp["d"])
             )
-            if count_better < 7:
+            if count_better < 8:  # Plan 044: < 7 was rank<=7; <8 = top 8
                 locked_top8.append({
                     "team_id": tp["team_id"],
                     "reason": f"最差 {min_pts} 分, 第 8 名最佳 {eighth_max} 分",

@@ -879,13 +879,27 @@ function computeBracketOrder(r32, r16) {
     return order;
 }
 
-function resolveTeamForMirror(side) {
+function resolveTeamForMirror(side, r32Resolved) {
     /** Plan 029: resolve placeholder to real team if a slot is locked.
      *  Plan 036: also resolve for favored (so the soft state is visible).
+     *  Plan 044: also accept the FIFA R32 3rd-place resolved opponent
+     *            (passed via r32Resolved) for 3X/Y/Z placeholders.
      * Returns {team, cls} where cls is 'qualified-locked' for locked and
      * 'qualified-favored' for favored. */
     if (!side || !side.name) return { team: null, cls: '' };
     if (side.code_iso) return { team: side, cls: '' };  // already real
+
+    // Plan 044: 3X/Y/Z placeholder resolved by FIFA bracket matrix (R32 only).
+    if (r32Resolved && /^3[A-L]/.test(side.name)) {
+        return {
+            team: {
+                name: r32Resolved.name || r32Resolved.name_zh,
+                name_zh: r32Resolved.name_zh || r32Resolved.name,
+                code_iso: r32Resolved.code_iso || '',
+            },
+            cls: r32Resolved.state === 'locked' ? 'qualified-locked' : 'qualified-favored',
+        };
+    }
 
     const resolved = resolveBracketPlaceholder(side.name);
     if (resolved) {
@@ -945,8 +959,27 @@ function renderMirrorCard(m, stage, col, row, span) {
     const time = beijingTimeStr(m.date_utc);
     const date = beijingDateStr(m.date_utc);
     const venue = m.venue?.name || '';
-    const homeRes = resolveTeamForMirror(m.home);
-    const awayRes = resolveTeamForMirror(m.away);
+    // Plan 044: apply FIFA R32 3rd-place resolution to the placeholder side.
+    // The API attaches `m.r32_resolved_opponent` (a team dict) for R32
+    // 1X-vs-3Y matches when the specific 3rd-place team is computable
+    // from the FIFA bracket matrix. The state is 'locked' (mathematically
+    // certain) or 'pending' (could change with last matches).
+    let homeSide = m.home, awaySide = m.away;
+    if (m.r32_resolved_opponent) {
+        const ro = m.r32_resolved_opponent;
+        const resolvedSide = {
+            name: ro.name || ro.name_zh,
+            name_zh: ro.name_zh || ro.name,
+            code_iso: ro.code_iso || '',
+        };
+        if (m.away && /^3[A-L]/.test(m.away.name || '')) {
+            awaySide = resolvedSide;
+        } else if (m.home && /^3[A-L]/.test(m.home.name || '')) {
+            homeSide = resolvedSide;
+        }
+    }
+    const homeRes = resolveTeamForMirror(homeSide, m.r32_resolved_opponent);
+    const awayRes = resolveTeamForMirror(awaySide, m.r32_resolved_opponent);
     const homeTeam = homeRes.team;
     const awayTeam = awayRes.team;
     const cardCls = [stage, `col-${col}`, homeRes.cls, awayRes.cls]

@@ -35,6 +35,10 @@ from src.data.qualification import (  # noqa: E402
     compute_full_qualification,
     compute_per_group,
 )
+from src.data.fifa_bracket_matrix import (  # noqa: E402
+    R32_3RD_OPPONENT_SETS,
+    resolve_r32_3rd_opponents,
+)
 from src.data.ics_fetcher import fetch_ics  # noqa: E402
 from src.data.ics_parser import parse_ics  # noqa: E402
 from src.data.worldcup_api import (  # noqa: E402
@@ -149,6 +153,29 @@ def create_app() -> Flask:
         matches = load_matches()
         enrich_matches(matches)
         enrich_details_matches(matches)
+        # Plan 044: precompute R32 3rd-place opponent resolution using
+        # the FIFA 2026 bracket matrix. We compute once per request (not
+        # per match) so all 8 R32 1st-vs-3rd matches share the same
+        # resolution map (greedy assignment must be globally consistent).
+        r32_resolution = _build_r32_resolution(matches)
+        # Build team name → group letter lookup for resolving host-nation
+        # 1st-place teams (e.g., "USA" → "D", "Mexico" → "A", "Canada" → "B").
+        # Use the same alias resolver as standings (Plan 027/028) so names
+        # like "USA" (baires ICS) → "United States" (worldcup API) work.
+        team_name_to_group: dict[str, str] = {}
+        try:
+            teams = get_teams_by_id()
+            name_to_id = build_team_id_map(teams, countries=all_countries())
+            tid_to_group: dict[str, str] = {}
+            for tid, t in teams.items():
+                grp = t.get("groups", "")
+                if grp:
+                    tid_to_group[str(tid)] = grp
+            for name, tid in name_to_id.items():
+                if str(tid) in tid_to_group:
+                    team_name_to_group[name] = tid_to_group[str(tid)]
+        except Exception as e:
+            print(f"Warning: team name lookup failed: {e}")
         # Plan 015: enrich with stadium (by city) and group standings
         for m in matches:
             venue = m.get("venue") or {}
@@ -172,6 +199,11 @@ def create_app() -> Flask:
                 standings = _local_or_api_standings(m["group"], matches)
                 if standings is not None:
                     m["standings"] = standings
+            # Plan 044: R32 1X vs 3Y/Z — attach the resolved 3rd opponent
+            if m.get("stage") == "r32" and r32_resolution:
+                resolved = _resolve_r32_match(m, r32_resolution, team_name_to_group)
+                if resolved is not None:
+                    m["r32_resolved_opponent"] = resolved
         date = request.args.get("date")
         if date:
             matches = [m for m in matches if m["date_utc"].startswith(date)]
@@ -254,6 +286,108 @@ def create_app() -> Flask:
 # Defined at module level (not inside create_app) so /api/refresh can
 
 # === Plan 031: Module-level qualification helpers ===
+
+# === Plan 044: R32 3rd-place opponent resolution ===
+
+_3RD_PLACEHOLDER_RE = __import__("re").compile(r"^3[A-L](?:/[A-L])+$")
+_1ST_PLACEHOLDER_RE = __import__("re").compile(r"^1[A-L]$")
+
+
+def _build_r32_resolution(matches: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Build the FIFA 2026 R32 3rd-place opponent resolution map.
+
+    Returns:
+        Dict mapping 1st-place group letter (in BRACKET_ORDER) to the
+        assigned 3rd-place team dict {team_id, name, name_zh, code_iso,
+        group, state}. Empty dict if qualification data is unavailable.
+    """
+    try:
+        # Use the same qualification cache the /api/qualification endpoint
+        # uses (fast path: read from disk).
+        if not QUALIFICATION_CACHE_FILE.exists():
+            return {}
+        cache = json.loads(QUALIFICATION_CACHE_FILE.read_text(encoding="utf-8"))
+        race = cache.get("best_3rd_race", {})
+        rankings = race.get("rankings", [])
+        if not rankings:
+            return {}
+        # Build group-letter sets from locked_top8 / locked_bot4 (both are
+        # lists of {team_id, reason} dicts; we need to look up group letter).
+        rankings_by_id = {r["team_id"]: r for r in rankings}
+        locked_letters = {
+            rankings_by_id[t["team_id"]]["group"]
+            for t in race.get("locked_top8", [])
+            if t.get("team_id") in rankings_by_id
+        }
+        eliminated_letters = {
+            rankings_by_id[t["team_id"]]["group"]
+            for t in race.get("locked_bot4", [])
+            if t.get("team_id") in rankings_by_id
+        }
+        return resolve_r32_3rd_opponents(
+            rankings=rankings,
+            locked_3rd_group_letters=locked_letters,
+            eliminated_3rd_group_letters=eliminated_letters,
+        )
+    except Exception as e:
+        # Non-fatal: bracket UI just shows raw placeholders.
+        print(f"Warning: R32 resolution build failed: {e}")
+        return {}
+
+
+def _resolve_r32_match(
+    m: dict[str, Any],
+    resolution: dict[str, dict[str, Any]],
+    team_name_to_group: dict[str, str] | None = None,
+) -> dict[str, Any] | None:
+    """For an R32 match dict, find the resolved 3rd-place opponent team.
+
+    Looks at home/away team names. The R32 1X-vs-3Y format can show up
+    two ways in the raw data:
+      1. Both sides are placeholders (e.g., '1C' vs '2F', or
+         '1D' vs '3B/E/F/I/J')
+      2. One side is a real team name (e.g., 'USA' or 'Mexico') and the
+         other is a 3X placeholder. This is the host-nation case.
+
+    For case 2, we use team_name_to_group to look up which group the
+    real team is the 1st-place team of.
+
+    Returns:
+        The resolved 3rd-place team dict (with state field), or None if
+        this match isn't a 1X-vs-3Y format or the resolution is missing.
+    """
+    import re
+    home_name = (m.get("home") or {}).get("name", "")
+    away_name = (m.get("away") or {}).get("name", "")
+    home_3rd = bool(re.match(r"^3[A-L](/[A-L])+$", home_name))
+    away_3rd = bool(re.match(r"^3[A-L](/[A-L])+$", away_name))
+
+    if not (home_3rd or away_3rd):
+        return None  # Not a 1st-vs-3rd match.
+
+    # Find the 1st-place group letter
+    first_letter: str | None = None
+    m_1st = re.match(r"^1([A-L])$", home_name)
+    if m_1st:
+        first_letter = m_1st.group(1).upper()
+    else:
+        m_1st = re.match(r"^1([A-L])$", away_name)
+        if m_1st:
+            first_letter = m_1st.group(1).upper()
+
+    if first_letter is None:
+        # Real team on the 1st side. Look up by name.
+        real_name = away_name if home_3rd else home_name
+        if team_name_to_group:
+            # Strip flag emoji prefix if present
+            cleaned = re.sub(r"^[\U0001F1E6-\U0001F1FF\U0001F3F4\U0001F5F4\u2600-\u26FF\u2700-\u27BF]+\s*", "", real_name).strip()
+            first_letter = team_name_to_group.get(cleaned) or team_name_to_group.get(real_name)
+
+    if first_letter is None:
+        return None
+
+    return resolution.get(first_letter)
+
 
 QUALIFICATION_CACHE_FILE = DATA_DIR / "qualification_cache.json"
 QUALIFICATION_CACHE_VERSION = 1
