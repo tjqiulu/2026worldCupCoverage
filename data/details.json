@@ -945,5 +945,768 @@
       }
     ]
   },
+  "fifa-wc-2026-04adb35cd696@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Dniz Avndav",
+        "minute": 68,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Dniz Avndav",
+        "minute": 90,
+        "stoppage": 4,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Franck Kessié",
+        "minute": 30,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-d400a9b695a8@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 5,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Brian Brobbey",
+        "minute": 5,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Brian Brobbey",
+        "minute": 17,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Kvdi Khakpv",
+        "minute": 47,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Kvdi Khakpv",
+        "minute": 54,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Crysencio Summerville",
+        "minute": 89,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Anthony Elanga",
+        "minute": 59,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-99c0702d0791@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "goalscorers": []
+  },
+  "fifa-wc-2026-f544802e5627@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 4
+    },
+    "goalscorers": [
+      {
+        "player": "Daichi Kamada",
+        "minute": 4,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Aiash Ivida",
+        "minute": 31,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Junya Itō",
+        "minute": 69,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Aiash Ivida",
+        "minute": 83,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-0b5f46aa9cfd@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "goalscorers": []
+  },
+  "fifa-wc-2026-5b9ad7ac6f5f@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 4,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Lamine Yamal",
+        "minute": 10,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Mikel Oyarzabal",
+        "minute": 21,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Mikel Oyarzabal",
+        "minute": 24,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Hassan Mohamed Altmbkti",
+        "minute": 49,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-a06b3652712e@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Maximiliano Araújo",
+        "minute": 44,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Agustín Canobbio",
+        "minute": 45,
+        "stoppage": 6,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Kevin Pina",
+        "minute": 21,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Hliv Varla",
+        "minute": 61,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-51f3976829e1@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 3
+    },
+    "goalscorers": [
+      {
+        "player": "Fin Svrman",
+        "minute": 15,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Mostafa Ziko",
+        "minute": 58,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Mohamed Salah",
+        "minute": 67,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Mahmoud Hassan Trezeguet",
+        "minute": 82,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-5344004efef4@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Kylian Mbappé",
+        "minute": 14,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Kylian Mbappé",
+        "minute": 54,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Ousmane Dembélé",
+        "minute": 66,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-61198cde6a1a@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Lionel Messi",
+        "minute": 38,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Lionel Messi",
+        "minute": 90,
+        "stoppage": 5,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-d47eb6b9f103@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Markvs Hlmgrn Pdrsn",
+        "minute": 43,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Erling Haaland",
+        "minute": 48,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Erling Haaland",
+        "minute": 58,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Ismaïla Sarr",
+        "minute": 53,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Ismaïla Sarr",
+        "minute": 90,
+        "stoppage": 3,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-41edcc085fe5@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Al Rashdan",
+        "minute": 36,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Nzir Bnbvali",
+        "minute": 69,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Amine Gouiri",
+        "minute": 82,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-1bc3f4be2e36@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 5,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Cristiano Ronaldo",
+        "minute": 6,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Nvnv Mndz",
+        "minute": 17,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Cristiano Ronaldo",
+        "minute": 39,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Abdalvhid Namtvf",
+        "minute": 60,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Rafael Leão",
+        "minute": 87,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-014d40403a6b@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Ante Budimir",
+        "minute": 54,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-0d9bbef5c913@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "goalscorers": []
+  },
+  "fifa-wc-2026-e592e72369a3@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Dnil Mvnvz",
+        "minute": 76,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-cb7249d22fdd@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 3,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Karim Alaibgvvich",
+        "minute": 29,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Abvnad",
+        "minute": 34,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Armin Mhmich",
+        "minute": 80,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Hassan Al-Haydos",
+        "minute": 42,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-7930b6dbf88c@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Rubén Vargas",
+        "minute": 46,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Jvhan Mnzambi",
+        "minute": 57,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Prvmis Divid",
+        "minute": 76,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-35140186af9c@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 4,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Achraf Hakimi",
+        "minute": 39,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Asmaail Saibari",
+        "minute": 45,
+        "stoppage": 1,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Svfian Rhimi",
+        "minute": 78,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Gessime Yassine",
+        "minute": 89,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Yassine Bounou",
+        "minute": 10,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Wilson Isidor",
+        "minute": 43,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-9b6ddb137374@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 3
+    },
+    "goalscorers": [
+      {
+        "player": "Vinícius Júnior",
+        "minute": 7,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Vinícius Júnior",
+        "minute": 45,
+        "stoppage": 3,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Matheus Cunha",
+        "minute": 60,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-a39ddca16285@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 3
+    },
+    "goalscorers": [
+      {
+        "player": "Mateo Chávez",
+        "minute": 55,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Jvlian Kviinvnz",
+        "minute": 61,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Álvaro Fidalgo",
+        "minute": 90,
+        "stoppage": 4,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-f21ab750b07d@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "goalscorers": [
+      {
+        "player": "Taplv Maskv",
+        "minute": 63,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      }
+    ]
+  },
+  "fifa-wc-2026-449fbd478704@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 0,
+      "away": 2
+    },
+    "goalscorers": [
+      {
+        "player": "Nikvlas Ph Ph",
+        "minute": 7,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Nikvlas Ph Ph",
+        "minute": 64,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-bd2418c0d719@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 2,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Nilsvn Angvlv",
+        "minute": 9,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Gvnzalv Plata",
+        "minute": 77,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Leroy Sané",
+        "minute": 2,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-82b095ff1da0@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 1
+    },
+    "goalscorers": [
+      {
+        "player": "Daizen Maeda",
+        "minute": 56,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Anthony Elanga",
+        "minute": 62,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
+  "fifa-wc-2026-f5165b86a7e9@worldcup-calendar": {
+    "status": "final",
+    "score": {
+      "home": 1,
+      "away": 3
+    },
+    "goalscorers": [
+      {
+        "player": "Hazm Mstvri",
+        "minute": 54,
+        "stoppage": null,
+        "type": null,
+        "team": "home"
+      },
+      {
+        "player": "Alis Skhiri",
+        "minute": 3,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Brian Brobbey",
+        "minute": 7,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      },
+      {
+        "player": "Ian Fn Hkh",
+        "minute": 62,
+        "stoppage": null,
+        "type": null,
+        "team": "away"
+      }
+    ]
+  },
   "_comment": "Manually maintained match results. Schema: src/data/details.py."
 }

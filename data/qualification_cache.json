@@ -4,100 +4,97 @@
       "group": "A",
       "standings": [
         {
-          "mp": 2,
-          "w": 2,
+          "mp": 3,
+          "w": 3,
           "d": 0,
           "l": 0,
-          "gf": 3,
+          "gf": 6,
           "ga": 0,
-          "pts": 6,
-          "gd": 3,
+          "pts": 9,
+          "gd": 6,
           "team_id": "1"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 1,
           "gf": 2,
-          "ga": 2,
+          "ga": 3,
+          "pts": 4,
+          "gd": -1,
+          "team_id": "2"
+        },
+        {
+          "mp": 3,
+          "w": 1,
+          "d": 0,
+          "l": 2,
+          "gf": 2,
+          "ga": 3,
           "pts": 3,
-          "gd": 0,
+          "gd": -1,
           "team_id": "3"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 0,
           "d": 1,
-          "l": 1,
+          "l": 2,
           "gf": 2,
-          "ga": 3,
+          "ga": 6,
           "pts": 1,
-          "gd": -1,
+          "gd": -4,
           "team_id": "4"
-        },
-        {
-          "mp": 2,
-          "w": 0,
-          "d": 1,
-          "l": 1,
-          "gf": 1,
-          "ga": 3,
-          "pts": 1,
-          "gd": -2,
-          "team_id": "2"
         }
       ],
-      "all_finals_played": false,
+      "all_finals_played": true,
       "locked_top2": [
         {
           "team_id": "1",
           "name": "Mexico",
           "name_zh": "墨西哥",
           "code_iso": "mx",
-          "reason": "当前 6 分 > 其他队最佳 4 分"
-        }
-      ],
-      "favored_top2": [
-        {
-          "team_id": "3",
-          "name": "South Korea",
-          "name_zh": "韩国",
-          "code_iso": "kr",
-          "reason": "当前 3 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
-        }
-      ],
-      "eliminated": [],
-      "pending": [
-        {
-          "team_id": "4",
-          "name": "Czech Republic",
-          "name_zh": "捷克",
-          "code_iso": "cz",
-          "max_pts": 4,
-          "min_pts": 1
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         },
         {
           "team_id": "2",
           "name": "South Africa",
           "name_zh": "南非",
           "code_iso": "za",
-          "max_pts": 4,
-          "min_pts": 1
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         }
       ],
+      "favored_top2": [],
+      "eliminated": [
+        {
+          "team_id": "3",
+          "name": "South Korea",
+          "name_zh": "韩国",
+          "code_iso": "kr",
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
+        },
+        {
+          "team_id": "4",
+          "name": "Czech Republic",
+          "name_zh": "捷克",
+          "code_iso": "cz",
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
+        }
+      ],
+      "pending": [],
       "third_place": {
-        "team_id": "4",
-        "name": "Czech Republic",
-        "name_zh": "捷克",
-        "code_iso": "cz",
-        "mp": 2,
-        "w": 0,
-        "d": 1,
-        "l": 1,
+        "team_id": "3",
+        "name": "South Korea",
+        "name_zh": "韩国",
+        "code_iso": "kr",
+        "mp": 3,
+        "w": 1,
+        "d": 0,
+        "l": 2,
         "gf": 2,
         "ga": 3,
-        "pts": 1,
+        "pts": 3,
         "gd": -1
       }
     },
@@ -203,100 +200,98 @@
       "group": "C",
       "standings": [
         {
-          "mp": 2,
-          "w": 1,
+          "mp": 3,
+          "w": 2,
           "d": 1,
           "l": 0,
-          "gf": 4,
+          "gf": 7,
           "ga": 1,
-          "pts": 4,
-          "gd": 3,
+          "pts": 7,
+          "gd": 6,
           "team_id": "9"
         },
         {
-          "mp": 2,
-          "w": 1,
+          "mp": 3,
+          "w": 2,
           "d": 1,
           "l": 0,
-          "gf": 2,
-          "ga": 1,
-          "pts": 4,
-          "gd": 1,
+          "gf": 6,
+          "ga": 3,
+          "pts": 7,
+          "gd": 3,
           "team_id": "10"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 1,
           "d": 0,
-          "l": 1,
+          "l": 2,
           "gf": 1,
-          "ga": 1,
+          "ga": 4,
           "pts": 3,
-          "gd": 0,
+          "gd": -3,
           "team_id": "12"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 0,
           "d": 0,
-          "l": 2,
-          "gf": 0,
-          "ga": 4,
+          "l": 3,
+          "gf": 2,
+          "ga": 8,
           "pts": 0,
-          "gd": -4,
+          "gd": -6,
           "team_id": "11"
         }
       ],
-      "all_finals_played": false,
-      "locked_top2": [],
-      "favored_top2": [
+      "all_finals_played": true,
+      "locked_top2": [
         {
           "team_id": "9",
           "name": "Brazil",
           "name_zh": "巴西",
           "code_iso": "br",
-          "reason": "当前 4 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         },
         {
           "team_id": "10",
           "name": "Morocco",
           "name_zh": "摩洛哥",
           "code_iso": "ma",
-          "reason": "当前 4 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         }
       ],
+      "favored_top2": [],
       "eliminated": [
-        {
-          "team_id": "11",
-          "name": "Haiti",
-          "name_zh": "海地",
-          "code_iso": "ht",
-          "reason": "最佳 3 分 < 其他队保底 4 分"
-        }
-      ],
-      "pending": [
         {
           "team_id": "12",
           "name": "Scotland",
           "name_zh": "苏格兰",
           "code_iso": "gb",
-          "max_pts": 6,
-          "min_pts": 3
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
+        },
+        {
+          "team_id": "11",
+          "name": "Haiti",
+          "name_zh": "海地",
+          "code_iso": "ht",
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
         }
       ],
+      "pending": [],
       "third_place": {
         "team_id": "12",
         "name": "Scotland",
         "name_zh": "苏格兰",
         "code_iso": "gb",
-        "mp": 2,
+        "mp": 3,
         "w": 1,
         "d": 0,
-        "l": 1,
+        "l": 2,
         "gf": 1,
-        "ga": 1,
+        "ga": 4,
         "pts": 3,
-        "gd": 0
+        "gd": -3
       }
     },
     "D": {
@@ -404,200 +399,195 @@
       "group": "E",
       "standings": [
         {
-          "mp": 2,
+          "mp": 3,
           "w": 2,
           "d": 0,
-          "l": 0,
-          "gf": 9,
-          "ga": 2,
+          "l": 1,
+          "gf": 10,
+          "ga": 4,
           "pts": 6,
-          "gd": 7,
+          "gd": 6,
           "team_id": "17"
         },
         {
-          "mp": 2,
-          "w": 1,
+          "mp": 3,
+          "w": 2,
           "d": 0,
           "l": 1,
-          "gf": 2,
+          "gf": 4,
           "ga": 2,
-          "pts": 3,
-          "gd": 0,
+          "pts": 6,
+          "gd": 2,
           "team_id": "19"
         },
         {
-          "mp": 2,
-          "w": 0,
+          "mp": 3,
+          "w": 1,
           "d": 1,
           "l": 1,
-          "gf": 0,
-          "ga": 1,
-          "pts": 1,
-          "gd": -1,
+          "gf": 2,
+          "ga": 2,
+          "pts": 4,
+          "gd": 0,
           "team_id": "20"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 0,
           "d": 1,
-          "l": 1,
+          "l": 2,
           "gf": 1,
-          "ga": 7,
+          "ga": 9,
           "pts": 1,
-          "gd": -6,
+          "gd": -8,
           "team_id": "18"
         }
       ],
-      "all_finals_played": false,
+      "all_finals_played": true,
       "locked_top2": [
         {
           "team_id": "17",
           "name": "Germany",
           "name_zh": "德国",
           "code_iso": "de",
-          "reason": "当前 6 分 > 其他队最佳 4 分"
-        }
-      ],
-      "favored_top2": [
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
+        },
         {
           "team_id": "19",
           "name": "Ivory Coast",
           "name_zh": "科特迪瓦",
           "code_iso": "ci",
-          "reason": "当前 3 分 > 其他队保底第 2 高 1 分，严格数学未锁但实际几乎锁定"
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         }
       ],
-      "eliminated": [],
-      "pending": [
+      "favored_top2": [],
+      "eliminated": [
         {
           "team_id": "20",
           "name": "Ecuador",
           "name_zh": "厄瓜多尔",
           "code_iso": "ec",
-          "max_pts": 4,
-          "min_pts": 1
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
         },
         {
           "team_id": "18",
           "name": "Curaçao",
           "name_zh": "库拉索",
           "code_iso": "cw",
-          "max_pts": 4,
-          "min_pts": 1
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
         }
       ],
+      "pending": [],
       "third_place": {
         "team_id": "20",
         "name": "Ecuador",
         "name_zh": "厄瓜多尔",
         "code_iso": "ec",
-        "mp": 2,
-        "w": 0,
+        "mp": 3,
+        "w": 1,
         "d": 1,
         "l": 1,
-        "gf": 0,
-        "ga": 1,
-        "pts": 1,
-        "gd": -1
+        "gf": 2,
+        "ga": 2,
+        "pts": 4,
+        "gd": 0
       }
     },
     "F": {
       "group": "F",
       "standings": [
         {
-          "mp": 2,
-          "w": 1,
+          "mp": 3,
+          "w": 2,
           "d": 1,
           "l": 0,
-          "gf": 7,
-          "ga": 3,
-          "pts": 4,
-          "gd": 4,
+          "gf": 10,
+          "ga": 4,
+          "pts": 7,
+          "gd": 6,
           "team_id": "21"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 1,
-          "d": 1,
+          "d": 2,
           "l": 0,
-          "gf": 6,
-          "ga": 2,
-          "pts": 4,
+          "gf": 7,
+          "ga": 3,
+          "pts": 5,
           "gd": 4,
           "team_id": "22"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 1,
-          "d": 0,
+          "d": 1,
           "l": 1,
-          "gf": 6,
-          "ga": 6,
-          "pts": 3,
+          "gf": 7,
+          "ga": 7,
+          "pts": 4,
           "gd": 0,
           "team_id": "23"
         },
         {
-          "mp": 2,
+          "mp": 3,
           "w": 0,
           "d": 0,
-          "l": 2,
-          "gf": 1,
-          "ga": 9,
+          "l": 3,
+          "gf": 2,
+          "ga": 12,
           "pts": 0,
-          "gd": -8,
+          "gd": -10,
           "team_id": "24"
         }
       ],
-      "all_finals_played": false,
-      "locked_top2": [],
-      "favored_top2": [
+      "all_finals_played": true,
+      "locked_top2": [
         {
           "team_id": "21",
           "name": "Netherlands",
           "name_zh": "荷兰",
           "code_iso": "nl",
-          "reason": "当前 4 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         },
         {
           "team_id": "22",
           "name": "Japan",
           "name_zh": "日本",
           "code_iso": "jp",
-          "reason": "当前 4 分 > 其他队保底第 2 高 3 分，严格数学未锁但实际几乎锁定"
+          "reason": "组别已全部结束，按当前积分榜确定晋级"
         }
       ],
+      "favored_top2": [],
       "eliminated": [
-        {
-          "team_id": "24",
-          "name": "Tunisia",
-          "name_zh": "突尼斯",
-          "code_iso": "tn",
-          "reason": "最佳 3 分 < 其他队保底 4 分"
-        }
-      ],
-      "pending": [
         {
           "team_id": "23",
           "name": "Sweden",
           "name_zh": "瑞典",
           "code_iso": "se",
-          "max_pts": 6,
-          "min_pts": 3
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
+        },
+        {
+          "team_id": "24",
+          "name": "Tunisia",
+          "name_zh": "突尼斯",
+          "code_iso": "tn",
+          "reason": "组别已全部结束，按当前积分榜确定淘汰"
         }
       ],
+      "pending": [],
       "third_place": {
         "team_id": "23",
         "name": "Sweden",
         "name_zh": "瑞典",
         "code_iso": "se",
-        "mp": 2,
+        "mp": 3,
         "w": 1,
-        "d": 0,
+        "d": 1,
         "l": 1,
-        "gf": 6,
-        "ga": 6,
-        "pts": 3,
+        "gf": 7,
+        "ga": 7,
+        "pts": 4,
         "gd": 0
       }
     },
@@ -1207,6 +1197,38 @@
   "best_3rd_race": {
     "rankings": [
       {
+        "team_id": "23",
+        "name": "Sweden",
+        "name_zh": "瑞典",
+        "code_iso": "se",
+        "group": "F",
+        "pts": 4,
+        "gd": 0,
+        "gf": 7,
+        "ga": 7,
+        "w": 1,
+        "d": 1,
+        "mp": 3,
+        "max_pts": 4,
+        "min_pts": 4
+      },
+      {
+        "team_id": "20",
+        "name": "Ecuador",
+        "name_zh": "厄瓜多尔",
+        "code_iso": "ec",
+        "group": "E",
+        "pts": 4,
+        "gd": 0,
+        "gf": 2,
+        "ga": 2,
+        "w": 1,
+        "d": 1,
+        "mp": 3,
+        "max_pts": 4,
+        "min_pts": 4
+      },
+      {
         "team_id": "6",
         "name": "Bosnia and Herzegovina",
         "name_zh": "波黑",
@@ -1223,38 +1245,6 @@
         "min_pts": 4
       },
       {
-        "team_id": "23",
-        "name": "Sweden",
-        "name_zh": "瑞典",
-        "code_iso": "se",
-        "group": "F",
-        "pts": 3,
-        "gd": 0,
-        "gf": 6,
-        "ga": 6,
-        "w": 1,
-        "d": 0,
-        "mp": 2,
-        "max_pts": 6,
-        "min_pts": 3
-      },
-      {
-        "team_id": "12",
-        "name": "Scotland",
-        "name_zh": "苏格兰",
-        "code_iso": "gb",
-        "group": "C",
-        "pts": 3,
-        "gd": 0,
-        "gf": 1,
-        "ga": 1,
-        "w": 1,
-        "d": 0,
-        "mp": 2,
-        "max_pts": 6,
-        "min_pts": 3
-      },
-      {
         "team_id": "46",
         "name": "Croatia",
         "name_zh": "克罗地亚",
@@ -1268,6 +1258,22 @@
         "d": 0,
         "mp": 2,
         "max_pts": 6,
+        "min_pts": 3
+      },
+      {
+        "team_id": "3",
+        "name": "South Korea",
+        "name_zh": "韩国",
+        "code_iso": "kr",
+        "group": "A",
+        "pts": 3,
+        "gd": -1,
+        "gf": 2,
+        "ga": 3,
+        "w": 1,
+        "d": 0,
+        "mp": 3,
+        "max_pts": 3,
         "min_pts": 3
       },
       {
@@ -1303,6 +1309,22 @@
         "min_pts": 3
       },
       {
+        "team_id": "12",
+        "name": "Scotland",
+        "name_zh": "苏格兰",
+        "code_iso": "gb",
+        "group": "C",
+        "pts": 3,
+        "gd": -3,
+        "gf": 1,
+        "ga": 4,
+        "w": 1,
+        "d": 0,
+        "mp": 3,
+        "max_pts": 3,
+        "min_pts": 3
+      },
+      {
         "team_id": "30",
         "name": "Cape Verde",
         "name_zh": "佛得角",
@@ -1335,22 +1357,6 @@
         "min_pts": 2
       },
       {
-        "team_id": "4",
-        "name": "Czech Republic",
-        "name_zh": "捷克",
-        "code_iso": "cz",
-        "group": "A",
-        "pts": 1,
-        "gd": -1,
-        "gf": 2,
-        "ga": 3,
-        "w": 0,
-        "d": 1,
-        "mp": 2,
-        "max_pts": 4,
-        "min_pts": 1
-      },
-      {
         "team_id": "42",
         "name": "Democratic Republic of the Congo",
         "name_zh": "民主刚果",
@@ -1360,22 +1366,6 @@
         "gd": -1,
         "gf": 1,
         "ga": 2,
-        "w": 0,
-        "d": 1,
-        "mp": 2,
-        "max_pts": 4,
-        "min_pts": 1
-      },
-      {
-        "team_id": "20",
-        "name": "Ecuador",
-        "name_zh": "厄瓜多尔",
-        "code_iso": "ec",
-        "group": "E",
-        "pts": 1,
-        "gd": -1,
-        "gf": 0,
-        "ga": 1,
         "w": 0,
         "d": 1,
         "mp": 2,
@@ -1400,27 +1390,21 @@
       }
     ],
     "critical_line": {
-      "team_id": "25",
-      "group": "G",
-      "pts": 2,
-      "gd": 0,
+      "team_id": "12",
+      "group": "C",
+      "pts": 3,
+      "gd": -3,
       "gf": 1,
-      "ga": 1,
-      "w": 0,
-      "d": 2,
-      "mp": 2,
-      "max_pts": 5,
-      "min_pts": 2
+      "ga": 4,
+      "w": 1,
+      "d": 0,
+      "mp": 3,
+      "max_pts": 3,
+      "min_pts": 3
     },
     "locked_top8": [],
     "locked_bot4": [],
     "pending": [
-      {
-        "team_id": "6",
-        "name": "Bosnia and Herzegovina",
-        "name_zh": "波黑",
-        "code_iso": "ba"
-      },
       {
         "team_id": "23",
         "name": "Sweden",
@@ -1428,16 +1412,28 @@
         "code_iso": "se"
       },
       {
-        "team_id": "12",
-        "name": "Scotland",
-        "name_zh": "苏格兰",
-        "code_iso": "gb"
+        "team_id": "20",
+        "name": "Ecuador",
+        "name_zh": "厄瓜多尔",
+        "code_iso": "ec"
+      },
+      {
+        "team_id": "6",
+        "name": "Bosnia and Herzegovina",
+        "name_zh": "波黑",
+        "code_iso": "ba"
       },
       {
         "team_id": "46",
         "name": "Croatia",
         "name_zh": "克罗地亚",
         "code_iso": "hr"
+      },
+      {
+        "team_id": "3",
+        "name": "South Korea",
+        "name_zh": "韩国",
+        "code_iso": "kr"
       },
       {
         "team_id": "14",
@@ -1452,6 +1448,12 @@
         "code_iso": "dz"
       },
       {
+        "team_id": "12",
+        "name": "Scotland",
+        "name_zh": "苏格兰",
+        "code_iso": "gb"
+      },
+      {
         "team_id": "30",
         "name": "Cape Verde",
         "name_zh": "佛得角",
@@ -1464,22 +1466,10 @@
         "code_iso": "be"
       },
       {
-        "team_id": "4",
-        "name": "Czech Republic",
-        "name_zh": "捷克",
-        "code_iso": "cz"
-      },
-      {
         "team_id": "42",
         "name": "Democratic Republic of the Congo",
         "name_zh": "民主刚果",
         "code_iso": "cd"
-      },
-      {
-        "team_id": "20",
-        "name": "Ecuador",
-        "name_zh": "厄瓜多尔",
-        "code_iso": "ec"
       },
       {
         "team_id": "34",
@@ -1489,6 +1479,6 @@
       }
     ]
   },
-  "generated_at": "2026-06-24T23:43:53.887545+00:00",
+  "generated_at": "2026-06-26T01:46:44.007639+00:00",
   "version": 1
 }

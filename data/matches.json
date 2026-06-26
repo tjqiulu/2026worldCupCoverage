@@ -1,13 +1,13 @@
 [
   {
     "match_id": "fifa-wc-2026-11a1dcab930a@worldcup-calendar",
-    "summary": "Mexico vs South Africa",
+    "summary": "🇲🇽 Mexico 2-0 🇿🇦 South Africa",
     "date_utc": "2026-06-11T19:00:00+00:00",
     "home": {
-      "name": "Mexico"
+      "name": "🇲🇽 Mexico"
     },
     "away": {
-      "name": "South Africa"
+      "name": "🇿🇦 South Africa"
     },
     "stage": "group",
     "group": "A",
@@ -19,13 +19,13 @@
   },
   {
     "match_id": "fifa-wc-2026-dfd8df44c1fb@worldcup-calendar",
-    "summary": "South Korea vs Czech Republic",
+    "summary": "🇰🇷 South Korea 2-1 🇨🇿 Czech Republic",
     "date_utc": "2026-06-12T02:00:00+00:00",
     "home": {
-      "name": "South Korea"
+      "name": "🇰🇷 South Korea"
     },
     "away": {
-      "name": "Czech Republic"
+      "name": "🇨🇿 Czech Republic"
     },
     "stage": "group",
     "group": "A",
@@ -37,13 +37,13 @@
   },
   {
     "match_id": "fifa-wc-2026-965e9ac9ce78@worldcup-calendar",
-    "summary": "Canada vs Bosnia & Herzegovina",
+    "summary": "🇨🇦 Canada 1-1 🇧🇦 Bosnia & Herzegovina",
     "date_utc": "2026-06-12T19:00:00+00:00",
     "home": {
-      "name": "Canada"
+      "name": "🇨🇦 Canada"
     },
     "away": {
-      "name": "Bosnia & Herzegovina"
+      "name": "🇧🇦 Bosnia & Herzegovina"
     },
     "stage": "group",
     "group": "B",
@@ -55,13 +55,13 @@
   },
   {
     "match_id": "fifa-wc-2026-fdf1bfc654f3@worldcup-calendar",
-    "summary": "USA vs Paraguay",
+    "summary": "🇺🇸 USA 4-1 🇵🇾 Paraguay",
     "date_utc": "2026-06-13T01:00:00+00:00",
     "home": {
-      "name": "USA"
+      "name": "🇺🇸 USA"
     },
     "away": {
-      "name": "Paraguay"
+      "name": "🇵🇾 Paraguay"
     },
     "stage": "group",
     "group": "D",
@@ -73,13 +73,13 @@
   },
   {
     "match_id": "fifa-wc-2026-11a1e8291690@worldcup-calendar",
-    "summary": "Qatar vs Switzerland",
+    "summary": "🇶🇦 Qatar 1-1 🇨🇭 Switzerland",
     "date_utc": "2026-06-13T19:00:00+00:00",
     "home": {
-      "name": "Qatar"
+      "name": "🇶🇦 Qatar"
     },
     "away": {
-      "name": "Switzerland"
+      "name": "🇨🇭 Switzerland"
     },
     "stage": "group",
     "group": "B",
@@ -91,13 +91,13 @@
   },
   {
     "match_id": "fifa-wc-2026-51c5def6e311@worldcup-calendar",
-    "summary": "Brazil vs Morocco",
+    "summary": "🇧🇷 Brazil 1-1 🇲🇦 Morocco",
     "date_utc": "2026-06-13T22:00:00+00:00",
     "home": {
-      "name": "Brazil"
+      "name": "🇧🇷 Brazil"
     },
     "away": {
-      "name": "Morocco"
+      "name": "🇲🇦 Morocco"
     },
     "stage": "group",
     "group": "C",
@@ -109,13 +109,13 @@
   },
   {
     "match_id": "fifa-wc-2026-ec4c7885a3a4@worldcup-calendar",
-    "summary": "Haiti vs Scotland",
+    "summary": "🇭🇹 Haiti 0-1 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland",
     "date_utc": "2026-06-14T01:00:00+00:00",
     "home": {
-      "name": "Haiti"
+      "name": "🇭🇹 Haiti"
     },
     "away": {
-      "name": "Scotland"
+      "name": "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland"
     },
     "stage": "group",
     "group": "C",
@@ -127,13 +127,13 @@
   },
   {
     "match_id": "fifa-wc-2026-998d2005257f@worldcup-calendar",
-    "summary": "Australia vs Turkey",
+    "summary": "🇦🇺 Australia 2-0 🇹🇷 Turkey",
     "date_utc": "2026-06-14T04:00:00+00:00",
     "home": {
-      "name": "Australia"
+      "name": "🇦🇺 Australia"
     },
     "away": {
-      "name": "Turkey"
+      "name": "🇹🇷 Turkey"
     },
     "stage": "group",
     "group": "D",
@@ -145,13 +145,13 @@
   },
   {
     "match_id": "fifa-wc-2026-764217ec91b0@worldcup-calendar",
-    "summary": "Germany vs Curaçao",
+    "summary": "🇩🇪 Germany 7-1 🇨🇼 Curaçao",
     "date_utc": "2026-06-14T17:00:00+00:00",
     "home": {
-      "name": "Germany"
+      "name": "🇩🇪 Germany"
     },
     "away": {
-      "name": "Curaçao"
+      "name": "🇨🇼 Curaçao"
     },
     "stage": "group",
     "group": "E",
@@ -163,13 +163,13 @@
   },
   {
     "match_id": "fifa-wc-2026-744bfbfd7938@worldcup-calendar",
-    "summary": "Netherlands vs Japan",
+    "summary": "🇳🇱 Netherlands 2-2 🇯🇵 Japan",
     "date_utc": "2026-06-14T20:00:00+00:00",
     "home": {
-      "name": "Netherlands"
+      "name": "🇳🇱 Netherlands"
     },
     "away": {
-      "name": "Japan"
+      "name": "🇯🇵 Japan"
     },
     "stage": "group",
     "group": "F",
@@ -181,13 +181,13 @@
   },
   {
     "match_id": "fifa-wc-2026-0ef2205260cd@worldcup-calendar",
-    "summary": "Ivory Coast vs Ecuador",
+    "summary": "🇨🇮 Ivory Coast 1-0 🇪🇨 Ecuador",
     "date_utc": "2026-06-14T23:00:00+00:00",
     "home": {
-      "name": "Ivory Coast"
+      "name": "🇨🇮 Ivory Coast"
     },
     "away": {
-      "name": "Ecuador"
+      "name": "🇪🇨 Ecuador"
     },
     "stage": "group",
     "group": "E",
@@ -199,13 +199,13 @@
   },
   {
     "match_id": "fifa-wc-2026-df779f16393a@worldcup-calendar",
-    "summary": "Sweden vs Tunisia",
+    "summary": "🇸🇪 Sweden 5-1 🇹🇳 Tunisia",
     "date_utc": "2026-06-15T02:00:00+00:00",
     "home": {
-      "name": "Sweden"
+      "name": "🇸🇪 Sweden"
     },
     "away": {
-      "name": "Tunisia"
+      "name": "🇹🇳 Tunisia"
     },
     "stage": "group",
     "group": "F",
@@ -217,13 +217,13 @@
   },
   {
     "match_id": "fifa-wc-2026-95c833b74439@worldcup-calendar",
-    "summary": "Spain vs Cape Verde",
+    "summary": "🇪🇸 Spain 0-0 🇨🇻 Cape Verde",
     "date_utc": "2026-06-15T16:00:00+00:00",
     "home": {
-      "name": "Spain"
+      "name": "🇪🇸 Spain"
     },
     "away": {
-      "name": "Cape Verde"
+      "name": "🇨🇻 Cape Verde"
     },
     "stage": "group",
     "group": "H",
@@ -235,13 +235,13 @@
   },
   {
     "match_id": "fifa-wc-2026-323786f24db4@worldcup-calendar",
-    "summary": "Belgium vs Egypt",
+    "summary": "🇧🇪 Belgium 1-1 🇪🇬 Egypt",
     "date_utc": "2026-06-15T19:00:00+00:00",
     "home": {
-      "name": "Belgium"
+      "name": "🇧🇪 Belgium"
     },
     "away": {
-      "name": "Egypt"
+      "name": "🇪🇬 Egypt"
     },
     "stage": "group",
     "group": "G",
@@ -253,13 +253,13 @@
   },
   {
     "match_id": "fifa-wc-2026-b9f4734fd923@worldcup-calendar",
-    "summary": "Saudi Arabia vs Uruguay",
+    "summary": "🇸🇦 Saudi Arabia 1-1 🇺🇾 Uruguay",
     "date_utc": "2026-06-15T22:00:00+00:00",
     "home": {
-      "name": "Saudi Arabia"
+      "name": "🇸🇦 Saudi Arabia"
     },
     "away": {
-      "name": "Uruguay"
+      "name": "🇺🇾 Uruguay"
     },
     "stage": "group",
     "group": "H",
@@ -271,13 +271,13 @@
   },
   {
     "match_id": "fifa-wc-2026-af1e7aa5490e@worldcup-calendar",
-    "summary": "Iran vs New Zealand",
+    "summary": "🇮🇷 Iran 2-2 🇳🇿 New Zealand",
     "date_utc": "2026-06-16T01:00:00+00:00",
     "home": {
-      "name": "Iran"
+      "name": "🇮🇷 Iran"
     },
     "away": {
-      "name": "New Zealand"
+      "name": "🇳🇿 New Zealand"
     },
     "stage": "group",
     "group": "G",
@@ -289,13 +289,13 @@
   },
   {
     "match_id": "fifa-wc-2026-0f846365870d@worldcup-calendar",
-    "summary": "France vs Senegal",
+    "summary": "🇫🇷 France 3-1 🇸🇳 Senegal",
     "date_utc": "2026-06-16T19:00:00+00:00",
     "home": {
-      "name": "France"
+      "name": "🇫🇷 France"
     },
     "away": {
-      "name": "Senegal"
+      "name": "🇸🇳 Senegal"
     },
     "stage": "group",
     "group": "I",
@@ -307,13 +307,13 @@
   },
   {
     "match_id": "fifa-wc-2026-cccee6959e93@worldcup-calendar",
-    "summary": "Iraq vs Norway",
+    "summary": "🇮🇶 Iraq 1-4 🇳🇴 Norway",
     "date_utc": "2026-06-16T22:00:00+00:00",
     "home": {
-      "name": "Iraq"
+      "name": "🇮🇶 Iraq"
     },
     "away": {
-      "name": "Norway"
+      "name": "🇳🇴 Norway"
     },
     "stage": "group",
     "group": "I",
@@ -325,13 +325,13 @@
   },
   {
     "match_id": "fifa-wc-2026-3d712cde556f@worldcup-calendar",
-    "summary": "Argentina vs Algeria",
+    "summary": "🇦🇷 Argentina 3-0 🇩🇿 Algeria",
     "date_utc": "2026-06-17T01:00:00+00:00",
     "home": {
-      "name": "Argentina"
+      "name": "🇦🇷 Argentina"
     },
     "away": {
-      "name": "Algeria"
+      "name": "🇩🇿 Algeria"
     },
     "stage": "group",
     "group": "J",
@@ -343,13 +343,13 @@
   },
   {
     "match_id": "fifa-wc-2026-647e537b682d@worldcup-calendar",
-    "summary": "Austria vs Jordan",
+    "summary": "🇦🇹 Austria 3-1 🇯🇴 Jordan",
     "date_utc": "2026-06-17T04:00:00+00:00",
     "home": {
-      "name": "Austria"
+      "name": "🇦🇹 Austria"
     },
     "away": {
-      "name": "Jordan"
+      "name": "🇯🇴 Jordan"
     },
     "stage": "group",
     "group": "J",
@@ -361,13 +361,13 @@
   },
   {
     "match_id": "fifa-wc-2026-762d3e9456fd@worldcup-calendar",
-    "summary": "Portugal vs DR Congo",
+    "summary": "🇵🇹 Portugal 1-1 🇨🇩 DR Congo",
     "date_utc": "2026-06-17T17:00:00+00:00",
     "home": {
-      "name": "Portugal"
+      "name": "🇵🇹 Portugal"
     },
     "away": {
-      "name": "DR Congo"
+      "name": "🇨🇩 DR Congo"
     },
     "stage": "group",
     "group": "K",
@@ -379,13 +379,13 @@
   },
   {
     "match_id": "fifa-wc-2026-1d9bf69d0e64@worldcup-calendar",
-    "summary": "England vs Croatia",
+    "summary": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England 4-2 🇭🇷 Croatia",
     "date_utc": "2026-06-17T20:00:00+00:00",
     "home": {
-      "name": "England"
+      "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England"
     },
     "away": {
-      "name": "Croatia"
+      "name": "🇭🇷 Croatia"
     },
     "stage": "group",
     "group": "L",
@@ -397,13 +397,13 @@
   },
   {
     "match_id": "fifa-wc-2026-3cf93686bcf8@worldcup-calendar",
-    "summary": "Ghana vs Panama",
+    "summary": "🇬🇭 Ghana 1-0 🇵🇦 Panama",
     "date_utc": "2026-06-17T23:00:00+00:00",
     "home": {
-      "name": "Ghana"
+      "name": "🇬🇭 Ghana"
     },
     "away": {
-      "name": "Panama"
+      "name": "🇵🇦 Panama"
     },
     "stage": "group",
     "group": "L",
@@ -415,13 +415,13 @@
   },
   {
     "match_id": "fifa-wc-2026-961435d8626c@worldcup-calendar",
-    "summary": "Uzbekistan vs Colombia",
+    "summary": "🇺🇿 Uzbekistan 1-3 🇨🇴 Colombia",
     "date_utc": "2026-06-18T02:00:00+00:00",
     "home": {
-      "name": "Uzbekistan"
+      "name": "🇺🇿 Uzbekistan"
     },
     "away": {
-      "name": "Colombia"
+      "name": "🇨🇴 Colombia"
     },
     "stage": "group",
     "group": "K",
@@ -433,13 +433,13 @@
   },
   {
     "match_id": "fifa-wc-2026-e8aa08edb6ad@worldcup-calendar",
-    "summary": "Czech Republic vs South Africa",
+    "summary": "🇨🇿 Czech Republic 1-1 🇿🇦 South Africa",
     "date_utc": "2026-06-18T16:00:00+00:00",
     "home": {
-      "name": "Czech Republic"
+      "name": "🇨🇿 Czech Republic"
     },
     "away": {
-      "name": "South Africa"
+      "name": "🇿🇦 South Africa"
     },
     "stage": "group",
     "group": "A",
@@ -451,13 +451,13 @@
   },
   {
     "match_id": "fifa-wc-2026-28e5beab171a@worldcup-calendar",
-    "summary": "Switzerland vs Bosnia & Herzegovina",
+    "summary": "🇨🇭 Switzerland 4-1 🇧🇦 Bosnia & Herzegovina",
     "date_utc": "2026-06-18T19:00:00+00:00",
     "home": {
-      "name": "Switzerland"
+      "name": "🇨🇭 Switzerland"
     },
     "away": {
-      "name": "Bosnia & Herzegovina"
+      "name": "🇧🇦 Bosnia & Herzegovina"
     },
     "stage": "group",
     "group": "B",
@@ -469,13 +469,13 @@
   },
   {
     "match_id": "fifa-wc-2026-106797924277@worldcup-calendar",
-    "summary": "Canada vs Qatar",
+    "summary": "🇨🇦 Canada 6-0 🇶🇦 Qatar",
     "date_utc": "2026-06-18T22:00:00+00:00",
     "home": {
-      "name": "Canada"
+      "name": "🇨🇦 Canada"
     },
     "away": {
-      "name": "Qatar"
+      "name": "🇶🇦 Qatar"
     },
     "stage": "group",
     "group": "B",
@@ -487,13 +487,13 @@
   },
   {
     "match_id": "fifa-wc-2026-7e2495985fc6@worldcup-calendar",
-    "summary": "Mexico vs South Korea",
+    "summary": "🇲🇽 Mexico 1-0 🇰🇷 South Korea",
     "date_utc": "2026-06-19T01:00:00+00:00",
     "home": {
-      "name": "Mexico"
+      "name": "🇲🇽 Mexico"
     },
     "away": {
-      "name": "South Korea"
+      "name": "🇰🇷 South Korea"
     },
     "stage": "group",
     "group": "A",
@@ -505,13 +505,13 @@
   },
   {
     "match_id": "fifa-wc-2026-8ff270051ebe@worldcup-calendar",
-    "summary": "USA vs Australia",
+    "summary": "🇺🇸 USA 2-0 🇦🇺 Australia",
     "date_utc": "2026-06-19T19:00:00+00:00",
     "home": {
-      "name": "USA"
+      "name": "🇺🇸 USA"
     },
     "away": {
-      "name": "Australia"
+      "name": "🇦🇺 Australia"
     },
     "stage": "group",
     "group": "D",
@@ -523,13 +523,13 @@
   },
   {
     "match_id": "fifa-wc-2026-f93686d79d46@worldcup-calendar",
-    "summary": "Scotland vs Morocco",
+    "summary": "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland 0-1 🇲🇦 Morocco",
     "date_utc": "2026-06-19T22:00:00+00:00",
     "home": {
-      "name": "Scotland"
+      "name": "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland"
     },
     "away": {
-      "name": "Morocco"
+      "name": "🇲🇦 Morocco"
     },
     "stage": "group",
     "group": "C",
@@ -541,13 +541,13 @@
   },
   {
     "match_id": "fifa-wc-2026-35b03107e97b@worldcup-calendar",
-    "summary": "Brazil vs Haiti",
+    "summary": "🇧🇷 Brazil 3-0 🇭🇹 Haiti",
     "date_utc": "2026-06-20T00:30:00+00:00",
     "home": {
-      "name": "Brazil"
+      "name": "🇧🇷 Brazil"
     },
     "away": {
-      "name": "Haiti"
+      "name": "🇭🇹 Haiti"
     },
     "stage": "group",
     "group": "C",
@@ -559,13 +559,13 @@
   },
   {
     "match_id": "fifa-wc-2026-dfb31b509dd6@worldcup-calendar",
-    "summary": "Turkey vs Paraguay",
+    "summary": "🇹🇷 Turkey 0-1 🇵🇾 Paraguay",
     "date_utc": "2026-06-20T03:00:00+00:00",
     "home": {
-      "name": "Turkey"
+      "name": "🇹🇷 Turkey"
     },
     "away": {
-      "name": "Paraguay"
+      "name": "🇵🇾 Paraguay"
     },
     "stage": "group",
     "group": "D",
@@ -577,13 +577,13 @@
   },
   {
     "match_id": "fifa-wc-2026-d400a9b695a8@worldcup-calendar",
-    "summary": "Netherlands vs Sweden",
+    "summary": "🇳🇱 Netherlands 5-1 🇸🇪 Sweden",
     "date_utc": "2026-06-20T17:00:00+00:00",
     "home": {
-      "name": "Netherlands"
+      "name": "🇳🇱 Netherlands"
     },
     "away": {
-      "name": "Sweden"
+      "name": "🇸🇪 Sweden"
     },
     "stage": "group",
     "group": "F",
@@ -595,13 +595,13 @@
   },
   {
     "match_id": "fifa-wc-2026-04adb35cd696@worldcup-calendar",
-    "summary": "Germany vs Ivory Coast",
+    "summary": "🇩🇪 Germany 2-1 🇨🇮 Ivory Coast",
     "date_utc": "2026-06-20T20:00:00+00:00",
     "home": {
-      "name": "Germany"
+      "name": "🇩🇪 Germany"
     },
     "away": {
-      "name": "Ivory Coast"
+      "name": "🇨🇮 Ivory Coast"
     },
     "stage": "group",
     "group": "E",
@@ -613,13 +613,13 @@
   },
   {
     "match_id": "fifa-wc-2026-99c0702d0791@worldcup-calendar",
-    "summary": "Ecuador vs Curaçao",
+    "summary": "🇪🇨 Ecuador 0-0 🇨🇼 Curaçao",
     "date_utc": "2026-06-21T00:00:00+00:00",
     "home": {
-      "name": "Ecuador"
+      "name": "🇪🇨 Ecuador"
     },
     "away": {
-      "name": "Curaçao"
+      "name": "🇨🇼 Curaçao"
     },
     "stage": "group",
     "group": "E",
@@ -631,13 +631,13 @@
   },
   {
     "match_id": "fifa-wc-2026-f544802e5627@worldcup-calendar",
-    "summary": "Tunisia vs Japan",
+    "summary": "🇹🇳 Tunisia 0-4 🇯🇵 Japan",
     "date_utc": "2026-06-21T04:00:00+00:00",
     "home": {
-      "name": "Tunisia"
+      "name": "🇹🇳 Tunisia"
     },
     "away": {
-      "name": "Japan"
+      "name": "🇯🇵 Japan"
     },
     "stage": "group",
     "group": "F",
@@ -649,13 +649,13 @@
   },
   {
     "match_id": "fifa-wc-2026-5b9ad7ac6f5f@worldcup-calendar",
-    "summary": "Spain vs Saudi Arabia",
+    "summary": "🇪🇸 Spain 4-0 🇸🇦 Saudi Arabia",
     "date_utc": "2026-06-21T16:00:00+00:00",
     "home": {
-      "name": "Spain"
+      "name": "🇪🇸 Spain"
     },
     "away": {
-      "name": "Saudi Arabia"
+      "name": "🇸🇦 Saudi Arabia"
     },
     "stage": "group",
     "group": "H",
@@ -667,13 +667,13 @@
   },
   {
     "match_id": "fifa-wc-2026-0b5f46aa9cfd@worldcup-calendar",
-    "summary": "Belgium vs Iran",
+    "summary": "🇧🇪 Belgium 0-0 🇮🇷 Iran",
     "date_utc": "2026-06-21T19:00:00+00:00",
     "home": {
-      "name": "Belgium"
+      "name": "🇧🇪 Belgium"
     },
     "away": {
-      "name": "Iran"
+      "name": "🇮🇷 Iran"
     },
     "stage": "group",
     "group": "G",
@@ -685,13 +685,13 @@
   },
   {
     "match_id": "fifa-wc-2026-a06b3652712e@worldcup-calendar",
-    "summary": "Uruguay vs Cape Verde",
+    "summary": "🇺🇾 Uruguay 2-2 🇨🇻 Cape Verde",
     "date_utc": "2026-06-21T22:00:00+00:00",
     "home": {
-      "name": "Uruguay"
+      "name": "🇺🇾 Uruguay"
     },
     "away": {
-      "name": "Cape Verde"
+      "name": "🇨🇻 Cape Verde"
     },
     "stage": "group",
     "group": "H",
@@ -703,13 +703,13 @@
   },
   {
     "match_id": "fifa-wc-2026-51f3976829e1@worldcup-calendar",
-    "summary": "New Zealand vs Egypt",
+    "summary": "🇳🇿 New Zealand 1-3 🇪🇬 Egypt",
     "date_utc": "2026-06-22T01:00:00+00:00",
     "home": {
-      "name": "New Zealand"
+      "name": "🇳🇿 New Zealand"
     },
     "away": {
-      "name": "Egypt"
+      "name": "🇪🇬 Egypt"
     },
     "stage": "group",
     "group": "G",
@@ -721,13 +721,13 @@
   },
   {
     "match_id": "fifa-wc-2026-61198cde6a1a@worldcup-calendar",
-    "summary": "Argentina vs Austria",
+    "summary": "🇦🇷 Argentina 2-0 🇦🇹 Austria",
     "date_utc": "2026-06-22T17:00:00+00:00",
     "home": {
-      "name": "Argentina"
+      "name": "🇦🇷 Argentina"
     },
     "away": {
-      "name": "Austria"
+      "name": "🇦🇹 Austria"
     },
     "stage": "group",
     "group": "J",
@@ -739,13 +739,13 @@
   },
   {
     "match_id": "fifa-wc-2026-5344004efef4@worldcup-calendar",
-    "summary": "France vs Iraq",
+    "summary": "🇫🇷 France 3-0 🇮🇶 Iraq",
     "date_utc": "2026-06-22T21:00:00+00:00",
     "home": {
-      "name": "France"
+      "name": "🇫🇷 France"
     },
     "away": {
-      "name": "Iraq"
+      "name": "🇮🇶 Iraq"
     },
     "stage": "group",
     "group": "I",
@@ -757,13 +757,13 @@
   },
   {
     "match_id": "fifa-wc-2026-d47eb6b9f103@worldcup-calendar",
-    "summary": "Norway vs Senegal",
+    "summary": "🇳🇴 Norway 3-2 🇸🇳 Senegal",
     "date_utc": "2026-06-23T00:00:00+00:00",
     "home": {
-      "name": "Norway"
+      "name": "🇳🇴 Norway"
     },
     "away": {
-      "name": "Senegal"
+      "name": "🇸🇳 Senegal"
     },
     "stage": "group",
     "group": "I",
@@ -775,13 +775,13 @@
   },
   {
     "match_id": "fifa-wc-2026-41edcc085fe5@worldcup-calendar",
-    "summary": "Jordan vs Algeria",
+    "summary": "🇯🇴 Jordan 1-2 🇩🇿 Algeria",
     "date_utc": "2026-06-23T03:00:00+00:00",
     "home": {
-      "name": "Jordan"
+      "name": "🇯🇴 Jordan"
     },
     "away": {
-      "name": "Algeria"
+      "name": "🇩🇿 Algeria"
     },
     "stage": "group",
     "group": "J",
@@ -793,13 +793,13 @@
   },
   {
     "match_id": "fifa-wc-2026-1bc3f4be2e36@worldcup-calendar",
-    "summary": "Portugal vs Uzbekistan",
+    "summary": "🇵🇹 Portugal 5-0 🇺🇿 Uzbekistan",
     "date_utc": "2026-06-23T17:00:00+00:00",
     "home": {
-      "name": "Portugal"
+      "name": "🇵🇹 Portugal"
     },
     "away": {
-      "name": "Uzbekistan"
+      "name": "🇺🇿 Uzbekistan"
     },
     "stage": "group",
     "group": "K",
@@ -811,13 +811,13 @@
   },
   {
     "match_id": "fifa-wc-2026-0d9bbef5c913@worldcup-calendar",
-    "summary": "England vs Ghana",
+    "summary": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England 0-0 🇬🇭 Ghana",
     "date_utc": "2026-06-23T20:00:00+00:00",
     "home": {
-      "name": "England"
+      "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England"
     },
     "away": {
-      "name": "Ghana"
+      "name": "🇬🇭 Ghana"
     },
     "stage": "group",
     "group": "L",
@@ -829,13 +829,13 @@
   },
   {
     "match_id": "fifa-wc-2026-014d40403a6b@worldcup-calendar",
-    "summary": "Panama vs Croatia",
+    "summary": "🇵🇦 Panama 0-1 🇭🇷 Croatia",
     "date_utc": "2026-06-23T23:00:00+00:00",
     "home": {
-      "name": "Panama"
+      "name": "🇵🇦 Panama"
     },
     "away": {
-      "name": "Croatia"
+      "name": "🇭🇷 Croatia"
     },
     "stage": "group",
     "group": "L",
@@ -847,13 +847,13 @@
   },
   {
     "match_id": "fifa-wc-2026-e592e72369a3@worldcup-calendar",
-    "summary": "Colombia vs DR Congo",
+    "summary": "🇨🇴 Colombia 1-0 🇨🇩 DR Congo",
     "date_utc": "2026-06-24T02:00:00+00:00",
     "home": {
-      "name": "Colombia"
+      "name": "🇨🇴 Colombia"
     },
     "away": {
-      "name": "DR Congo"
+      "name": "🇨🇩 DR Congo"
     },
     "stage": "group",
     "group": "K",
@@ -865,13 +865,13 @@
   },
   {
     "match_id": "fifa-wc-2026-7930b6dbf88c@worldcup-calendar",
-    "summary": "Switzerland vs Canada",
+    "summary": "🇨🇭 Switzerland 2-1 🇨🇦 Canada",
     "date_utc": "2026-06-24T19:00:00+00:00",
     "home": {
-      "name": "Switzerland"
+      "name": "🇨🇭 Switzerland"
     },
     "away": {
-      "name": "Canada"
+      "name": "🇨🇦 Canada"
     },
     "stage": "group",
     "group": "B",
@@ -883,13 +883,13 @@
   },
   {
     "match_id": "fifa-wc-2026-cb7249d22fdd@worldcup-calendar",
-    "summary": "Bosnia & Herzegovina vs Qatar",
+    "summary": "🇧🇦 Bosnia & Herzegovina 3-1 🇶🇦 Qatar",
     "date_utc": "2026-06-24T19:00:00+00:00",
     "home": {
-      "name": "Bosnia & Herzegovina"
+      "name": "🇧🇦 Bosnia & Herzegovina"
     },
     "away": {
-      "name": "Qatar"
+      "name": "🇶🇦 Qatar"
     },
     "stage": "group",
     "group": "B",
@@ -901,13 +901,13 @@
   },
   {
     "match_id": "fifa-wc-2026-9b6ddb137374@worldcup-calendar",
-    "summary": "Scotland vs Brazil",
+    "summary": "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland 0-3 🇧🇷 Brazil",
     "date_utc": "2026-06-24T22:00:00+00:00",
     "home": {
-      "name": "Scotland"
+      "name": "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland"
     },
     "away": {
-      "name": "Brazil"
+      "name": "🇧🇷 Brazil"
     },
     "stage": "group",
     "group": "C",
@@ -919,13 +919,13 @@
   },
   {
     "match_id": "fifa-wc-2026-35140186af9c@worldcup-calendar",
-    "summary": "Morocco vs Haiti",
+    "summary": "🇲🇦 Morocco 4-2 🇭🇹 Haiti",
     "date_utc": "2026-06-24T22:00:00+00:00",
     "home": {
-      "name": "Morocco"
+      "name": "🇲🇦 Morocco"
     },
     "away": {
-      "name": "Haiti"
+      "name": "🇭🇹 Haiti"
     },
     "stage": "group",
     "group": "C",
@@ -937,13 +937,13 @@
   },
   {
     "match_id": "fifa-wc-2026-a39ddca16285@worldcup-calendar",
-    "summary": "Czech Republic vs Mexico",
+    "summary": "🇨🇿 Czech Republic 0-3 🇲🇽 Mexico",
     "date_utc": "2026-06-25T01:00:00+00:00",
     "home": {
-      "name": "Czech Republic"
+      "name": "🇨🇿 Czech Republic"
     },
     "away": {
-      "name": "Mexico"
+      "name": "🇲🇽 Mexico"
     },
     "stage": "group",
     "group": "A",
@@ -955,13 +955,13 @@
   },
   {
     "match_id": "fifa-wc-2026-f21ab750b07d@worldcup-calendar",
-    "summary": "South Africa vs South Korea",
+    "summary": "🇿🇦 South Africa 1-0 🇰🇷 South Korea",
     "date_utc": "2026-06-25T01:00:00+00:00",
     "home": {
-      "name": "South Africa"
+      "name": "🇿🇦 South Africa"
     },
     "away": {
-      "name": "South Korea"
+      "name": "🇰🇷 South Korea"
     },
     "stage": "group",
     "group": "A",
@@ -973,13 +973,13 @@
   },
   {
     "match_id": "fifa-wc-2026-449fbd478704@worldcup-calendar",
-    "summary": "Curaçao vs Ivory Coast",
+    "summary": "🇨🇼 Curaçao 0-2 🇨🇮 Ivory Coast",
     "date_utc": "2026-06-25T20:00:00+00:00",
     "home": {
-      "name": "Curaçao"
+      "name": "🇨🇼 Curaçao"
     },
     "away": {
-      "name": "Ivory Coast"
+      "name": "🇨🇮 Ivory Coast"
     },
     "stage": "group",
     "group": "E",
@@ -991,13 +991,13 @@
   },
   {
     "match_id": "fifa-wc-2026-bd2418c0d719@worldcup-calendar",
-    "summary": "Ecuador vs Germany",
+    "summary": "🇪🇨 Ecuador 2-1 🇩🇪 Germany",
     "date_utc": "2026-06-25T20:00:00+00:00",
     "home": {
-      "name": "Ecuador"
+      "name": "🇪🇨 Ecuador"
     },
     "away": {
-      "name": "Germany"
+      "name": "🇩🇪 Germany"
     },
     "stage": "group",
     "group": "E",
@@ -1009,13 +1009,13 @@
   },
   {
     "match_id": "fifa-wc-2026-82b095ff1da0@worldcup-calendar",
-    "summary": "Japan vs Sweden",
+    "summary": "🇯🇵 Japan vs 🇸🇪 Sweden",
     "date_utc": "2026-06-25T23:00:00+00:00",
     "home": {
-      "name": "Japan"
+      "name": "🇯🇵 Japan"
     },
     "away": {
-      "name": "Sweden"
+      "name": "🇸🇪 Sweden"
     },
     "stage": "group",
     "group": "F",
@@ -1027,13 +1027,13 @@
   },
   {
     "match_id": "fifa-wc-2026-f5165b86a7e9@worldcup-calendar",
-    "summary": "Tunisia vs Netherlands",
+    "summary": "🇹🇳 Tunisia vs 🇳🇱 Netherlands",
     "date_utc": "2026-06-25T23:00:00+00:00",
     "home": {
-      "name": "Tunisia"
+      "name": "🇹🇳 Tunisia"
     },
     "away": {
-      "name": "Netherlands"
+      "name": "🇳🇱 Netherlands"
     },
     "stage": "group",
     "group": "F",
@@ -1045,13 +1045,13 @@
   },
   {
     "match_id": "fifa-wc-2026-4f14fe6a7480@worldcup-calendar",
-    "summary": "Turkey vs USA",
+    "summary": "🇹🇷 Turkey vs 🇺🇸 USA",
     "date_utc": "2026-06-26T02:00:00+00:00",
     "home": {
-      "name": "Turkey"
+      "name": "🇹🇷 Turkey"
     },
     "away": {
-      "name": "USA"
+      "name": "🇺🇸 USA"
     },
     "stage": "group",
     "group": "D",
@@ -1063,13 +1063,13 @@
   },
   {
     "match_id": "fifa-wc-2026-27d203e7ec39@worldcup-calendar",
-    "summary": "Paraguay vs Australia",
+    "summary": "🇵🇾 Paraguay vs 🇦🇺 Australia",
     "date_utc": "2026-06-26T02:00:00+00:00",
     "home": {
-      "name": "Paraguay"
+      "name": "🇵🇾 Paraguay"
     },
     "away": {
-      "name": "Australia"
+      "name": "🇦🇺 Australia"
     },
     "stage": "group",
     "group": "D",
@@ -1081,13 +1081,13 @@
   },
   {
     "match_id": "fifa-wc-2026-723b2034d515@worldcup-calendar",
-    "summary": "Norway vs France",
+    "summary": "🇳🇴 Norway vs 🇫🇷 France",
     "date_utc": "2026-06-26T19:00:00+00:00",
     "home": {
-      "name": "Norway"
+      "name": "🇳🇴 Norway"
     },
     "away": {
-      "name": "France"
+      "name": "🇫🇷 France"
     },
     "stage": "group",
     "group": "I",
@@ -1099,13 +1099,13 @@
   },
   {
     "match_id": "fifa-wc-2026-bd389ef93c34@worldcup-calendar",
-    "summary": "Senegal vs Iraq",
+    "summary": "🇸🇳 Senegal vs 🇮🇶 Iraq",
     "date_utc": "2026-06-26T19:00:00+00:00",
     "home": {
-      "name": "Senegal"
+      "name": "🇸🇳 Senegal"
     },
     "away": {
-      "name": "Iraq"
+      "name": "🇮🇶 Iraq"
     },
     "stage": "group",
     "group": "I",
@@ -1117,13 +1117,13 @@
   },
   {
     "match_id": "fifa-wc-2026-f7b3d5f83547@worldcup-calendar",
-    "summary": "Cape Verde vs Saudi Arabia",
+    "summary": "🇨🇻 Cape Verde vs 🇸🇦 Saudi Arabia",
     "date_utc": "2026-06-27T00:00:00+00:00",
     "home": {
-      "name": "Cape Verde"
+      "name": "🇨🇻 Cape Verde"
     },
     "away": {
-      "name": "Saudi Arabia"
+      "name": "🇸🇦 Saudi Arabia"
     },
     "stage": "group",
     "group": "H",
@@ -1135,13 +1135,13 @@
   },
   {
     "match_id": "fifa-wc-2026-3ae6a791ad0a@worldcup-calendar",
-    "summary": "Uruguay vs Spain",
+    "summary": "🇺🇾 Uruguay vs 🇪🇸 Spain",
     "date_utc": "2026-06-27T00:00:00+00:00",
     "home": {
-      "name": "Uruguay"
+      "name": "🇺🇾 Uruguay"
     },
     "away": {
-      "name": "Spain"
+      "name": "🇪🇸 Spain"
     },
     "stage": "group",
     "group": "H",
@@ -1153,13 +1153,13 @@
   },
   {
     "match_id": "fifa-wc-2026-71865170e473@worldcup-calendar",
-    "summary": "Egypt vs Iran",
+    "summary": "🇪🇬 Egypt vs 🇮🇷 Iran",
     "date_utc": "2026-06-27T03:00:00+00:00",
     "home": {
-      "name": "Egypt"
+      "name": "🇪🇬 Egypt"
     },
     "away": {
-      "name": "Iran"
+      "name": "🇮🇷 Iran"
     },
     "stage": "group",
     "group": "G",
@@ -1171,13 +1171,13 @@
   },
   {
     "match_id": "fifa-wc-2026-b388a214fccb@worldcup-calendar",
-    "summary": "New Zealand vs Belgium",
+    "summary": "🇳🇿 New Zealand vs 🇧🇪 Belgium",
     "date_utc": "2026-06-27T03:00:00+00:00",
     "home": {
-      "name": "New Zealand"
+      "name": "🇳🇿 New Zealand"
     },
     "away": {
-      "name": "Belgium"
+      "name": "🇧🇪 Belgium"
     },
     "stage": "group",
     "group": "G",
@@ -1189,13 +1189,13 @@
   },
   {
     "match_id": "fifa-wc-2026-e855fd4f1a2f@worldcup-calendar",
-    "summary": "Panama vs England",
+    "summary": "🇵🇦 Panama vs 🏴󠁧󠁢󠁥󠁮󠁧󠁿 England",
     "date_utc": "2026-06-27T21:00:00+00:00",
     "home": {
-      "name": "Panama"
+      "name": "🇵🇦 Panama"
     },
     "away": {
-      "name": "England"
+      "name": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England"
     },
     "stage": "group",
     "group": "L",
@@ -1207,13 +1207,13 @@
   },
   {
     "match_id": "fifa-wc-2026-e1ac545f3f60@worldcup-calendar",
-    "summary": "Croatia vs Ghana",
+    "summary": "🇭🇷 Croatia vs 🇬🇭 Ghana",
     "date_utc": "2026-06-27T21:00:00+00:00",
     "home": {
-      "name": "Croatia"
+      "name": "🇭🇷 Croatia"
     },
     "away": {
-      "name": "Ghana"
+      "name": "🇬🇭 Ghana"
     },
     "stage": "group",
     "group": "L",
@@ -1225,13 +1225,13 @@
   },
   {
     "match_id": "fifa-wc-2026-da13fe28ac54@worldcup-calendar",
-    "summary": "Colombia vs Portugal",
+    "summary": "🇨🇴 Colombia vs 🇵🇹 Portugal",
     "date_utc": "2026-06-27T23:30:00+00:00",
     "home": {
-      "name": "Colombia"
+      "name": "🇨🇴 Colombia"
     },
     "away": {
-      "name": "Portugal"
+      "name": "🇵🇹 Portugal"
     },
     "stage": "group",
     "group": "K",
@@ -1243,13 +1243,13 @@
   },
   {
     "match_id": "fifa-wc-2026-bc692e901fbf@worldcup-calendar",
-    "summary": "DR Congo vs Uzbekistan",
+    "summary": "🇨🇩 DR Congo vs 🇺🇿 Uzbekistan",
     "date_utc": "2026-06-27T23:30:00+00:00",
     "home": {
-      "name": "DR Congo"
+      "name": "🇨🇩 DR Congo"
     },
     "away": {
-      "name": "Uzbekistan"
+      "name": "🇺🇿 Uzbekistan"
     },
     "stage": "group",
     "group": "K",
@@ -1261,13 +1261,13 @@
   },
   {
     "match_id": "fifa-wc-2026-2ed591dab203@worldcup-calendar",
-    "summary": "Algeria vs Austria",
+    "summary": "🇩🇿 Algeria vs 🇦🇹 Austria",
     "date_utc": "2026-06-28T02:00:00+00:00",
     "home": {
-      "name": "Algeria"
+      "name": "🇩🇿 Algeria"
     },
     "away": {
-      "name": "Austria"
+      "name": "🇦🇹 Austria"
     },
     "stage": "group",
     "group": "J",
@@ -1279,13 +1279,13 @@
   },
   {
     "match_id": "fifa-wc-2026-8d41013dc501@worldcup-calendar",
-    "summary": "Jordan vs Argentina",
+    "summary": "🇯🇴 Jordan vs 🇦🇷 Argentina",
     "date_utc": "2026-06-28T02:00:00+00:00",
     "home": {
-      "name": "Jordan"
+      "name": "🇯🇴 Jordan"
     },
     "away": {
-      "name": "Argentina"
+      "name": "🇦🇷 Argentina"
     },
     "stage": "group",
     "group": "J",
@@ -1297,13 +1297,13 @@
   },
   {
     "match_id": "fifa-wc-2026-1e776111ce63@worldcup-calendar",
-    "summary": "2A vs 2B",
+    "summary": "🇿🇦 South Africa vs 🇨🇦 Canada",
     "date_utc": "2026-06-28T19:00:00+00:00",
     "home": {
-      "name": "2A"
+      "name": "🇿🇦 South Africa"
     },
     "away": {
-      "name": "2B"
+      "name": "🇨🇦 Canada"
     },
     "stage": "r32",
     "group": null,
@@ -1315,10 +1315,10 @@
   },
   {
     "match_id": "fifa-wc-2026-e144cb4fb77e@worldcup-calendar",
-    "summary": "1C vs 2F",
+    "summary": "🇧🇷 Brazil vs 2F",
     "date_utc": "2026-06-29T17:00:00+00:00",
     "home": {
-      "name": "1C"
+      "name": "🇧🇷 Brazil"
     },
     "away": {
       "name": "2F"
@@ -1333,10 +1333,10 @@
   },
   {
     "match_id": "fifa-wc-2026-2d0a996298e5@worldcup-calendar",
-    "summary": "1E vs 3A/B/C/D/F",
+    "summary": "🇩🇪 Germany vs 3A/B/C/D/F",
     "date_utc": "2026-06-29T20:30:00+00:00",
     "home": {
-      "name": "1E"
+      "name": "🇩🇪 Germany"
     },
     "away": {
       "name": "3A/B/C/D/F"
@@ -1351,13 +1351,13 @@
   },
   {
     "match_id": "fifa-wc-2026-cf8f93430d95@worldcup-calendar",
-    "summary": "1F vs 2C",
+    "summary": "1F vs 🇲🇦 Morocco",
     "date_utc": "2026-06-30T01:00:00+00:00",
     "home": {
       "name": "1F"
     },
     "away": {
-      "name": "2C"
+      "name": "🇲🇦 Morocco"
     },
     "stage": "r32",
     "group": null,
@@ -1405,10 +1405,10 @@
   },
   {
     "match_id": "fifa-wc-2026-ff1e60e42e65@worldcup-calendar",
-    "summary": "1A vs 3C/E/F/H/I",
+    "summary": "🇲🇽 Mexico vs 3C/E/F/H/I",
     "date_utc": "2026-07-01T01:00:00+00:00",
     "home": {
-      "name": "1A"
+      "name": "🇲🇽 Mexico"
     },
     "away": {
       "name": "3C/E/F/H/I"
@@ -1459,10 +1459,10 @@
   },
   {
     "match_id": "fifa-wc-2026-8ecc320a224b@worldcup-calendar",
-    "summary": "1D vs 3B/E/F/I/J",
+    "summary": "🇺🇸 USA vs 3B/E/F/I/J",
     "date_utc": "2026-07-02T00:00:00+00:00",
     "home": {
-      "name": "1D"
+      "name": "🇺🇸 USA"
     },
     "away": {
       "name": "3B/E/F/I/J"
@@ -1513,10 +1513,10 @@
   },
   {
     "match_id": "fifa-wc-2026-8f31a5321274@worldcup-calendar",
-    "summary": "1B vs 3E/F/G/I/J",
+    "summary": "🇨🇭 Switzerland vs 3E/F/G/I/J",
     "date_utc": "2026-07-03T03:00:00+00:00",
     "home": {
-      "name": "1B"
+      "name": "🇨🇭 Switzerland"
     },
     "away": {
       "name": "3E/F/G/I/J"
