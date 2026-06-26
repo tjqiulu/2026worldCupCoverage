@@ -164,25 +164,27 @@ class TestRenderTop8Panel:
         )
         body = result["body"]
         assert body, "expected non-empty body HTML"
-        # All 12 teams should appear (look up by name_zh since ids are not in HTML)
-        for t in self._sample_rankings():
+        # Top 8 (advance) only — bottom 4 are omitted per user request 2026-06-26
+        for t in self._sample_rankings()[:8]:
             zh = self._sample_teams()[t["team_id"]]["name_zh"]
-            assert zh in body, f"team {t['team_id']} ({zh}) missing from rendered HTML"
-        # 8 advance + 4 eliminate rows
-        assert body.count("row-advance") == 8, "expected 8 advance rows"
-        assert body.count("row-eliminate") == 4, "expected 4 eliminate rows"
-        # 8 advance badges
+            assert zh in body, f"top-8 team {t['team_id']} ({zh}) missing"
+        # Bottom 4 (rank 9-12) should NOT appear
+        for t in self._sample_rankings()[8:]:
+            zh = self._sample_teams()[t["team_id"]]["name_zh"]
+            assert zh not in body, f"eliminated team {t['team_id']} ({zh}) should be hidden"
+        # 8 advance rows, no eliminate rows, no divider
+        assert body.count("row-advance") == 8
+        assert body.count("row-eliminate") == 0
         assert body.count("status-advance") == 8
-        assert body.count("status-eliminate") == 4
-        # Divider row present
-        assert "row-divider" in body
-        # Group letters present
-        for letter in "ABCDEFGHIJKL":
-            if any(t["group"] == letter for t in self._sample_rankings()):
-                assert f">{letter}<" in body, f"group {letter} missing"
-        # Flags present (one per team)
-        assert body.count('class="fi fi-') == 12
-        # Status update text rendered with Beijing time
+        assert body.count("status-eliminate") == 0
+        assert "row-divider" not in body
+        # Group letters (only top-8 groups)
+        top8_groups = {t["group"] for t in self._sample_rankings()[:8]}
+        for letter in top8_groups:
+            assert f">{letter}<" in body, f"group {letter} missing"
+        # 8 flags
+        assert body.count('class="fi fi-') == 8
+        # Timestamp
         assert "北京时间" in result["updated"]
         assert "2026-06-26" in result["updated"]
 

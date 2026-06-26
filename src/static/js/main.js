@@ -218,12 +218,11 @@ function renderThirdPlaceTop8() {
         return;
     }
 
-    // Insert a visual divider between rank 8 and rank 9.
+    // Only show the top 8 (advance). Bottom 4 (eliminated) are omitted per
+    // user request 2026-06-26 12:56 — the panel is now "Top 8 晋级名单"
+    // rather than "全部 12 队" with a strike-through on the bottom half.
     const top8 = rankings.slice(0, 8);
-    const bot4 = rankings.slice(8, 12);
     const topRows = top8.map((t, i) => rowsForRanking(t, i + 1, true)).join('');
-    const divider = '<tr class="row-divider"><td colspan="12"></td></tr>';
-    const botRows = bot4.map((t, i) => rowsForRanking(t, i + 9, false)).join('');
 
     body.innerHTML = `<table class="third-place-table">
         <thead>
@@ -242,7 +241,7 @@ function renderThirdPlaceTop8() {
                 <th class="col-status">状态</th>
             </tr>
         </thead>
-        <tbody>${topRows}${divider}${botRows}</tbody>
+        <tbody>${topRows}</tbody>
     </table>`;
 }
 
