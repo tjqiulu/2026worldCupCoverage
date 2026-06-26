@@ -24,18 +24,22 @@ class TestLookup:
         assert info["code_fifa"] == "MEX"
 
     def test_england_uses_subnational_flag(self):
-        # England has no separate flag-icons entry (no ISO 3166-1 code),
-        # so the dashboard renders the UK flag (`gb`). Both home nations
-        # (England, Scotland) share this convention.
+        # England uses the flag-icons `gb-eng` subdivision class (St. George's
+        # Cross), NOT the generic UK Union Jack. flag-icons 6.6.6 ships
+        # `fi-gb-eng` and `fi-gb-sct` (verified against CDN).
+        # See Plan 045 revert of Plan 9b8f3d5 (which mistakenly used `gb`).
         info = lookup("England")
         assert info is not None
-        assert info["code_iso"] == "gb"
+        assert info["code_iso"] == "gb-eng"
+        assert info["code_fifa"] == "ENG"
 
     def test_scotland_uses_subnational_flag(self):
-        # See test_england_uses_subnational_flag — Scotland also uses the UK flag.
+        # Scotland uses the flag-icons `gb-sct` subdivision class (Saltire).
+        # See test_england_uses_subnational_flag for context.
         info = lookup("Scotland")
         assert info is not None
-        assert info["code_iso"] == "gb"
+        assert info["code_iso"] == "gb-sct"
+        assert info["code_fifa"] == "SCO"
 
 
 class TestResolveCodeIso:
