@@ -43,6 +43,32 @@ class TestParseSummary:
     def test_trims_whitespace(self):
         assert _parse_summary("Mexico  vs  South Africa") == ["Mexico", "South Africa"]
 
+    def test_with_score(self):
+        # baires updates SUMMARY in-place once a match is played:
+        # "Mexico 2-0 South Africa" instead of "Mexico vs South Africa".
+        # Without this fallback, already-played matches get silently
+        # dropped from the calendar (Plan 037-era bug).
+        assert _parse_summary("Mexico 2-0 South Africa") == ["Mexico", "South Africa"]
+
+    def test_with_score_zero(self):
+        assert _parse_summary("Scotland 0-1 Morocco") == ["Scotland", "Morocco"]
+
+    def test_with_score_draw(self):
+        assert _parse_summary("Czech Republic 1-1 South Africa") == [
+            "Czech Republic",
+            "South Africa",
+        ]
+
+    def test_with_score_spaces_around_dash(self):
+        assert _parse_summary("France 3 - 0 Iraq") == ["France", "Iraq"]
+
+    def test_with_score_multibyte_country(self):
+        # Long names on both sides — the score must consume the middle.
+        assert _parse_summary("Bosnia & Herzegovina 1-0 Qatar") == [
+            "Bosnia & Herzegovina",
+            "Qatar",
+        ]
+
 
 class TestParseMatchday:
     def test_matchday_1(self):

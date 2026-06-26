@@ -102,11 +102,20 @@ def _parse_vevent(component: Any) -> dict[str, Any] | None:
 def _parse_summary(summary: str) -> list[str]:
     """Extract team names from 'Country A vs Country B' pattern.
 
+    baires/fifa-cal-2026 updates SUMMARY in place as matches finish:
+        "Mexico vs South Africa"          (pre-match)
+        "Mexico 2-0 South Africa"         (post-match, with score)
+    Both formats must be accepted, otherwise already-played matches get
+    dropped from the calendar entirely.
+
     Returns empty list if pattern not found. Names are kept as-is (preserves
     case, e.g., "South Korea", "Czech Republic").
     """
+    # Normalize the post-match "X 2-0 Y" form back to "X vs Y" so a single
+    # downstream regex handles both shapes.
+    normalized = re.sub(r"\s+\d+\s*-\s*\d+\s+", " vs ", summary)
     # Match "X vs Y" — accept multi-word country names
-    m = re.match(r"^(.+?)\s+vs\.?\s+(.+?)$", summary, re.IGNORECASE)
+    m = re.match(r"^(.+?)\s+vs\.?\s+(.+?)$", normalized, re.IGNORECASE)
     if m:
         return [m.group(1).strip(), m.group(2).strip()]
     return []
